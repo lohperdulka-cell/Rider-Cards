@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block title %}{{ settings.shop_name }} — {{ t('brand.tagline') }}{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden pb-20 pt-14 lg:pb-28 lg:pt-20">
+  <div class="rc-mesh" aria-hidden="true"></div>
+  <div class="rc-suits" aria-hidden="true"></div>
+
+  <div class="rc-container relative grid items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
+    <div>
+      <p class="rc-eyebrow" data-reveal>
+        <span class="h-1.5 w-1.5 rounded-full bg-lime-brand animate-pulse-ring" aria-hidden="true"></span>
+        {{ t('home.hero.eyebrow') }}
+      </p>
+      <h1 class="font-display text-[2.75rem] leading-[0.95] tracking-tight sm:text-6xl lg:text-[4.5rem]" data-reveal data-reveal-delay="1">
+        {{ t('home.hero.title') }}
+      </h1>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" data-reveal data-reveal-delay="2">
+        {{ t('home.hero.subtitle') }}
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3" data-reveal data-reveal-delay="3">
+        <a href="/catalog" class="rc-btn-primary px-7 py-3 text-base">
+          {{ t('home.hero.cta') }}
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+        <a href="/about" class="rc-btn-ghost px-7 py-3 text-base">{{ t('home.hero.secondary') }}</a>
+      </div>
+
+      <a href="/news" class="mt-7 inline-flex items-center gap-2 rounded-full border border-lime-brand/30 bg-lime-brand/8 px-4 py-2 text-xs text-lime-brand transition hover:bg-lime-brand/15" data-reveal data-reveal-delay="4">
+        <span aria-hidden="true">✦</span>{{ t('home.hero.badge') }}
+      </a>
+
+      <dl class="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4" data-reveal data-reveal-delay="5">
+        <div>
+          <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.decks') }}</dt>
+          <dd class="font-display text-3xl text-white" data-count-to="{{ total_products }}">0</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.clients') }}</dt>
+          <dd class="font-display text-3xl text-white" data-count-to="12480">0</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.years') }}</dt>
+          <dd class="font-display text-3xl text-white" data-count-to="11">0</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.rating') }}</dt>
+          <dd class="font-display text-3xl text-white">4.9</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="relative" data-reveal data-reveal-delay="2">
+      <div class="absolute -inset-6 rounded-[36px] bg-lime-brand/10 blur-3xl" aria-hidden="true"></div>
+      <div class="relative grid grid-cols-2 gap-4">
+        {% set hero_cards = [
+          ('♠', 'rotate-[-8deg]', 'z-20', '0'),
+          ('♥', 'rotate-[6deg]', 'z-10', '0.06'),
+          ('♦', 'rotate-[3deg]', 'z-30', '0.12'),
+          ('♣', 'rotate-[-4deg]', 'z-20', '0.18')
+        ] %}
+        {% for suit, rotate, z, delay in hero_cards %}
+          <div class="rc-card rc-float flex aspect-[3/4] flex-col justify-between p-5 {{ rotate }} {{ z }}"
+               style="--rc-rot: {{ rotate | replace('rotate-[','') | replace('deg]','') }}deg; animation-delay: {{ delay }}s">
+            <span class="text-4xl leading-none text-lime-brand" aria-hidden="true">{{ suit }}</span>
+            <div class="space-y-2">
+              <span class="rc-skeleton block h-2 w-2/3"></span>
+              <span class="rc-skeleton block h-2 w-1/2"></span>
+            </div>
+            <span class="font-display text-5xl text-white/15" aria-hidden="true">{{ loop.index }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if categories %}
+<section class="rc-container py-16">
+  <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="rc-eyebrow">{{ t('home.categories.title') }}</p>
+      <h2 class="rc-section-title" data-reveal>{{ t('home.categories.subtitle') }}</h2>
+    </div>
+    <a href="/catalog" class="rc-btn-ghost">{{ t('catalog.all') }}</a>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    {% for category in categories %}
+      <a href="/catalog?category={{ category.slug }}"
+         class="rc-card rc-card-hover group flex flex-col justify-between gap-6 p-6"
+         data-reveal data-reveal-delay="{{ loop.index0 % 5 + 1 }}">
+        <span class="text-3xl text-lime-brand" aria-hidden="true">{{ category.icon or '♠' }}</span>
+        <span>
+          <span class="block font-display text-xl text-white">{{ category.localized_name(locale) }}</span>
+          <span class="mt-1 block text-xs text-white/45">{{ category.localized_description(locale) | truncate(70) }}</span>
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if featured %}
+<section class="rc-container py-16">
+  <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="rc-eyebrow">{{ t('home.featured.title') }}</p>
+      <h2 class="rc-section-title" data-reveal>{{ t('home.featured.subtitle') }}</h2>
+    </div>
+    <a href="/catalog" class="rc-btn-ghost">{{ t('home.cta.button') }}</a>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    {% for product in featured %}
+      {% include "partials/product_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="relative py-16">
+  <div class="rc-container">
+    <p class="rc-eyebrow">{{ t('home.advantages.title') }}</p>
+    <h2 class="rc-section-title mb-10 max-w-2xl" data-reveal>{{ t('home.advantages.subtitle') }}</h2>
+
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {% set advantages = [
+        ('1', '♠', 'M12 2.6 9.2 7.4a2.6 2.6 0 0 0 5.6 0L12 2.6Zm0 18.8 2.8-4.8a2.6 2.6 0 0 0-5.6 0L12 21.4ZM2.6 12l4.8 2.8a2.6 2.6 0 0 0 0-5.6L2.6 12Zm18.8 0-4.8-2.8a2.6 2.6 0 0 0 0 5.6l4.8-2.8Z'),
+        ('2', '♥', 'M12 21s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8.6 3.9 3.9 0 0 1 19 11.7C19 16.6 12 21 12 21Z'),
+        ('3', '♦', 'M12 2 22 12 12 22 2 12Z'),
+        ('4', '♣', 'M12 3a3.6 3.6 0 0 1 3.3 5.1 3.6 3.6 0 1 1-1.6 6.7h-.4l.4 6.2h-3.4l.4-6.2h-.4a3.6 3.6 0 1 1-1.6-6.7A3.6 3.6 0 0 1 12 3Z')
+      ] %}
+      {% for index, suit, path in advantages %}
+        <article class="rc-card p-6" data-reveal data-reveal-delay="{{ loop.index }}">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-lime-brand/12 text-lime-brand">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="{{ path }}"/></svg>
+          </span>
+          <h3 class="mt-4 font-display text-lg text-white">{{ t('home.advantages.' ~ index ~ '.title') }}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-white/55">{{ t('home.advantages.' ~ index ~ '.text') }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if bestsellers %}
+<section class="rc-container py-16">
+  <div class="mb-8 flex items-end justify-between gap-4">
+    <h2 class="rc-section-title" data-reveal>{{ t('home.bestsellers.title') }}</h2>
+    <a href="/catalog?sort=popular" class="rc-btn-ghost">{{ t('catalog.all') }}</a>
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {% for product in bestsellers %}
+      {% include "partials/product_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if news %}
+<section class="rc-container py-16">
+  <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="rc-eyebrow">{{ t('home.news.title') }}</p>
+      <h2 class="rc-section-title" data-reveal>{{ t('home.news.subtitle') }}</h2>
+    </div>
+    <a href="/news" class="rc-btn-ghost">{{ t('home.news.all') }}</a>
+  </div>
+
+  <div class="grid gap-5 md:grid-cols-3">
+    {% for item in news %}
+      <article class="rc-card rc-card-hover overflow-hidden" data-reveal data-reveal-delay="{{ loop.index }}">
+        <a href="/news/{{ item.slug }}" class="block">
+          <div class="rc-card-media aspect-[16/9] overflow-hidden bg-ink-800">
+            {% if item.cover_image %}
+              <img src="{{ item.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+            {% else %}
+              <div class="grid h-full place-items-center text-4xl text-lime-brand/30" aria-hidden="true">♠</div>
+            {% endif %}
+          </div>
+          <div class="p-5">
+            <time class="text-xs text-white/40" datetime="{{ item.published_at }}">{{ item.published_at | date }}</time>
+            <h3 class="mt-2 font-display text-lg leading-snug text-white">{{ item.localized_title(locale) }}</h3>
+            <p class="mt-2 line-clamp-3 text-sm text-white/55">{{ item.localized_excerpt(locale) }}</p>
+            <span class="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-lime-brand">
+              {{ t('news.read_more') }} <span aria-hidden="true">→</span>
+            </span>
+          </div>
+        </a>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="rc-container py-20">
+  <div class="rc-card relative overflow-hidden p-10 text-center lg:p-16" data-reveal>
+    <div class="rc-mesh" aria-hidden="true"></div>
+    <div class="relative">
+      <h2 class="rc-section-title">{{ t('home.cta.title') }}</h2>
+      <p class="mx-auto mt-4 max-w-xl text-white/60">{{ t('home.cta.text') }}</p>
+      <a href="/catalog" class="rc-btn-primary mt-8 px-8 py-3 text-base">{{ t('home.cta.button') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "{{ settings.shop_name }}",
+    "description": "{{ t('meta.description') }}",
+    "url": "{{ request.url.scheme }}://{{ request.url.netloc }}",
+    "priceRange": "$$",
+    "currenciesAccepted": "{{ settings.currency }}",
+    "email": "{{ settings.support_email }}",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "1284"
+    }
+  }
+</script>
+{% endblock %}

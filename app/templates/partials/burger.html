@@ -1,0 +1,37 @@
+<div id="rc-mobile-menu" class="fixed inset-0 z-[60] hidden flex-col bg-ink-950/97 backdrop-blur-xl lg:hidden" role="dialog" aria-modal="true" aria-label="{{ t('a11y.menu') }}">
+  <div class="rc-container flex h-16 items-center justify-between">
+    <span class="font-display text-lg tracking-[0.14em] text-white">RIDER<span class="text-lime-brand">CARDS</span></span>
+    <button type="button" id="rc-burger-close" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-white/80" aria-label="{{ t('a11y.close') }}" onclick="document.getElementById('rc-burger').click()">
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="rc-container flex flex-1 flex-col gap-1 overflow-y-auto py-6" aria-label="{{ t('a11y.main_nav') }}">
+    {% for href, key in [('/', 'nav.home'), ('/catalog', 'nav.catalog'), ('/news', 'nav.news'), ('/about', 'nav.about'), ('/faq', 'nav.faq'), ('/support', 'nav.support')] %}
+      <a href="{{ href }}" class="rounded-2xl px-4 py-3.5 text-lg font-semibold text-white/85 transition hover:bg-white/[0.06] hover:text-white">{{ t(key) }}</a>
+    {% endfor %}
+    <div class="my-3 h-px bg-white/10"></div>
+    {% if user %}
+      <a href="/profile" class="rounded-2xl px-4 py-3 text-base text-white/75 transition hover:bg-white/[0.06]">{{ t('nav.profile') }}</a>
+      <a href="/profile/orders" class="rounded-2xl px-4 py-3 text-base text-white/75 transition hover:bg-white/[0.06]">{{ t('nav.orders') }}</a>
+      <a href="/profile/wishlist" class="rounded-2xl px-4 py-3 text-base text-white/75 transition hover:bg-white/[0.06]">{{ t('nav.wishlist') }}</a>
+      <a href="/chats" class="rounded-2xl px-4 py-3 text-base text-white/75 transition hover:bg-white/[0.06]">{{ t('nav.chats') }}</a>
+      {% if user.is_admin %}
+        <a href="/admin" class="rounded-2xl px-4 py-3 text-base font-semibold text-lime-brand transition hover:bg-lime-brand/10">{{ t('nav.admin') }}</a>
+      {% endif %}
+      <form method="post" action="/logout" class="mt-2">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="w-full rounded-2xl px-4 py-3 text-left text-base text-rose-200 transition hover:bg-rose-500/10">{{ t('nav.logout') }}</button>
+      </form>
+    {% else %}
+      <a href="/login" class="rc-btn-ghost mt-2 w-full">{{ t('nav.login') }}</a>
+      <a href="/register" class="rc-btn-primary mt-2 w-full">{{ t('nav.register') }}</a>
+    {% endif %}
+    <div class="mt-auto flex items-center gap-2 pt-6" role="group" aria-label="{{ t('a11y.language') }}">
+      {% for code in SUPPORTED_LOCALES %}
+        <a href="?lang={{ code }}" class="rc-chip {{ 'border-lime-brand/60 text-lime-brand' if locale == code else '' }}">{{ LOCALE_LABELS.get(code, code|upper) }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+</div>

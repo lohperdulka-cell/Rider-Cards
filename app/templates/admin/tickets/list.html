@@ -1,0 +1,57 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.tickets') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.tickets') }}</h1>
+  <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ tickets | length }}</p>
+</header>
+
+{% if tickets %}
+  <div class="space-y-4">
+    {% for ticket in tickets %}
+      <article class="rc-card p-5">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h2 class="font-display text-lg text-white">{{ ticket.subject }}</h2>
+            <p class="mt-1 text-xs text-white/40">
+              #{{ ticket.id }} · {{ ticket.name }} ·
+              <a href="mailto:{{ ticket.email }}" class="rc-link">{{ ticket.email }}</a>
+              · {{ ticket.created_at | dt }}
+            </p>
+          </div>
+          <span class="rc-badge
+            {% if ticket.status.value == 'closed' %}bg-emerald-500/15 text-emerald-300
+            {% elif ticket.status.value == 'in_progress' %}bg-sky-500/15 text-sky-300
+            {% else %}bg-amber-400/15 text-amber-300{% endif %}">
+            {{ ticket.status.value }}
+          </span>
+        </div>
+
+        <p class="mt-3 whitespace-pre-line rounded-xl bg-white/[0.03] p-4 text-sm text-white/70">{{ ticket.message }}</p>
+
+        <form method="post" action="/admin/tickets/{{ ticket.id }}" class="mt-4 grid gap-3 sm:grid-cols-[1fr_180px_auto] sm:items-end">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <div>
+            <label class="rc-label" for="ticket-answer-{{ ticket.id }}">{{ t('admin.ticket.answer') }}</label>
+            <textarea id="ticket-answer-{{ ticket.id }}" name="answer" rows="2" maxlength="4000"
+                      class="rc-input resize-y">{{ ticket.answer }}</textarea>
+          </div>
+          <div>
+            <label class="rc-label" for="ticket-status-{{ ticket.id }}">{{ t('admin.status') }}</label>
+            <select id="ticket-status-{{ ticket.id }}" name="status" class="rc-input">
+              {% for value in statuses %}
+                <option value="{{ value }}" {{ 'selected' if ticket.status.value == value }}>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="rc-btn-primary px-5 py-2.5">{{ t('admin.save') }}</button>
+        </form>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.empty') }}</div>
+{% endif %}
+{% endblock %}

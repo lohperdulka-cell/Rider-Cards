@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}{{ t('catalog.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <header class="mb-8">
+    <p class="rc-eyebrow">{{ t('catalog.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('catalog.subtitle') }}</h1>
+  </header>
+
+  <form method="get" action="/catalog" class="mb-8 flex flex-col gap-3 lg:flex-row lg:items-center">
+    <div class="relative flex-1">
+      <label for="catalog-q" class="sr-only">{{ t('a11y.search') }}</label>
+      <input id="catalog-q" type="search" name="q" value="{{ filters.q }}"
+             placeholder="{{ t('catalog.search_placeholder') }}" class="rc-input pl-10" maxlength="120">
+      <svg viewBox="0 0 24 24" class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+    </div>
+    <label for="catalog-sort" class="sr-only">{{ t('catalog.sort') }}</label>
+    <select id="catalog-sort" name="sort" class="rc-input lg:w-56">
+      {% for value, key in [('new','catalog.sort.new'),('price_asc','catalog.sort.price_asc'),('price_desc','catalog.sort.price_desc'),('popular','catalog.sort.popular'),('name','catalog.sort.name')] %}
+        <option value="{{ value }}" {{ 'selected' if filters.sort == value }}>{{ t(key) }}</option>
+      {% endfor %}
+    </select>
+    {% if filters.category %}<input type="hidden" name="category" value="{{ filters.category }}">{% endif %}
+    {% for b in filters.brand %}<input type="hidden" name="brand" value="{{ b }}">{% endfor %}
+    {% for r in filters.rarity %}<input type="hidden" name="rarity" value="{{ r }}">{% endfor %}
+    <button type="submit" class="rc-btn-primary px-6">{{ t('catalog.filters_apply') }}</button>
+  </form>
+
+  <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
+    <aside class="lg:sticky lg:top-24 lg:self-start" x-data="filters" x-cloak>
+      <button type="button" class="rc-btn-ghost mb-4 w-full lg:hidden" @click="toggle()" :aria-expanded="open">
+        {{ t('catalog.filters') }}
+      </button>
+
+      <form method="get" action="/catalog" class="rc-card space-y-6 p-5" x-show="open || window.innerWidth >= 1024" x-transition.opacity>
+        <input type="hidden" name="q" value="{{ filters.q }}">
+        <input type="hidden" name="sort" value="{{ filters.sort }}">
+
+        <fieldset>
+          <legend class="rc-label">{{ t('catalog.category') }}</legend>
+          <div class="space-y-1.5">
+            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-white/70 hover:text-white">
+              <input type="radio" name="category" value="" {{ 'checked' if not filters.category }} class="h-4 w-4 accent-lime-brand">
+              {{ t('catalog.all') }}
+            </label>
+            {% for category in categories %}
+              <label class="flex cursor-pointer items-center gap-2.5 text-sm text-white/70 hover:text-white">
+                <input type="radio" name="category" value="{{ category.slug }}" {{ 'checked' if filters.category == category.slug }} class="h-4 w-4 accent-lime-brand">
+                <span>{{ category.icon or '♠' }}</span>{{ category.localized_name(locale) }}
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+
+        {% if brands %}
+        <fieldset>
+          <legend class="rc-label">{{ t('catalog.brand') }}</legend>
+          <div class="max-h-44 space-y-1.5 overflow-y-auto pr-1">
+            {% for brand in brands %}
+              <label class="flex cursor-pointer items-center gap-2.5 text-sm text-white/70 hover:text-white">
+                <input type="checkbox" name="brand" value="{{ brand }}" {{ 'checked' if brand in filters.brand }} class="h-4 w-4 accent-lime-brand">
+                {{ brand }}
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+        {% endif %}
+
+        <fieldset>
+          <legend class="rc-label">{{ t('catalog.rarity') }}</legend>
+          <div class="space-y-1.5">
+            {% for value in ['common','rare','epic','legendary','limited'] %}
+              <label class="flex cursor-pointer items-center gap-2.5 text-sm text-white/70 hover:text-white">
+                <input type="checkbox" name="rarity" value="{{ value }}" {{ 'checked' if value in filters.rarity }} class="h-4 w-4 accent-lime-brand">
+                {{ RARITY_LABELS.get(value, {}).get(locale, value) }}
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="rc-label">{{ t('catalog.price') }}</legend>
+          <div class="flex items-center gap-2">
+            <label class="sr-only" for="min_price">{{ t('catalog.price_from') }}</label>
+            <input id="min_price" type="number" name="min_price" min="0" step="1" inputmode="numeric"
+                   value="{{ filters.min_price if filters.min_price is not none }}" placeholder="{{ t('catalog.price_from') }}" class="rc-input">
+            <span class="text-white/30" aria-hidden="true">—</span>
+            <label class="sr-only" for="max_price">{{ t('catalog.price_to') }}</label>
+            <input id="max_price" type="number" name="max_price" min="0" step="1" inputmode="numeric"
+                   value="{{ filters.max_price if filters.max_price is not none }}" placeholder="{{ t('catalog.price_to') }}" class="rc-input">
+          </div>
+          <p class="mt-2 text-[11px] text-white/35">{{ price_bounds[0] | money }} — {{ price_bounds[1] | money }}</p>
+        </fieldset>
+
+        <label class="flex cursor-pointer items-center gap-2.5 text-sm text-white/70 hover:text-white">
+          <input type="checkbox" name="in_stock" value="1" {{ 'checked' if filters.in_stock }} class="h-4 w-4 accent-lime-brand">
+          {{ t('catalog.in_stock_only') }}
+        </label>
+
+        <div class="flex gap-2 border-t border-white/8 pt-5">
+          <button type="submit" class="rc-btn-primary flex-1">{{ t('catalog.filters_apply') }}</button>
+          <a href="/catalog" class="rc-btn-ghost">{{ t('catalog.filters_reset') }}</a>
+        </div>
+      </form>
+    </aside>
+
+    <div>
+      <p class="mb-4 text-sm text-white/45">
+        {{ t('catalog.found') }} <span class="font-semibold text-white">{{ result.total }}</span>
+      </p>
+
+      {% if result.items %}
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {% for product in result.items %}
+            {% include "partials/product_card.html" %}
+          {% endfor %}
+        </div>
+
+        {% if result.pages > 1 %}
+          <nav class="mt-10 flex items-center justify-center gap-1.5" aria-label="{{ t('catalog.page') }}">
+            {% if result.has_prev %}
+              <a href="?{{ filters.as_query() | urlencode_query(page=result.page - 1) }}" class="rc-btn-ghost px-4 py-2 text-xs">{{ t('catalog.prev') }}</a>
+            {% endif %}
+            {% for number in result.page_range() %}
+              {% if number is none %}
+                <span class="px-2 text-white/30" aria-hidden="true">…</span>
+              {% else %}
+                <a href="?{{ filters.as_query() | urlencode_query(page=number) }}"
+                   class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == result.page else 'border border-white/10 text-white/70 hover:border-lime-brand/50 hover:text-white' }}"
+                   {% if number == result.page %}aria-current="page"{% endif %}>{{ number }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if result.has_next %}
+              <a href="?{{ filters.as_query() | urlencode_query(page=result.page + 1) }}" class="rc-btn-ghost px-4 py-2 text-xs">{{ t('catalog.next') }}</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% else %}
+        <div class="rc-card grid place-items-center gap-4 p-16 text-center" data-reveal>
+          <span class="text-5xl text-lime-brand/25" aria-hidden="true">♣</span>
+          <h2 class="font-display text-2xl">{{ t('catalog.empty') }}</h2>
+          <p class="text-sm text-white/50">{{ t('catalog.empty_hint') }}</p>
+          <a href="/catalog" class="rc-btn-primary mt-2">{{ t('catalog.reset') }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

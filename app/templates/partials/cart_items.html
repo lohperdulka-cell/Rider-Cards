@@ -1,0 +1,87 @@
+{% if items %}
+  <div class="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+    <div class="rc-card divide-y divide-white/6">
+      {% for item in items %}
+        <div class="flex gap-4 p-4 sm:p-5">
+          <a href="/product/{{ item.product.slug }}" class="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-ink-800">
+            {% if item.product.cover_image %}
+              <img src="{{ item.product.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+            {% else %}
+              <span class="grid h-full place-items-center text-2xl text-lime-brand/25" aria-hidden="true">♠</span>
+            {% endif %}
+          </a>
+
+          <div class="min-w-0 flex-1">
+            <div class="flex items-start justify-between gap-3">
+              <a href="/product/{{ item.product.slug }}" class="font-display text-base text-white transition hover:text-lime-brand">
+                {{ item.product.localized_name(locale) }}
+              </a>
+              <form method="post" action="/cart/remove" hx-post="/cart/remove" hx-target="#rc-cart-root" hx-swap="innerHTML">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <button type="submit" class="text-xs text-rose-300 transition hover:text-rose-200">{{ t('cart.remove') }}</button>
+              </form>
+            </div>
+
+            <p class="mt-1 text-xs text-white/40">{{ item.product.brand }}</p>
+
+            {% if item.over_stock %}
+              <p class="mt-2 text-xs text-amber-300">{{ t('cart.over_stock') }} ({{ item.available }})</p>
+            {% endif %}
+
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <form method="post" action="/cart/update" hx-post="/cart/update" hx-target="#rc-cart-root" hx-swap="innerHTML"
+                    class="flex items-center gap-2">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <label class="sr-only" for="qty-{{ item.product.id }}">{{ t('cart.qty') }}</label>
+                <input id="qty-{{ item.product.id }}" type="number" name="qty" value="{{ item.qty }}" min="0" max="{{ item.available }}"
+                       class="w-16 rounded-lg border border-white/10 bg-ink-900/80 px-2 py-1.5 text-center text-sm">
+                <button type="submit" class="rc-btn-ghost px-3 py-1.5 text-xs">{{ t('cart.updated') }}</button>
+              </form>
+
+              <div class="text-right">
+                <span class="block text-xs text-white/40">{{ item.product.price | money(item.product.currency) }} × {{ item.qty }}</span>
+                <span class="font-display text-lg text-lime-brand">{{ item.subtotal | money(item.product.currency) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <aside class="lg:sticky lg:top-24 lg:self-start">
+      <div class="rc-card space-y-5 p-6">
+        <h2 class="rc-label">{{ t('checkout.summary') }}</h2>
+        <dl class="space-y-2.5 text-sm">
+          <div class="flex items-center justify-between">
+            <dt class="text-white/50">{{ t('cart.items') }}</dt>
+            <dd class="text-white/85">{{ cart_count }}</dd>
+          </div>
+          <div class="flex items-center justify-between border-t border-white/8 pt-3">
+            <dt class="font-semibold text-white">{{ t('cart.total') }}</dt>
+            <dd class="font-display text-2xl text-lime-brand">{{ total | money }}</dd>
+          </div>
+        </dl>
+        <p class="text-xs text-white/40">{{ t('cart.delivery_note') }}</p>
+
+        <a href="/checkout" class="rc-btn-primary w-full py-3">{{ t('cart.checkout') }}</a>
+        <a href="/catalog" class="rc-btn-ghost w-full">{{ t('cart.continue') }}</a>
+
+        <form method="post" action="/cart/clear">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit" class="w-full text-center text-xs text-rose-300 transition hover:text-rose-200">
+            {{ t('cart.clear') }}
+          </button>
+        </form>
+      </div>
+    </aside>
+  </div>
+{% else %}
+  <div class="rc-card grid place-items-center gap-4 p-16 text-center" data-reveal>
+    <span class="text-6xl text-lime-brand/25" aria-hidden="true">♣</span>
+    <h2 class="font-display text-2xl">{{ t('cart.empty') }}</h2>
+    <p class="text-sm text-white/50">{{ t('cart.empty_hint') }}</p>
+    <a href="/catalog" class="rc-btn-primary mt-2 px-7 py-3">{{ t('home.cta.button') }}</a>
+  </div>
+{% endif %}

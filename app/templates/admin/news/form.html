@@ -1,0 +1,87 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.news.title_edit') if item else t('admin.news.title_new') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <a href="/admin/news" class="rc-btn-ghost mb-3 px-3 py-1.5 text-xs">← {{ t('admin.news') }}</a>
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.news.title_edit') if item else t('admin.news.title_new') }}</h1>
+</header>
+
+<form method="post" action="{{ '/admin/news/' ~ item.id if item else '/admin/news/new' }}"
+      enctype="multipart/form-data" class="grid gap-5 xl:grid-cols-[1.6fr_1fr]">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+  <div class="rc-card space-y-4 p-5">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="rc-label" for="n-title-ru">Заголовок (RU) *</label>
+        <input id="n-title-ru" name="title_ru" type="text" required minlength="2" maxlength="240"
+               value="{{ form_data.get('title_ru', '') }}" class="rc-input">
+        {% if errors.get('title_ru') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['title_ru'] }}</p>{% endif %}
+      </div>
+      <div>
+        <label class="rc-label" for="n-title-en">Title (EN)</label>
+        <input id="n-title-en" name="title_en" type="text" maxlength="240" value="{{ form_data.get('title_en', '') }}" class="rc-input">
+      </div>
+    </div>
+
+    <div>
+      <label class="rc-label" for="n-slug">slug</label>
+      <input id="n-slug" name="slug" type="text" maxlength="180" value="{{ form_data.get('slug', '') }}" class="rc-input" placeholder="auto">
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="rc-label" for="n-excerpt-ru">Лид (RU)</label>
+        <textarea id="n-excerpt-ru" name="excerpt_ru" rows="3" maxlength="1000" class="rc-input resize-y">{{ form_data.get('excerpt_ru', '') }}</textarea>
+      </div>
+      <div>
+        <label class="rc-label" for="n-excerpt-en">Excerpt (EN)</label>
+        <textarea id="n-excerpt-en" name="excerpt_en" rows="3" maxlength="1000" class="rc-input resize-y">{{ form_data.get('excerpt_en', '') }}</textarea>
+      </div>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="rc-label" for="n-body-ru">Текст (RU)</label>
+        <textarea id="n-body-ru" name="body_ru" rows="12" maxlength="40000" class="rc-input resize-y">{{ form_data.get('body_ru', '') }}</textarea>
+        <p class="mt-1.5 text-xs text-white/40">{{ t('admin.settings.note') }}</p>
+      </div>
+      <div>
+        <label class="rc-label" for="n-body-en">Body (EN)</label>
+        <textarea id="n-body-en" name="body_en" rows="12" maxlength="40000" class="rc-input resize-y">{{ form_data.get('body_en', '') }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <aside class="space-y-5">
+    <section class="rc-card space-y-4 p-5">
+      <h2 class="rc-label">{{ t('admin.news.published') }}</h2>
+      <label class="flex items-center gap-2.5 text-sm text-white/75">
+        <input type="checkbox" name="is_published" value="1" {{ 'checked' if form_data.get('is_published') }} class="h-4 w-4 accent-lime-brand">
+        {{ t('admin.news.publish') }}
+      </label>
+      {% if item and item.published_at %}
+        <p class="text-xs text-white/40">{{ t('news.published_on') }} {{ item.published_at | dt }}</p>
+      {% endif %}
+    </section>
+
+    <section class="rc-card space-y-4 p-5">
+      <h2 class="rc-label">{{ t('admin.product.cover') }}</h2>
+      {% if item and item.cover_image %}
+        <span class="block h-32 overflow-hidden rounded-xl border border-white/10">
+          <img src="{{ item.cover_image }}" alt="" class="h-full w-full object-cover">
+        </span>
+      {% endif %}
+      <input name="cover_file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+             class="rc-input file:mr-3 file:rounded-full file:border-0 file:bg-lime-brand/15 file:px-3 file:py-1.5 file:text-xs file:text-lime-brand">
+    </section>
+
+    <div class="flex flex-wrap gap-2">
+      <button type="submit" class="rc-btn-primary flex-1 px-6 py-3">{{ t('admin.save') }}</button>
+      <a href="/admin/news" class="rc-btn-ghost px-5 py-3">{{ t('admin.cancel') }}</a>
+    </div>
+  </aside>
+</form>
+{% endblock %}

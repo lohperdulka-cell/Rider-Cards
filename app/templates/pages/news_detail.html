@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ item.localized_title(locale) }} — {{ settings.shop_name }}{% endblock %}
+{% block meta_description %}{{ item.localized_excerpt(locale) | striptags | truncate(160) }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}{{ item.cover_image or '/static/img/og-default.svg' }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<article class="rc-container py-8">
+  <header class="mx-auto max-w-3xl text-center">
+    <time class="text-xs uppercase tracking-wider text-white/40" datetime="{{ item.published_at }}">
+      {{ t('news.published_on') }} {{ item.published_at | date }}
+    </time>
+    <h1 class="mt-3 font-display text-3xl leading-tight sm:text-5xl" data-reveal>{{ item.localized_title(locale) }}</h1>
+    <p class="mt-5 text-lg text-white/55">{{ item.localized_excerpt(locale) }}</p>
+  </header>
+
+  {% if item.cover_image %}
+    <div class="rc-card mx-auto mt-10 max-w-4xl overflow-hidden" data-reveal>
+      <img src="{{ item.cover_image }}" alt="" class="aspect-[16/9] w-full object-cover">
+    </div>
+  {% endif %}
+
+  <div class="mx-auto mt-10 max-w-3xl space-y-5 text-base leading-relaxed text-white/70">
+    {% for paragraph in item.localized_body(locale).split('\n\n') %}
+      {% if paragraph.strip() %}<p>{{ paragraph | trim }}</p>{% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="mx-auto mt-12 flex max-w-3xl flex-wrap items-center justify-between gap-4 border-t border-white/8 pt-6 text-sm text-white/40">
+    <a href="/news" class="rc-btn-ghost">← {{ t('news.back') }}</a>
+    <span>{{ t('news.views') }}: {{ item.views }}</span>
+  </div>
+
+  {% if related %}
+    <section class="mt-16">
+      <h2 class="rc-section-title mb-8" data-reveal>{{ t('news.title') }}</h2>
+      <div class="grid gap-5 md:grid-cols-3">
+        {% for other in related %}
+          <a href="/news/{{ other.slug }}" class="rc-card rc-card-hover p-5" data-reveal>
+            <time class="text-xs text-white/40" datetime="{{ other.published_at }}">{{ other.published_at | date }}</time>
+            <h3 class="mt-2 font-display text-lg text-white">{{ other.localized_title(locale) }}</h3>
+            <p class="mt-2 line-clamp-2 text-sm text-white/50">{{ other.localized_excerpt(locale) }}</p>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</article>
+{% endblock %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "{{ item.localized_title(locale) }}",
+    "description": "{{ item.localized_excerpt(locale) | striptags | truncate(200) }}",
+    "datePublished": "{{ item.published_at }}",
+    "image": "{{ request.url.scheme }}://{{ request.url.netloc }}{{ item.cover_image }}",
+    "publisher": { "@type": "Organization", "name": "{{ settings.shop_name }}" }
+  }
+</script>
+{% endblock %}

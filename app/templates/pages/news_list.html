@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ t('news.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <header class="mb-10">
+    <p class="rc-eyebrow">{{ t('news.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('news.subtitle') }}</h1>
+  </header>
+
+  {% if items %}
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {% for item in items %}
+        <article class="rc-card rc-card-hover overflow-hidden" data-reveal data-reveal-delay="{{ loop.index0 % 3 + 1 }}">
+          <a href="/news/{{ item.slug }}" class="block">
+            <div class="rc-card-media aspect-[16/9] overflow-hidden bg-ink-800">
+              {% if item.cover_image %}
+                <img src="{{ item.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+              {% else %}
+                <div class="grid h-full place-items-center text-4xl text-lime-brand/25" aria-hidden="true">♥</div>
+              {% endif %}
+            </div>
+            <div class="p-5">
+              <time class="text-xs text-white/40" datetime="{{ item.published_at }}">{{ item.published_at | date }}</time>
+              <h2 class="mt-2 font-display text-xl leading-snug text-white">{{ item.localized_title(locale) }}</h2>
+              <p class="mt-3 line-clamp-3 text-sm text-white/55">{{ item.localized_excerpt(locale) }}</p>
+              <div class="mt-4 flex items-center justify-between text-xs text-white/40">
+                <span>{{ t('news.views') }}: {{ item.views }}</span>
+                <span class="font-semibold text-lime-brand">{{ t('news.read_more') }} →</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    </div>
+
+    {% if pages > 1 %}
+      <nav class="mt-12 flex items-center justify-center gap-2" aria-label="{{ t('catalog.page') }}">
+        {% for number in range(1, pages + 1) %}
+          <a href="/news?page={{ number }}"
+             class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == page else 'border border-white/10 text-white/70 hover:border-lime-brand/50' }}"
+             {% if number == page %}aria-current="page"{% endif %}>{{ number }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="rc-card grid place-items-center gap-4 p-16 text-center">
+      <span class="text-5xl text-lime-brand/25" aria-hidden="true">♦</span>
+      <h2 class="font-display text-2xl">{{ t('news.empty') }}</h2>
+      <a href="/catalog" class="rc-btn-primary">{{ t('errors.to_catalog') }}</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

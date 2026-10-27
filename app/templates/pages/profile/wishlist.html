@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ t('profile.tab.wishlist') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <header class="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="rc-eyebrow">{{ t('profile.title') }}</p>
+      <h1 class="rc-section-title" data-reveal>{{ t('profile.tab.wishlist') }}</h1>
+    </div>
+    <a href="/profile" class="rc-btn-ghost">{{ t('profile.tab.data') }}</a>
+  </header>
+
+  {% if items %}
+    <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {% for item in items %}
+        {% set product = item.product %}
+        {% include "partials/product_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="rc-card grid place-items-center gap-4 p-16 text-center" data-reveal>
+      <span class="text-5xl text-lime-brand/25" aria-hidden="true">♥</span>
+      <h2 class="font-display text-2xl">{{ t('profile.wishlist.empty') }}</h2>
+      <p class="text-sm text-white/50">{{ t('cart.empty_hint') }}</p>
+      <a href="/catalog" class="rc-btn-primary mt-2 px-7 py-3">{{ t('home.cta.button') }}</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

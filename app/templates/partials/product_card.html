@@ -1,0 +1,72 @@
+{# Reusable product card. Expects `product` in context and `locale`. #}
+{% set in_wishlist = product.id in wishlist_ids %}
+<article class="rc-card rc-card-hover group flex flex-col overflow-hidden" data-reveal>
+  <div class="relative">
+    <a href="/product/{{ product.slug }}" class="rc-card-media block aspect-[4/5] overflow-hidden bg-ink-800"
+       aria-label="{{ product.localized_name(locale) }}">
+      {% if product.cover_image %}
+        <img src="{{ product.cover_image }}" alt="{{ product.localized_name(locale) }}"
+             class="h-full w-full object-cover" loading="lazy" width="480" height="600">
+      {% else %}
+        <span class="grid h-full place-items-center text-5xl text-lime-brand/25" aria-hidden="true">♠</span>
+      {% endif %}
+    </a>
+
+    <div class="pointer-events-none absolute left-3 top-3 flex flex-col items-start gap-1.5">
+      {% if product.discount_percent %}
+        <span class="rc-badge bg-rose-500/90 text-white">−{{ product.discount_percent }}%</span>
+      {% endif %}
+      {% if product.rarity and product.rarity.value != 'common' %}
+        <span class="rc-badge border border-lime-brand/40 bg-ink-950/80 text-lime-brand">
+          {{ product.rarity_label.get(locale, product.rarity.value) }}
+        </span>
+      {% endif %}
+      {% if not product.in_stock %}
+        <span class="rc-badge bg-ink-950/85 text-white/70">{{ t('product.out_of_stock') }}</span>
+      {% elif product.stock <= 3 %}
+        <span class="rc-badge bg-amber-400/90 text-ink-950">{{ t('product.low_stock') }}</span>
+      {% endif %}
+    </div>
+
+    <button type="button"
+            data-wishlist-toggle="{{ product.id }}"
+            aria-pressed="{{ 'true' if in_wishlist else 'false' }}"
+            aria-label="{{ t('product.wishlist_add') }}"
+            class="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-ink-950/70 text-white/70 backdrop-blur transition hover:border-lime-brand/60 hover:text-lime-brand {{ 'text-lime-brand' if in_wishlist else '' }}">
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="{{ 'currentColor' if in_wishlist else 'none' }}" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8.6 3.9 3.9 0 0 1 19 11.7C19 16.6 12 21 12 20Z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex flex-1 flex-col p-4">
+    {% if product.brand %}
+      <span class="text-[11px] uppercase tracking-wider text-white/40">{{ product.brand }}</span>
+    {% endif %}
+    <h3 class="mt-1 line-clamp-2 font-display text-base leading-snug text-white">
+      <a href="/product/{{ product.slug }}" class="transition hover:text-lime-brand">{{ product.localized_name(locale) }}</a>
+    </h3>
+
+    <div class="mt-auto pt-4">
+      <div class="flex items-end justify-between gap-2">
+        <span class="flex flex-col">
+          {% if product.old_price and product.old_price > product.price %}
+            <s class="text-xs text-white/35">{{ product.old_price | money(product.currency) }}</s>
+          {% endif %}
+          <span class="font-display text-xl text-lime-brand">{{ product.price | money(product.currency) }}</span>
+        </span>
+        <form data-add-to-cart data-product-id="{{ product.id }}" method="post" action="/cart/add">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <input type="hidden" name="qty" value="1">
+          <button type="submit" class="rc-btn-primary px-4 py-2 text-xs" {{ 'disabled' if not product.in_stock }} aria-label="{{ t('product.add_to_cart') }}">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            {{ t('product.add_to_cart') }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</article>

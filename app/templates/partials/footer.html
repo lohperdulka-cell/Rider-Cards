@@ -1,0 +1,59 @@
+<footer class="relative z-10 mt-24 border-t border-white/8 bg-ink-950/80">
+  <div class="rc-container grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="space-y-4">
+      <span class="flex items-center gap-2.5">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-lime-brand to-lime-deep text-ink-950">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true" fill="currentColor">
+            <path d="M12 2.6 9.2 7.4a2.6 2.6 0 0 0 5.6 0L12 2.6Zm0 18.8 2.8-4.8a2.6 2.6 0 0 0-5.6 0L12 21.4ZM2.6 12l4.8 2.8a2.6 2.6 0 0 0 0-5.6L2.6 12Zm18.8 0-4.8-2.8a2.6 2.6 0 0 0 0 5.6l4.8-2.8Z"/>
+          </svg>
+        </span>
+        <span class="font-display text-lg tracking-[0.14em] text-white">RIDER<span class="text-lime-brand">CARDS</span></span>
+      </span>
+      <p class="max-w-xs text-sm leading-relaxed text-white/50">{{ t('footer.tagline') }}</p>
+      <div class="flex gap-2">
+        {% for name, href in [('Telegram', 'https://t.me/'), ('Instagram', 'https://instagram.com/'), ('YouTube', 'https://youtube.com/')] %}
+          <a href="{{ href }}" rel="noopener noreferrer nofollow" target="_blank" class="rc-chip transition hover:border-lime-brand/50 hover:text-white">{{ name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <nav aria-label="{{ t('footer.catalog') }}">
+      <h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white/45">{{ t('footer.catalog') }}</h2>
+      <ul class="space-y-2.5 text-sm">
+        <li><a href="/catalog" class="text-white/65 transition hover:text-lime-brand">{{ t('nav.catalog') }}</a></li>
+        <li><a href="/catalog?sort=popular" class="text-white/65 transition hover:text-lime-brand">{{ t('home.bestsellers.title') }}</a></li>
+        <li><a href="/catalog?in_stock=1" class="text-white/65 transition hover:text-lime-brand">{{ t('product.in_stock') }}</a></li>
+        <li><a href="/news" class="text-white/65 transition hover:text-lime-brand">{{ t('nav.news') }}</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="{{ t('footer.company') }}">
+      <h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white/45">{{ t('footer.company') }}</h2>
+      <ul class="space-y-2.5 text-sm">
+        <li><a href="/about" class="text-white/65 transition hover:text-lime-brand">{{ t('nav.about') }}</a></li>
+        <li><a href="/faq" class="text-white/65 transition hover:text-lime-brand">{{ t('nav.faq') }}</a></li>
+        <li><a href="/sitemap.xml" class="text-white/65 transition hover:text-lime-brand">Sitemap</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white/45">{{ t('footer.help') }}</h2>
+      <ul class="space-y-2.5 text-sm">
+        <li><a href="/support" class="text-lime-brand transition hover:underline">{{ t('nav.support') }}</a></li>
+        <li><a href="mailto:{{ settings.support_email }}" class="text-white/65 transition hover:text-lime-brand">{{ settings.support_email }}</a></li>
+        <li class="text-white/50">{{ t('support.hours') }}</li>
+        <li class="text-white/50">{{ t('footer.payments') }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/8">
+    <div class="rc-container flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/40 sm:flex-row">
+      <p>© {{ now_year }} {{ settings.shop_name }}. {{ t('footer.rights') }}</p>
+      <p class="flex items-center gap-2">
+        <span aria-hidden="true">♠ ♥ ♦ ♣</span>
+        <span>{{ settings.currency }} · {{ locale|upper }}</span>
+      </p>
+    </div>
+  </div>
+</footer>

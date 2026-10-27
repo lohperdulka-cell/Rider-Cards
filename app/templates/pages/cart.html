@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ t('cart.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <h1 class="rc-section-title mb-8" data-reveal>{{ t('cart.title') }}</h1>
+
+  <div id="rc-cart-root">
+    {% include "partials/cart_items.html" %}
+  </div>
+</section>
+{% endblock %}

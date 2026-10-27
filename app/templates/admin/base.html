@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{% block admin_title %}{{ t('admin.title') }}{% endblock %} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+<section class="rc-container py-6">
+  <div class="grid gap-6 lg:grid-cols-[240px_1fr]">
+    <aside class="lg:sticky lg:top-24 lg:self-start">
+      <div class="rc-card p-4">
+        <p class="rc-eyebrow mb-3">{{ t('admin.title') }}</p>
+        <nav class="flex flex-col gap-0.5" aria-label="{{ t('admin.title') }}">
+          {% set items = [
+            ('/admin', 'admin.dashboard', '▦'),
+            ('/admin/orders', 'admin.orders', '▤'),
+            ('/admin/products', 'admin.products', '♠'),
+            ('/admin/categories', 'admin.categories', '♣'),
+            ('/admin/news', 'admin.news', '✦'),
+            ('/admin/users', 'admin.users', '☺'),
+            ('/admin/chats', 'admin.chats', '✉'),
+            ('/admin/tickets', 'admin.tickets', '⚑'),
+            ('/admin/audit', 'admin.audit', '⌘'),
+            ('/admin/settings', 'admin.settings', '⚙')
+          ] %}
+          {% for href, key, icon in items %}
+            {% set active = current_path == href or (href != '/admin' and current_path.startswith(href)) %}
+            <a href="{{ href }}"
+               class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition {{ 'bg-lime-brand/12 text-lime-brand' if active else 'text-white/70 hover:bg-white/[0.06] hover:text-white' }}"
+               {% if active %}aria-current="page"{% endif %}>
+              <span aria-hidden="true">{{ icon }}</span>
+              <span class="flex-1">{{ t(key) }}</span>
+              {% if href == '/admin/chats' and admin_unread_count %}
+                <span class="grid h-5 min-w-5 place-items-center rounded-full bg-lime-brand px-1 text-[10px] font-bold text-ink-950">{{ admin_unread_count }}</span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </nav>
+        <div class="mt-4 border-t border-white/8 pt-4">
+          <a href="/" class="rc-btn-ghost w-full text-xs">{{ t('admin.back_to_site') }}</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="min-w-0">
+      {% block admin_content %}{% endblock %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="/static/vendor/chart.umd.min.js"></script>
+<script defer src="/static/js/admin.js"></script>
+{% block admin_scripts %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.audit') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.audit') }}</h1>
+  <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ total }}</p>
+</header>
+
+<form method="get" action="/admin/audit" class="rc-card mb-5 flex flex-wrap items-end gap-3 p-4">
+  <div class="min-w-[220px] flex-1">
+    <label class="rc-label" for="audit-q">{{ t('admin.search') }}</label>
+    <input id="audit-q" name="q" type="search" value="{{ filters.q }}" placeholder="product.update / admin@…" class="rc-input">
+  </div>
+  <button type="submit" class="rc-btn-primary px-4">{{ t('admin.filter') }}</button>
+  <a href="/admin/audit" class="rc-btn-ghost px-3">{{ t('admin.reset') }}</a>
+</form>
+
+{% if entries %}
+  <div class="rc-card overflow-x-auto">
+    <table class="w-full min-w-[760px] text-sm">
+      <thead>
+        <tr class="border-b border-white/8 text-left text-xs uppercase tracking-wider text-white/40">
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">{{ t('admin.audit.when') }}</th>
+          <th class="px-4 py-3">{{ t('admin.audit.actor') }}</th>
+          <th class="px-4 py-3">{{ t('admin.audit.action') }}</th>
+          <th class="px-4 py-3">{{ t('admin.audit.entity') }}</th>
+          <th class="px-4 py-3">{{ t('admin.audit.details') }}</th>
+          <th class="px-4 py-3">{{ t('admin.audit.ip') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+          <tr class="border-b border-white/5 last:border-0">
+            <td class="px-4 py-3 text-white/35">{{ entry.id }}</td>
+            <td class="px-4 py-3 whitespace-nowrap text-white/50">{{ entry.created_at | dt }}</td>
+            <td class="px-4 py-3 text-white/75">{{ entry.actor_email or '—' }}</td>
+            <td class="px-4 py-3"><span class="font-mono text-xs text-lime-brand">{{ entry.action }}</span></td>
+            <td class="px-4 py-3 text-white/55">
+              {{ entry.entity }}{% if entry.entity_id %}<span class="text-white/35">:{{ entry.entity_id }}</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 text-xs text-white/50">{{ entry.details | truncate(80) }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-white/35">{{ entry.ip }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if pages > 1 %}
+    <nav class="mt-6 flex items-center justify-center gap-1.5" aria-label="{{ t('admin.page') }}">
+      {% for number in range(1, pages + 1) %}
+        <a href="?page={{ number }}&q={{ filters.q }}"
+           class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == page else 'border border-white/10 text-white/70 hover:border-lime-brand/50' }}"
+           {% if number == page %}aria-current="page"{% endif %}>{{ number }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.audit.empty') }}</div>
+{% endif %}
+{% endblock %}

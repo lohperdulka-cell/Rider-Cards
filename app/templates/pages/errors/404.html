@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ t('errors.404.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+<section class="relative grid min-h-[70vh] place-items-center overflow-hidden py-16">
+  <div class="rc-mesh" aria-hidden="true"></div>
+  <div class="rc-suits" aria-hidden="true"></div>
+
+  <div class="rc-container relative text-center">
+    <p class="font-display text-[7rem] leading-none text-lime-brand/20" aria-hidden="true">404</p>
+    <h1 class="font-display text-3xl sm:text-4xl">{{ t('errors.404.title') }}</h1>
+    <p class="mx-auto mt-4 max-w-md text-white/55">{{ t('errors.404.text') }}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="/" class="rc-btn-primary px-7 py-3">{{ t('errors.back_home') }}</a>
+      <a href="/catalog" class="rc-btn-ghost px-7 py-3">{{ t('errors.to_catalog') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

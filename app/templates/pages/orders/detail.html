@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ t('orders.detail.title', id=order.id) }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <header class="mb-8 flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <p class="rc-eyebrow">{{ t('orders.number') }} #{{ order.id }}</p>
+      <h1 class="rc-section-title" data-reveal>{{ t('orders.detail.title', id=order.id) }}</h1>
+      <time class="mt-2 block text-sm text-white/45" datetime="{{ order.created_at }}">{{ order.created_at | dt }}</time>
+    </div>
+    <span class="rc-badge
+      {% if order.status.value == 'delivered' %}bg-emerald-500/15 text-emerald-300
+      {% elif order.status.value == 'cancelled' %}bg-rose-500/15 text-rose-300
+      {% elif order.status.value == 'pending' %}bg-amber-400/15 text-amber-300
+      {% elif order.status.value == 'shipped' %}bg-violet-500/15 text-violet-300
+      {% elif order.status.value == 'processing' %}bg-sky-500/15 text-sky-300
+      {% else %}bg-lime-brand/15 text-lime-brand{% endif %} px-4 py-2 text-sm">
+      {{ t('orders.status.' ~ order.status.value) }}
+    </span>
+  </header>
+
+  {% include "partials/order_info.html" %}
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+    <div class="rc-card p-6">
+      <h2 class="rc-label">{{ t('orders.detail.items') }}</h2>
+      <ul class="divide-y divide-white/6">
+        {% for item in order.items %}
+          <li class="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
+            <span class="h-16 w-14 shrink-0 overflow-hidden rounded-xl bg-ink-800">
+              {% if item.cover_image %}
+                <img src="{{ item.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+              {% else %}
+                <span class="grid h-full place-items-center text-lg text-lime-brand/25" aria-hidden="true">♠</span>
+              {% endif %}
+            </span>
+            <span class="min-w-0 flex-1">
+              {% if item.product_slug %}
+                <a href="/product/{{ item.product_slug }}" class="block truncate text-sm text-white/85 transition hover:text-lime-brand">
+                  {{ item.product_name }}
+                </a>
+              {% else %}
+                <span class="block truncate text-sm text-white/85">{{ item.product_name }}</span>
+              {% endif %}
+              <span class="text-xs text-white/40">{{ item.price_at_purchase | money(order.currency) }} × {{ item.qty }}</span>
+            </span>
+            <span class="font-display text-lg text-lime-brand">{{ item.subtotal | money(order.currency) }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="mt-5 flex items-center justify-between border-t border-white/8 pt-4">
+        <span class="font-semibold text-white">{{ t('orders.total') }}</span>
+        <span class="font-display text-2xl text-lime-brand">{{ order.total | money(order.currency) }}</span>
+      </div>
+    </div>
+
+    <div class="space-y-5">
+      <div class="rc-card p-6">
+        <h2 class="rc-label">{{ t('orders.detail.delivery') }}</h2>
+        <p class="whitespace-pre-line text-sm text-white/70">{{ order.address }}</p>
+        <h2 class="rc-label mt-5">{{ t('orders.detail.contact') }}</h2>
+        <p class="text-sm text-white/70">{{ order.contact }}</p>
+        {% if order.note %}
+          <h2 class="rc-label mt-5">{{ t('orders.detail.note') }}</h2>
+          <p class="whitespace-pre-line text-sm text-white/70">{{ order.note }}</p>
+        {% endif %}
+      </div>
+
+      <div class="rc-card space-y-3 p-6">
+        {% if chat %}
+          <a href="/chats/{{ chat.id }}" class="rc-btn-primary w-full py-3">{{ t('orders.open_chat') }}</a>
+        {% endif %}
+        {% if order.status.value in ['pending', 'paid'] %}
+          <form method="post" action="/profile/orders/{{ order.id }}/cancel"
+                onsubmit="return confirm('{{ t('orders.cancel') }}?')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="rc-btn-danger w-full py-3">{{ t('orders.cancel') }}</button>
+          </form>
+        {% endif %}
+        <a href="/profile/orders" class="rc-btn-ghost w-full">{{ t('orders.title') }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

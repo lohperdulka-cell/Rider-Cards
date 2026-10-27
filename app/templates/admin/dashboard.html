@@ -1,0 +1,187 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.dashboard') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('admin.dashboard') }}</h1>
+  </div>
+  <p class="text-sm text-white/45">{{ admin.display_name }} · {{ admin.email }}</p>
+</header>
+
+<dl class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+  {% set kpis = [
+    ('admin.kpi.orders_today', stats.orders_today, '▤', ''),
+    ('admin.kpi.orders_week', stats.orders_week, '▥', ''),
+    ('admin.kpi.revenue_week', stats.revenue_week | money, '₽', 'lime'),
+    ('admin.kpi.new_users', stats.new_users_week, '☺', ''),
+    ('admin.kpi.open_chats', stats.open_chats, '✉', ''),
+    ('admin.kpi.unread', stats.unread_messages, '⚑', 'amber'),
+    ('admin.kpi.low_stock', stats.low_stock, '⚠', 'rose'),
+    ('admin.kpi.avg_order', stats.avg_order | money, '∑', '')
+  ] %}
+  {% for key, value, icon, tone in kpis %}
+    <div class="rc-card p-5" data-reveal data-reveal-delay="{{ loop.index0 % 4 + 1 }}">
+      <dt class="flex items-center justify-between gap-2 text-xs uppercase tracking-wider text-white/40">
+        <span>{{ t(key) }}</span>
+        <span class="text-lg {{ 'text-lime-brand' if tone == 'lime' else 'text-amber-300' if tone == 'amber' else 'text-rose-300' if tone == 'rose' else 'text-white/25' }}" aria-hidden="true">{{ icon }}</span>
+      </dt>
+      <dd class="mt-2 font-display text-3xl {{ 'text-lime-brand' if tone == 'lime' else 'text-white' }}">{{ value }}</dd>
+    </div>
+  {% endfor %}
+</dl>
+
+<section class="rc-card mt-6 p-5" data-reveal>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <h2 class="rc-label mb-0">{{ t('admin.chart.title') }}</h2>
+    <p class="text-xs text-white/40">{{ t('admin.kpi.total_orders') }}: {{ stats.total_orders }} · {{ t('admin.kpi.revenue') }}: {{ stats.revenue_total | money }}</p>
+  </div>
+  <div class="relative h-72">
+    <canvas id="rc-admin-chart" aria-label="{{ t('admin.chart.title') }}" role="img"></canvas>
+  </div>
+  <script type="application/json" id="rc-admin-series">{{ series_json | safe }}</script>
+</section>
+
+<div class="mt-6 grid gap-5 xl:grid-cols-2">
+  <section class="rc-card p-5" data-reveal>
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <h2 class="rc-label mb-0">{{ t('admin.recent_orders') }}</h2>
+      <a href="/admin/orders" class="text-xs text-lime-brand hover:underline">{{ t('admin.orders') }}</a>
+    </div>
+    {% if recent_orders %}
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/8 text-left text-xs uppercase tracking-wider text-white/40">
+              <th class="py-2 pr-3">#</th>
+              <th class="py-2 pr-3">{{ t('admin.audit.when') }}</th>
+              <th class="py-2 pr-3">{{ t('admin.status') }}</th>
+              <th class="py-2 text-right">{{ t('orders.total') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in recent_orders %}
+              <tr class="border-b border-white/5 last:border-0">
+                <td class="py-2.5 pr-3">
+                  <a href="/admin/orders/{{ order.id }}" class="font-semibold text-lime-brand hover:underline">#{{ order.id }}</a>
+                </td>
+                <td class="py-2.5 pr-3 text-white/50">{{ order.created_at | dt }}</td>
+                <td class="py-2.5 pr-3">
+                  <span class="rc-badge bg-white/8 text-white/60">{{ t('orders.status.' ~ order.status.value) }}</span>
+                </td>
+                <td class="py-2.5 text-right font-semibold text-white/85">{{ order.total | money(order.currency) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-sm text-white/45">{{ t('admin.empty') }}</p>
+    {% endif %}
+  </section>
+
+  <section class="rc-card p-5" data-reveal data-reveal-delay="1">
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <h2 class="rc-label mb-0">{{ t('admin.unread_chats') }}</h2>
+      <a href="/admin/chats?only_unread=1" class="text-xs text-lime-brand hover:underline">{{ t('admin.chats') }}</a>
+    </div>
+    {% if unread_chats %}
+      <ul class="space-y-3">
+        {% for chat in unread_chats %}
+          <li class="flex items-center gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
+            <span class="rc-avatar">{{ chat.user.initials if chat.user else 'RC' }}</span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-sm text-white/85">{{ chat.user.display_name if chat.user else '—' }}</span>
+              <span class="block truncate text-xs text-white/40">
+                {{ t('orders.number') }} #{{ chat.order_id }} · {{ chat.last_message.text | truncate(48) if chat.last_message else '' }}
+              </span>
+            </span>
+            <span class="flex shrink-0 flex-col items-end gap-1">
+              <span class="grid h-5 min-w-5 place-items-center rounded-full bg-lime-brand px-1 text-[10px] font-bold text-ink-950">{{ chat.unread_for_admin }}</span>
+              <a href="/admin/chats/{{ chat.id }}" class="text-xs text-lime-brand hover:underline">{{ t('admin.open_chat') }}</a>
+            </span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-sm text-white/45">{{ t('admin.empty') }}</p>
+    {% endif %}
+  </section>
+
+  <section class="rc-card p-5" data-reveal data-reveal-delay="2">
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <h2 class="rc-label mb-0">{{ t('admin.low_stock_list') }}</h2>
+      <a href="/admin/products" class="text-xs text-lime-brand hover:underline">{{ t('admin.products') }}</a>
+    </div>
+    {% if low_stock %}
+      <ul class="space-y-3">
+        {% for product in low_stock %}
+          <li class="flex items-center gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
+            <span class="h-11 w-9 shrink-0 overflow-hidden rounded-lg bg-ink-800">
+              {% if product.cover_image %}
+                <img src="{{ product.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+              {% endif %}
+            </span>
+            <span class="min-w-0 flex-1">
+              <a href="/admin/products/{{ product.id }}" class="block truncate text-sm text-white/85 hover:text-lime-brand">{{ product.localized_name(locale) }}</a>
+              <span class="text-xs text-white/40">{{ product.brand }}</span>
+            </span>
+            <span class="rc-badge bg-rose-500/15 text-rose-300">{{ product.stock }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-sm text-white/45">{{ t('admin.empty') }}</p>
+    {% endif %}
+  </section>
+
+  <section class="rc-card p-5" data-reveal data-reveal-delay="3">
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <h2 class="rc-label mb-0">{{ t('admin.recent_users') }}</h2>
+      <a href="/admin/users" class="text-xs text-lime-brand hover:underline">{{ t('admin.users') }}</a>
+    </div>
+    {% if recent_users %}
+      <ul class="space-y-3">
+        {% for item in recent_users %}
+          <li class="flex items-center gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
+            <span class="rc-avatar">{{ item.initials }}</span>
+            <span class="min-w-0 flex-1">
+              <a href="/admin/users/{{ item.id }}" class="block truncate text-sm text-white/85 hover:text-lime-brand">{{ item.display_name }}</a>
+              <span class="block truncate text-xs text-white/40">{{ item.email }}</span>
+            </span>
+            <time class="shrink-0 text-[11px] text-white/35">{{ item.created_at | date }}</time>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-sm text-white/45">{{ t('admin.empty') }}</p>
+    {% endif %}
+  </section>
+</div>
+
+<section class="rc-card mt-6 p-5" data-reveal>
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <h2 class="rc-label mb-0">{{ t('admin.audit') }}</h2>
+    <a href="/admin/audit" class="text-xs text-lime-brand hover:underline">{{ t('admin.audit') }}</a>
+  </div>
+  {% if audit_entries %}
+    <ul class="space-y-2 text-sm">
+      {% for entry in audit_entries %}
+        <li class="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-white/5 pb-2 text-xs last:border-0 last:pb-0">
+          <span class="font-mono text-lime-brand">{{ entry.action }}</span>
+          <span class="text-white/55">{{ entry.actor_email or '—' }}</span>
+          <span class="text-white/35">{{ entry.entity }}{% if entry.entity_id %}:{{ entry.entity_id }}{% endif %}</span>
+          <span class="ml-auto text-white/30">{{ entry.created_at | dt }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-sm text-white/45">{{ t('admin.audit.empty') }}</p>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block admin_scripts %}
+<script defer src="/static/js/dashboard-init.js"></script>
+{% endblock %}
