@@ -5,6 +5,9 @@ on:
     branches: ["**"]
   pull_request:
 
+env:
+  UV_PYTHON: "3.13"
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -13,8 +16,9 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.13"
-      - run: uv venv .venv --python 3.13
-      - run: uv pip install -p .venv -e ".[dev]"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv pip install --python .venv -e ".[dev]"
       - name: Ruff
         run: .venv/bin/ruff check app tests
       - name: Mypy
@@ -32,8 +36,9 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.13"
-      - run: uv venv .venv --python 3.13
-      - run: uv pip install -p .venv -e ".[dev]"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv pip install --python .venv -e ".[dev]"
       - name: Install Chromium
         run: .venv/bin/python -m playwright install --with-deps chromium
       - name: Playwright journey
