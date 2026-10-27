@@ -54,6 +54,21 @@ class Settings(BaseSettings):
             raise ValueError("SECRET_KEY must be at least 16 characters long")
         return v
 
+    @field_validator("database_url")
+    @classmethod
+    def _async_driver(cls, v: str) -> str:
+        """Accept the URLs managed hosts hand out and pick an async driver.
+
+        Render/Heroku-style variables are ``postgres://`` or ``postgresql://``,
+        neither of which SQLAlchemy can drive asynchronously. Rewriting the
+        scheme here turns an opaque startup crash into a working connection.
+        """
+        if v.startswith("postgres://"):
+            return "postgresql+asyncpg://" + v[len("postgres://") :]
+        if v.startswith("postgresql://"):
+            return "postgresql+asyncpg://" + v[len("postgresql://") :]
+        return v
+
     @property
     def locales(self) -> list[str]:
         return [item.strip() for item in self.supported_locales.split(",") if item.strip()]

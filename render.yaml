@@ -1,0 +1,53 @@
+# Render Blueprint. Commit this file and Render offers "New > Blueprint" on the repo.
+#
+# Two decisions worth knowing:
+#   * Postgres instead of SQLite. Render's container filesystem is ephemeral, so a
+#     SQLite file is wiped on every deploy and restart. The database below keeps
+#     orders and users across deploys.
+#   * Docker runtime instead of Render's native Python runtime, because the app
+#     ships its own pinned Python and system deps in Dockerfile.
+
+databases:
+  - name: ridercards-db
+    databaseName: ridercards
+    user: ridercards
+    plan: free
+    region: frankfurt
+
+services:
+  - type: web
+    name: ridercards
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: frankfurt
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: ENV
+        value: prod
+      - key: DEBUG
+        value: "false"
+      # Render generates a strong value; it is never stored in the repo.
+      - key: SECRET_KEY
+        generateValue: true
+      # Render's own https terminator, so cookies must be Secure-only.
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ridercards-db
+          property: connectionString
+      # Prompted in the dashboard on first deploy; not written to the repo.
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DEFAULT_LOCALE
+        value: ru
+      - key: SUPPORTED_LOCALES
+        value: ru,en
+      - key: CURRENCY
+        value: RUB
+      - key: SUPPORT_EMAIL
+        sync: false

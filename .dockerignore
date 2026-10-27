@@ -1,0 +1,32 @@
+# Keep the image small and never ship secrets or local state.
+.git
+.github
+.venv
+venv
+__pycache__
+*.py[cod]
+.mypy_cache
+.pytest_cache
+.ruff_cache
+
+# Secrets and local databases must never enter the image.
+.env
+.env.*
+!.env.example
+data/
+*.db
+*.sqlite3
+
+# Uploads are runtime state, not build input.
+app/static/uploads/*
+!app/static/uploads/.gitkeep
+
+# Not needed at runtime.
+tests
+node_modules
+dist
+build
+*.egg-info
+playwright-report
+test-results
+.agent_tmp
