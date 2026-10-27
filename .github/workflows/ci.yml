@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - run: uv venv .venv --python 3.13
+      - run: uv pip install -p .venv -e ".[dev]"
+      - name: Ruff
+        run: .venv/bin/ruff check app tests
+      - name: Mypy
+        run: .venv/bin/mypy app
+      - name: pytest
+        run: .venv/bin/python -m pytest -q
+      - name: pip-audit
+        run: .venv/bin/python -m pip_audit --skip-editable
+        continue-on-error: true
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - run: uv venv .venv --python 3.13
+      - run: uv pip install -p .venv -e ".[dev]"
+      - name: Install Chromium
+        run: .venv/bin/python -m playwright install --with-deps chromium
+      - name: Playwright journey
+        run: .venv/bin/python -m pytest tests/e2e -q
