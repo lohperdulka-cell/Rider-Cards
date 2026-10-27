@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}{{ t('orders.detail.title', id=chat.order_id) }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+<section class="rc-container py-6">
+  {% if is_admin %}
+    <a href="/admin/chats" class="rc-btn-ghost mb-4 px-4 py-2 text-xs">← {{ t('admin.chats') }}</a>
+  {% else %}
+    <a href="/chats" class="rc-btn-ghost mb-4 px-4 py-2 text-xs">← {{ t('chat.list_title') }}</a>
+  {% endif %}
+
+  <div id="rc-chat" data-chat-root data-chat-id="{{ chat.id }}" data-chat-admin="{{ '1' if is_admin else '0' }}"
+       data-poll-url="/chats/{{ chat.id }}/messages"
+       data-send-url="/chats/{{ chat.id }}/messages"
+       data-read-url="/chats/{{ chat.id }}/read">
+    <div class="grid gap-5 lg:grid-cols-[1.6fr_1fr]">
+      <div class="rc-card flex h-[70vh] min-h-[520px] flex-col overflow-hidden">
+        <header class="flex items-center gap-3 border-b border-white/8 px-5 py-4">
+          <span class="rc-avatar">{{ 'RC' if is_admin else (user.initials if user else 'RC') }}</span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-display text-lg text-white">{{ t('chat.support') }}</p>
+            <p class="text-[11px] text-white/40" data-chat-status>{{ t('chat.connecting') }}</p>
+          </div>
+          {% if is_admin and chat.is_closed %}
+            <span class="rc-badge bg-white/8 text-white/50">{{ t('chat.closed') }}</span>
+          {% endif %}
+        </header>
+
+        <div data-chat-stream class="rc-chat-scroll flex flex-1 flex-col gap-3 overflow-y-auto px-5 py-4"
+             role="log" aria-live="polite" aria-label="{{ t('chat.title') }}">
+          {% for message in chat.messages %}
+            {% if message.is_system %}
+              <div class="rc-bubble rc-bubble-system" data-message-id="{{ message.id }}">
+                {{ message.text }}
+                <span class="ml-2 opacity-60">{{ message.created_at | dt('%H:%M') }}</span>
+              </div>
+            {% else %}
+              {% set own = (message.sender_role.value == 'admin') if is_admin else (message.sender_role.value == 'user') %}
+              <div class="flex {{ 'justify-end' if own else 'justify-start' }} gap-2" data-message-id="{{ message.id }}">
+                {% if not own %}
+                  <span class="rc-avatar mt-1" aria-hidden="true">{{ message.sender.initials if message.sender else 'RC' }}</span>
+                {% endif %}
+                <div class="rc-bubble {{ 'rc-bubble-user' if own else 'rc-bubble-admin' }}">
+                  <div class="mb-1 flex items-center gap-2 text-[11px] opacity-70">
+                    <span>{{ message.sender.display_name if message.sender else t('chat.support') }}</span>
+                    <span>{{ message.created_at | dt('%H:%M') }}</span>
+                  </div>
+                  <div class="whitespace-pre-wrap break-words">{{ message.text }}</div>
+                </div>
+              </div>
+            {% endif %}
+          {% else %}
+            <p class="m-auto text-sm text-white/40" data-chat-empty>{{ t('chat.empty') }}</p>
+          {% endfor %}
+        </div>
+
+        {% if chat.is_closed and not is_admin %}
+          <p class="border-t border-white/8 px-5 py-4 text-center text-sm text-white/45">{{ t('chat.closed') }}</p>
+        {% else %}
+          <form data-chat-form method="post" action="/chats/{{ chat.id }}/messages"
+                class="flex items-end gap-2 border-t border-white/8 px-4 py-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label class="sr-only" for="chat-input">{{ t('chat.placeholder') }}</label>
+            <textarea id="chat-input" data-chat-input name="text" rows="1" required maxlength="2000"
+                      placeholder="{{ t('chat.placeholder') }}" class="rc-input resize-none" style="max-height:8rem"></textarea>
+            <button type="submit" class="rc-btn-primary h-11 shrink-0 px-5" aria-label="{{ t('chat.send') }}">
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="m4 12 16-8-6 8 6 8-16-8Z"/>
+              </svg>
+              <span class="hidden sm:inline">{{ t('chat.send') }}</span>
+            </button>
+          </form>
+        {% endif %}
+      </div>
+
+      <aside class="space-y-5">
+        {% if order %}
+          {% include "partials/order_info.html" %}
+        {% endif %}
+
+        {% if is_admin and order %}
+          <div class="rc-card p-5">
+            <h2 class="rc-label">{{ t('admin.change_status') }}</h2>
+            <form method="post" action="/admin/orders/{{ order.id }}/status" class="flex gap-2">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <label class="sr-only" for="chat-status-select">{{ t('admin.status') }}</label>
+              <select id="chat-status-select" name="status" class="rc-input">
+                {% for value in ORDER_STATUS_META.keys() %}
+                  <option value="{{ value }}" {{ 'selected' if order.status.value == value }}>
+                    {{ t('orders.status.' ~ value) }}
+                  </option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="rc-btn-primary shrink-0 px-5">{{ t('admin.save') }}</button>
+            </form>
+          </div>
+
+          <form method="post" action="/admin/chats/{{ chat.id }}/close" class="rc-card p-5">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="rc-btn-ghost w-full">
+              {{ t('chat.closed') if chat.is_closed else t('admin.chats') }}
+            </button>
+          </form>
+        {% endif %}
+
+        {% if user and not is_admin %}
+          <div class="rc-card p-5">
+            <h2 class="rc-label">{{ t('support.contacts') }}</h2>
+            <ul class="space-y-2.5 text-sm">
+              <li class="flex items-center justify-between gap-3">
+                <span class="text-white/45">{{ t('support.email') }}</span>
+                <a href="mailto:{{ settings.support_email }}" class="rc-link">{{ settings.support_email }}</a>
+              </li>
+              <li class="flex items-center justify-between gap-3">
+                <span class="text-white/45">{{ t('support.phone') }}</span>
+                <a href="tel:+78005553535" class="rc-link">+7 800 555-35-35</a>
+              </li>
+              <li class="text-white/45">{{ t('support.hours') }}</li>
+            </ul>
+          </div>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="/static/js/chat-init.js"></script>
+{% endblock %}

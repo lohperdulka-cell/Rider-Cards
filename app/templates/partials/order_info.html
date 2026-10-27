@@ -1,0 +1,36 @@
+{# Order status info block: used in the chat header and order cards (7.7). #}
+<div class="rc-card p-5" data-order-info="{{ order.id }}">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <span class="font-display text-lg text-white">{{ t('orders.number') }} #{{ order.id }}</span>
+      <span class="rc-badge
+        {% if order.status.value == 'delivered' %}bg-emerald-500/15 text-emerald-300
+        {% elif order.status.value == 'cancelled' %}bg-rose-500/15 text-rose-300
+        {% elif order.status.value == 'pending' %}bg-amber-400/15 text-amber-300
+        {% elif order.status.value == 'shipped' %}bg-violet-500/15 text-violet-300
+        {% elif order.status.value == 'processing' %}bg-sky-500/15 text-sky-300
+        {% else %}bg-lime-brand/15 text-lime-brand{% endif %}"
+        data-order-status>
+        {{ t('orders.status.' ~ order.status.value) }}
+      </span>
+    </div>
+    <div class="flex items-center gap-3 text-sm">
+      <span class="text-white/45">{{ order.created_at | dt }}</span>
+      <span class="font-display text-xl text-lime-brand">{{ order.total | money(order.currency) }}</span>
+    </div>
+  </div>
+
+  <details class="group mt-3">
+    <summary class="cursor-pointer list-none text-xs text-white/45 transition hover:text-lime-brand">
+      {{ t('orders.items') }} ({{ order.items_count }}) <span class="transition group-open:rotate-180" aria-hidden="true">▾</span>
+    </summary>
+    <ul class="mt-3 space-y-1.5 text-xs text-white/60">
+      {% for item in order.items %}
+        <li class="flex items-center justify-between gap-3">
+          <span class="truncate">{{ item.product_name }} × {{ item.qty }}</span>
+          <span>{{ item.subtotal | money(order.currency) }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </details>
+</div>

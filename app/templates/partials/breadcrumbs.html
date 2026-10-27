@@ -1,0 +1,17 @@
+{% if crumbs %}
+<nav aria-label="Breadcrumb" class="rc-container pt-6">
+  <ol class="flex flex-wrap items-center gap-2 text-xs text-white/45">
+    <li><a href="/" class="transition hover:text-lime-brand">{{ t('nav.home') }}</a></li>
+    {% for label, href in crumbs %}
+      <li aria-hidden="true" class="text-white/25">/</li>
+      <li>
+        {% if href and not loop.last %}
+          <a href="{{ href }}" class="transition hover:text-lime-brand">{{ label }}</a>
+        {% else %}
+          <span class="text-white/70" aria-current="page">{{ label }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %}

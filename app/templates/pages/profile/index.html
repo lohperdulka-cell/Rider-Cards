@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}{{ t('profile.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <header class="mb-8">
+    <p class="rc-eyebrow">{{ user.email }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('profile.title') }}</h1>
+    <p class="mt-2 text-sm text-white/45">{{ t('profile.since') }} {{ user.created_at | date }}</p>
+  </header>
+
+  <dl class="mb-8 grid gap-4 sm:grid-cols-3">
+    <div class="rc-card p-5" data-reveal>
+      <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('profile.stats.orders') }}</dt>
+      <dd class="font-display text-3xl text-lime-brand">{{ orders | length }}</dd>
+    </div>
+    <div class="rc-card p-5" data-reveal data-reveal-delay="1">
+      <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('profile.stats.spent') }}</dt>
+      <dd class="font-display text-3xl text-lime-brand">{{ spent | money }}</dd>
+    </div>
+    <div class="rc-card p-5" data-reveal data-reveal-delay="2">
+      <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('profile.stats.wishlist') }}</dt>
+      <dd class="font-display text-3xl text-lime-brand">{{ wishlist_items | length }}</dd>
+    </div>
+  </dl>
+
+  <nav class="mb-8 flex flex-wrap gap-2" aria-label="{{ t('profile.title') }}">
+    {% set tabs = [
+      ('/profile', 'profile.tab.data'),
+      ('/profile/orders', 'profile.tab.orders'),
+      ('/profile/wishlist', 'profile.tab.wishlist'),
+      ('/profile/tickets', 'profile.tab.tickets'),
+      ('/chats', 'profile.tab.chats')
+    ] %}
+    {% for href, key in tabs %}
+      <a href="{{ href }}"
+         class="rounded-full px-4 py-2 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if current_path == href else 'border border-white/10 text-white/70 hover:border-lime-brand/50 hover:text-white' }}">
+        {{ t(key) }}
+      </a>
+    {% endfor %}
+  </nav>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <form method="post" action="/profile" class="rc-card space-y-5 p-6" data-reveal novalidate>
+      <h2 class="rc-label">{{ t('profile.tab.data') }}</h2>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      {% if errors.get('form') %}
+        <p class="rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">{{ errors['form'] }}</p>
+      {% endif %}
+
+      <div>
+        <label class="rc-label" for="profile-name">{{ t('profile.name') }}</label>
+        <input id="profile-name" name="name" type="text" required minlength="2" maxlength="120"
+               value="{{ form_data.get('name', user.name) }}" class="rc-input" autocomplete="name">
+        {% if errors.get('name') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['name'] }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="rc-label" for="profile-email">{{ t('profile.email') }}</label>
+        <input id="profile-email" name="email" type="email" required
+               value="{{ form_data.get('email', user.email) }}" class="rc-input" autocomplete="email">
+        {% if errors.get('email') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['email'] }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="rc-label" for="profile-locale">{{ t('profile.locale') }}</label>
+        <select id="profile-locale" name="locale" class="rc-input">
+          {% for code in SUPPORTED_LOCALES %}
+            <option value="{{ code }}" {{ 'selected' if (form_data.get('locale') or user.locale) == code }}>
+              {{ LOCALE_LABELS.get(code, code | upper) }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="rc-btn-primary px-7 py-3">{{ t('profile.save') }}</button>
+    </form>
+
+    <form method="post" action="/profile/password" class="rc-card space-y-5 p-6" data-reveal data-reveal-delay="1" novalidate>
+      <h2 class="rc-label">{{ t('profile.password.title') }}</h2>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div>
+        <label class="rc-label" for="pw-current">{{ t('profile.password.current') }}</label>
+        <input id="pw-current" name="current_password" type="password" required autocomplete="current-password" class="rc-input">
+      </div>
+      <div>
+        <label class="rc-label" for="pw-new">{{ t('profile.password.new') }}</label>
+        <input id="pw-new" name="new_password" type="password" required minlength="8" autocomplete="new-password" class="rc-input">
+      </div>
+      <div>
+        <label class="rc-label" for="pw-confirm">{{ t('profile.password.confirm') }}</label>
+        <input id="pw-confirm" name="new_password_confirm" type="password" required minlength="8" autocomplete="new-password" class="rc-input">
+      </div>
+
+      <button type="submit" class="rc-btn-ghost px-7 py-3">{{ t('profile.password.submit') }}</button>
+    </form>
+  </div>
+
+  <section class="mt-10">
+    <div class="mb-5 flex items-center justify-between gap-4">
+      <h2 class="rc-section-title text-2xl">{{ t('orders.title') }}</h2>
+      <a href="/profile/orders" class="rc-btn-ghost px-4 py-2 text-xs">{{ t('catalog.all') }}</a>
+    </div>
+
+    {% if orders %}
+      <div class="grid gap-4 md:grid-cols-2">
+        {% for order in orders[:4] %}
+          <a href="/profile/orders/{{ order.id }}" class="rc-card rc-card-hover flex items-center justify-between gap-4 p-5">
+            <span>
+              <span class="block font-display text-lg text-white">#{{ order.id }}</span>
+              <time class="text-xs text-white/40">{{ order.created_at | dt }}</time>
+            </span>
+            <span class="text-right">
+              <span class="block text-xs text-white/45">{{ t('orders.status.' ~ order.status.value) }}</span>
+              <span class="font-display text-lg text-lime-brand">{{ order.total | money(order.currency) }}</span>
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="rc-card p-10 text-center text-sm text-white/50">{{ t('profile.orders.empty') }}</div>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

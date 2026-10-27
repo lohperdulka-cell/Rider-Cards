@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.settings') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.settings') }}</h1>
+  <p class="mt-1 text-sm text-white/45">{{ t('admin.settings.note') }}</p>
+</header>
+
+<div class="grid gap-5 xl:grid-cols-2">
+  <section class="rc-card p-5">
+    <h2 class="rc-label">{{ settings.shop_name }}</h2>
+    <dl class="space-y-2.5 text-sm">
+      {% set shop_rows = [
+        ('ENV', config.env),
+        ('SHOP_NAME', config.shop_name),
+        ('CURRENCY', config.currency),
+        ('SUPPORT_EMAIL', config.support_email),
+        ('DEFAULT_LOCALE', config.default_locale),
+        ('SUPPORTED_LOCALES', config.supported_locales),
+        ('DEBUG', config.debug)
+      ] %}
+      {% for key, value in shop_rows %}
+        <div class="flex items-center justify-between gap-3 border-b border-white/5 pb-2.5 last:border-0 last:pb-0">
+          <dt class="font-mono text-xs text-white/40">{{ key }}</dt>
+          <dd class="break-all text-right text-white/80">{{ value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </section>
+
+  <section class="rc-card p-5">
+    <h2 class="rc-label">{{ t('admin.settings') }}</h2>
+    <dl class="space-y-2.5 text-sm">
+      {% set infra_rows = [
+        ('SESSION_COOKIE_NAME', config.session_cookie_name),
+        ('SESSION_MAX_AGE', config.session_max_age),
+        ('COOKIE_SECURE', config.cookie_secure),
+        ('MAX_UPLOAD_SIZE', config.max_upload_size),
+        ('ALLOWED_IMAGE_TYPES', config.allowed_image_types),
+        ('ADMIN_EMAIL', config.admin_email)
+      ] %}
+      {% for key, value in infra_rows %}
+        <div class="flex items-center justify-between gap-3 border-b border-white/5 pb-2.5 last:border-0 last:pb-0">
+          <dt class="font-mono text-xs text-white/40">{{ key }}</dt>
+          <dd class="break-all text-right text-white/80">{{ value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+    <p class="mt-4 text-xs text-amber-300">{{ t('admin.settings.note') }}</p>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.chats') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.chats') }}</h1>
+  <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ chats | length }}</p>
+</header>
+
+<form method="get" action="/admin/chats" class="rc-card mb-5 flex flex-wrap items-end gap-3 p-4">
+  <div class="min-w-[220px] flex-1">
+    <label class="rc-label" for="chat-q">{{ t('admin.search') }}</label>
+    <input id="chat-q" name="q" type="search" value="{{ filters.q }}" placeholder="#123 / {{ t('auth.email') }}" class="rc-input">
+  </div>
+  <label class="flex items-center gap-2.5 pb-2.5 text-sm text-white/70">
+    <input type="checkbox" name="only_unread" value="1" {{ 'checked' if filters.only_unread in ['1','true'] }} class="h-4 w-4 accent-lime-brand">
+    {{ t('admin.chats.only_unread') }}
+  </label>
+  <button type="submit" class="rc-btn-primary px-4">{{ t('admin.filter') }}</button>
+  <a href="/admin/chats" class="rc-btn-ghost px-3">{{ t('admin.reset') }}</a>
+</form>
+
+{% if chats %}
+  <div class="space-y-3">
+    {% for chat in chats %}
+      <article class="rc-card flex flex-wrap items-center gap-4 p-4">
+        <span class="rc-avatar">{{ chat.user.initials if chat.user else 'RC' }}</span>
+
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <a href="/admin/chats/{{ chat.id }}" class="font-display text-lg text-white hover:text-lime-brand">
+              {{ t('orders.number') }} #{{ chat.order_id }}
+            </a>
+            {% if chat.order %}
+              <span class="rc-badge bg-white/8 text-white/60">{{ t('orders.status.' ~ chat.order.status.value) }}</span>
+            {% endif %}
+            {% if chat.is_closed %}
+              <span class="rc-badge bg-white/8 text-white/45">{{ t('chat.closed') }}</span>
+            {% endif %}
+            {% if chat.unread_for_admin %}
+              <span class="rc-badge bg-lime-brand/15 text-lime-brand">{{ chat.unread_for_admin }} {{ t('chat.unread') }}</span>
+            {% endif %}
+          </div>
+          <p class="mt-1 truncate text-sm text-white/50">
+            {% if chat.last_message %}{{ chat.last_message.text }}{% else %}{{ t('chat.empty') }}{% endif %}
+          </p>
+          <p class="mt-1 text-xs text-white/30">
+            {{ chat.user.email if chat.user else '—' }}
+            {% if chat.last_message %}· {{ chat.last_message.created_at | dt }}{% endif %}
+          </p>
+        </div>
+
+        <a href="/admin/chats/{{ chat.id }}" class="rc-btn-primary px-5 py-2.5 text-xs">{{ t('admin.open_chat') }}</a>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.chats.empty') }}</div>
+{% endif %}
+{% endblock %}

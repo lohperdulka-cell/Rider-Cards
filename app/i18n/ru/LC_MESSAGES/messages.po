@@ -1,0 +1,1180 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RiderCards 0.1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+
+msgid "a11y.close"
+msgstr "Закрыть"
+
+msgid "a11y.filters"
+msgstr "Фильтры каталога"
+
+msgid "a11y.language"
+msgstr "Выбор языка"
+
+msgid "a11y.main_nav"
+msgstr "Основная навигация"
+
+msgid "a11y.menu"
+msgstr "Открыть меню"
+
+msgid "a11y.search"
+msgstr "Поиск по каталогу"
+
+msgid "a11y.skip"
+msgstr "Перейти к содержимому"
+
+msgid "a11y.theme"
+msgstr "Тема оформления"
+
+msgid "about.lead"
+msgstr "RiderCards — небольшая команда, которая верит, что хорошая колода меняет игру."
+
+msgid "about.mission.text"
+msgstr "Делать премиальные карты доступными: без переплат, без подделок и без сюрпризов при доставке."
+
+msgid "about.mission.title"
+msgstr "Миссия"
+
+msgid "about.numbers.title"
+msgstr "Цифры"
+
+msgid "about.story.text"
+msgstr "Мы начали в 2014 году с одной витрины и сотни колод. Сегодня RiderCards — это склад, мастерская проверки и сообщество игроков, которые ценят качество печати и честную игру."
+
+msgid "about.story.title"
+msgstr "Наша история"
+
+msgid "about.team.1.name"
+msgstr "Артём Райдер"
+
+msgid "about.team.1.role"
+msgstr "Основатель, карт-мастер"
+
+msgid "about.team.2.name"
+msgstr "Мария Лемешева"
+
+msgid "about.team.2.role"
+msgstr "Куратор каталога"
+
+msgid "about.team.3.name"
+msgstr "Иван Северов"
+
+msgid "about.team.3.role"
+msgstr "Логистика и поддержка"
+
+msgid "about.team.subtitle"
+msgstr "Люди, которые отвечают на ваши сообщения в чате"
+
+msgid "about.team.title"
+msgstr "Команда"
+
+msgid "about.title"
+msgstr "О магазине"
+
+msgid "about.values.1"
+msgstr "Только оригинальные тиражи"
+
+msgid "about.values.2"
+msgstr "Проверка каждой колоды перед отправкой"
+
+msgid "about.values.3"
+msgstr "Прозрачные сроки и трекинг"
+
+msgid "about.values.4"
+msgstr "Возврат 30 дней без вопросов"
+
+msgid "about.values.title"
+msgstr "Принципы"
+
+msgid "admin.actions"
+msgstr "Действия"
+
+msgid "admin.audit"
+msgstr "Журнал действий"
+
+msgid "admin.audit.action"
+msgstr "Действие"
+
+msgid "admin.audit.actor"
+msgstr "Кто"
+
+msgid "admin.audit.details"
+msgstr "Детали"
+
+msgid "admin.audit.empty"
+msgstr "Журнал пуст"
+
+msgid "admin.audit.entity"
+msgstr "Объект"
+
+msgid "admin.audit.ip"
+msgstr "IP"
+
+msgid "admin.audit.when"
+msgstr "Когда"
+
+msgid "admin.back_to_site"
+msgstr "На сайт"
+
+msgid "admin.bulk_disable"
+msgstr "Скрыть"
+
+msgid "admin.bulk_done"
+msgstr "Массовое действие выполнено"
+
+msgid "admin.bulk_enable"
+msgstr "Включить показ"
+
+msgid "admin.cancel"
+msgstr "Отмена"
+
+msgid "admin.categories"
+msgstr "Категории"
+
+msgid "admin.change_status"
+msgstr "Сменить статус"
+
+msgid "admin.chart.title"
+msgstr "Заказы и выручка по дням"
+
+msgid "admin.chats"
+msgstr "Чаты"
+
+msgid "admin.chats.empty"
+msgstr "Чатов не найдено"
+
+msgid "admin.chats.only_unread"
+msgstr "Только непрочитанные"
+
+msgid "admin.confirm_delete"
+msgstr "Удалить без возможности восстановления?"
+
+msgid "admin.confirm_soft_delete"
+msgstr "Переместить в архив?"
+
+msgid "admin.create"
+msgstr "Создать"
+
+msgid "admin.created"
+msgstr "Запись создана"
+
+msgid "admin.dashboard"
+msgstr "Дашборд"
+
+msgid "admin.delete"
+msgstr "Удалить"
+
+msgid "admin.deleted"
+msgstr "Запись удалена"
+
+msgid "admin.edit"
+msgstr "Изменить"
+
+msgid "admin.empty"
+msgstr "Данных пока нет"
+
+msgid "admin.export_csv"
+msgstr "Экспорт CSV"
+
+msgid "admin.filter"
+msgstr "Фильтр"
+
+msgid "admin.kpi.avg_order"
+msgstr "Средний чек"
+
+msgid "admin.kpi.low_stock"
+msgstr "Мало на складе"
+
+msgid "admin.kpi.new_users"
+msgstr "Новые пользователи"
+
+msgid "admin.kpi.open_chats"
+msgstr "Открытые чаты"
+
+msgid "admin.kpi.orders_today"
+msgstr "Заказы сегодня"
+
+msgid "admin.kpi.orders_week"
+msgstr "Заказы за неделю"
+
+msgid "admin.kpi.revenue"
+msgstr "Выручка"
+
+msgid "admin.kpi.revenue_week"
+msgstr "Выручка за неделю"
+
+msgid "admin.kpi.total_orders"
+msgstr "Всего заказов"
+
+msgid "admin.kpi.unread"
+msgstr "Непрочитанные сообщения"
+
+msgid "admin.low_stock_list"
+msgstr "Пора пополнить склад"
+
+msgid "admin.news"
+msgstr "Новости"
+
+msgid "admin.news.draft"
+msgstr "Черновик"
+
+msgid "admin.news.publish"
+msgstr "Опубликовать"
+
+msgid "admin.news.published"
+msgstr "Опубликовано"
+
+msgid "admin.news.title_edit"
+msgstr "Редактирование новости"
+
+msgid "admin.news.title_new"
+msgstr "Новая новость"
+
+msgid "admin.news.unpublish"
+msgstr "Снять с публикации"
+
+msgid "admin.open_chat"
+msgstr "Открыть чат"
+
+msgid "admin.orders"
+msgstr "Заказы"
+
+msgid "admin.page"
+msgstr "Страница"
+
+msgid "admin.product.cover"
+msgstr "Обложка"
+
+msgid "admin.product.gallery"
+msgstr "Галерея (по одному URL в строке)"
+
+msgid "admin.product.images"
+msgstr "Изображения"
+
+msgid "admin.product.title_edit"
+msgstr "Редактирование товара"
+
+msgid "admin.product.title_new"
+msgstr "Новый товар"
+
+msgid "admin.product.upload"
+msgstr "Загрузить изображение"
+
+msgid "admin.products"
+msgstr "Товары"
+
+msgid "admin.recent_orders"
+msgstr "Последние заказы"
+
+msgid "admin.recent_users"
+msgstr "Последние регистрации"
+
+msgid "admin.reset"
+msgstr "Сбросить"
+
+msgid "admin.restore"
+msgstr "Восстановить"
+
+msgid "admin.save"
+msgstr "Сохранить"
+
+msgid "admin.saved"
+msgstr "Изменения сохранены"
+
+msgid "admin.search"
+msgstr "Поиск"
+
+msgid "admin.settings"
+msgstr "Настройки"
+
+msgid "admin.settings.note"
+msgstr "Настройки читаются из переменных окружения (.env)."
+
+msgid "admin.status"
+msgstr "Статус"
+
+msgid "admin.status_changed"
+msgstr "Статус изменён, сообщение отправлено в чат"
+
+msgid "admin.ticket.answer"
+msgstr "Ответ"
+
+msgid "admin.ticket.answer_sent"
+msgstr "Ответ сохранён"
+
+msgid "admin.tickets"
+msgstr "Обращения"
+
+msgid "admin.title"
+msgstr "Админ-панель"
+
+msgid "admin.toggle_all"
+msgstr "Выбрать все"
+
+msgid "admin.total"
+msgstr "Всего"
+
+msgid "admin.unread_chats"
+msgstr "Чаты с непрочитанными"
+
+msgid "admin.users"
+msgstr "Пользователи"
+
+msgid "admin.users.admin_granted"
+msgstr "Права администратора выданы"
+
+msgid "admin.users.admin_revoked"
+msgstr "Права администратора сняты"
+
+msgid "admin.users.block"
+msgstr "Заблокировать"
+
+msgid "admin.users.blocked"
+msgstr "Пользователь заблокирован"
+
+msgid "admin.users.make_admin"
+msgstr "Выдать админа"
+
+msgid "admin.users.orders_of"
+msgstr "Заказы пользователя"
+
+msgid "admin.users.revoke_admin"
+msgstr "Снять админа"
+
+msgid "admin.users.unblock"
+msgstr "Разблокировать"
+
+msgid "admin.users.unblocked"
+msgstr "Пользователь разблокирован"
+
+msgid "auth.email"
+msgstr "Email"
+
+msgid "auth.errors.account_blocked"
+msgstr "Аккаунт заблокирован. Напишите в поддержку."
+
+msgid "auth.errors.bad_credentials"
+msgstr "Неверный email или пароль"
+
+msgid "auth.errors.bad_current_password"
+msgstr "Текущий пароль указан неверно"
+
+msgid "auth.errors.email_taken"
+msgstr "Такой email уже зарегистрирован"
+
+msgid "auth.errors.password_mismatch"
+msgstr "Пароли не совпадают"
+
+msgid "auth.errors.rate_limited"
+msgstr "Слишком много попыток. Попробуйте позже."
+
+msgid "auth.errors.validation"
+msgstr "Проверьте правильность заполнения полей"
+
+msgid "auth.logged_out"
+msgstr "Вы вышли из аккаунта"
+
+msgid "auth.login.forgot"
+msgstr "Забыли пароль?"
+
+msgid "auth.login.no_account"
+msgstr "Нет аккаунта?"
+
+msgid "auth.login.submit"
+msgstr "Войти"
+
+msgid "auth.login.subtitle"
+msgstr "Рады видеть снова"
+
+msgid "auth.login.title"
+msgstr "Вход"
+
+msgid "auth.name"
+msgstr "Имя"
+
+msgid "auth.password"
+msgstr "Пароль"
+
+msgid "auth.password_confirm"
+msgstr "Повторите пароль"
+
+msgid "auth.register.have_account"
+msgstr "Уже есть аккаунт?"
+
+msgid "auth.register.submit"
+msgstr "Создать аккаунт"
+
+msgid "auth.register.subtitle"
+msgstr "Создайте аккаунт, чтобы отслеживать заказы"
+
+msgid "auth.register.title"
+msgstr "Регистрация"
+
+msgid "auth.welcome"
+msgstr "Добро пожаловать, {name}!"
+
+msgid "brand.tagline"
+msgstr "премиальные карты"
+
+msgid "cart.added"
+msgstr "Товар добавлен в корзину"
+
+msgid "cart.checkout"
+msgstr "Оформить заказ"
+
+msgid "cart.clear"
+msgstr "Очистить корзину"
+
+msgid "cart.cleared"
+msgstr "Корзина очищена"
+
+msgid "cart.continue"
+msgstr "Продолжить покупки"
+
+msgid "cart.delivery_note"
+msgstr "Доставку рассчитаем при подтверждении заказа"
+
+msgid "cart.empty"
+msgstr "Корзина пуста"
+
+msgid "cart.empty_hint"
+msgstr "Загляните в каталог — там 400+ колод"
+
+msgid "cart.items"
+msgstr "товаров"
+
+msgid "cart.over_stock"
+msgstr "На складе меньше, чем в корзине"
+
+msgid "cart.price"
+msgstr "Цена"
+
+msgid "cart.product"
+msgstr "Товар"
+
+msgid "cart.qty"
+msgstr "Кол-во"
+
+msgid "cart.remove"
+msgstr "Удалить"
+
+msgid "cart.removed"
+msgstr "Товар удалён"
+
+msgid "cart.subtotal"
+msgstr "Итого"
+
+msgid "cart.title"
+msgstr "Корзина"
+
+msgid "cart.total"
+msgstr "Сумма"
+
+msgid "cart.updated"
+msgstr "Корзина обновлена"
+
+msgid "catalog.all"
+msgstr "Все"
+
+msgid "catalog.brand"
+msgstr "Бренд"
+
+msgid "catalog.category"
+msgstr "Категория"
+
+msgid "catalog.empty"
+msgstr "По вашим фильтрам ничего не найдено"
+
+msgid "catalog.empty_hint"
+msgstr "Попробуйте изменить условия поиска или сбросить фильтры"
+
+msgid "catalog.filters"
+msgstr "Фильтры"
+
+msgid "catalog.filters_apply"
+msgstr "Показать"
+
+msgid "catalog.filters_reset"
+msgstr "Сбросить"
+
+msgid "catalog.found"
+msgstr "Найдено товаров:"
+
+msgid "catalog.in_stock_only"
+msgstr "Только в наличии"
+
+msgid "catalog.next"
+msgstr "Вперёд"
+
+msgid "catalog.page"
+msgstr "Страница"
+
+msgid "catalog.prev"
+msgstr "Назад"
+
+msgid "catalog.price"
+msgstr "Цена"
+
+msgid "catalog.price_from"
+msgstr "от"
+
+msgid "catalog.price_to"
+msgstr "до"
+
+msgid "catalog.rarity"
+msgstr "Редкость"
+
+msgid "catalog.reset"
+msgstr "Сбросить фильтры"
+
+msgid "catalog.search_placeholder"
+msgstr "Поиск: название, бренд, описание"
+
+msgid "catalog.sort"
+msgstr "Сортировка"
+
+msgid "catalog.sort.name"
+msgstr "По названию"
+
+msgid "catalog.sort.new"
+msgstr "Сначала новые"
+
+msgid "catalog.sort.popular"
+msgstr "Популярные"
+
+msgid "catalog.sort.price_asc"
+msgstr "Цена: по возрастанию"
+
+msgid "catalog.sort.price_desc"
+msgstr "Цена: по убыванию"
+
+msgid "catalog.subtitle"
+msgstr "Колоды на любой вкус: от классики до лимитированных тиражей"
+
+msgid "catalog.title"
+msgstr "Каталог"
+
+msgid "chat.closed"
+msgstr "Чат закрыт"
+
+msgid "chat.connecting"
+msgstr "Подключение…"
+
+msgid "chat.empty"
+msgstr "Сообщений пока нет. Напишите первым!"
+
+msgid "chat.list_title"
+msgstr "Мои чаты"
+
+msgid "chat.no_access"
+msgstr "Нет доступа к этому чату"
+
+msgid "chat.offline"
+msgstr "Нет соединения"
+
+msgid "chat.online"
+msgstr "Онлайн"
+
+msgid "chat.open_order"
+msgstr "Открыть заказ"
+
+msgid "chat.order_info"
+msgstr "Информация о заказе"
+
+msgid "chat.placeholder"
+msgstr "Напишите сообщение…"
+
+msgid "chat.polling"
+msgstr "Обновление каждые 3 с"
+
+msgid "chat.rate_limited"
+msgstr "Слишком часто. Подождите пару секунд."
+
+msgid "chat.read"
+msgstr "Прочитано"
+
+msgid "chat.send"
+msgstr "Отправить"
+
+msgid "chat.support"
+msgstr "Поддержка RiderCards"
+
+msgid "chat.system"
+msgstr "Система"
+
+msgid "chat.title"
+msgstr "Чат по заказу"
+
+msgid "chat.unread"
+msgstr "Непрочитанных"
+
+msgid "chat.you"
+msgstr "Вы"
+
+msgid "checkout.address"
+msgstr "Адрес доставки"
+
+msgid "checkout.address_hint"
+msgstr "Город, улица, дом, квартира, индекс"
+
+msgid "checkout.back_to_cart"
+msgstr "Вернуться в корзину"
+
+msgid "checkout.contact"
+msgstr "Контакт для связи"
+
+msgid "checkout.contact_hint"
+msgstr "Email или телефон — пришлём трек и статус"
+
+msgid "checkout.created"
+msgstr "Заказ #{id} создан. Мы открыли чат по заказу."
+
+msgid "checkout.errors.empty"
+msgstr "Корзина пуста"
+
+msgid "checkout.errors.validation"
+msgstr "Проверьте контакт и адрес"
+
+msgid "checkout.need_login"
+msgstr "Для оформления заказа нужно войти"
+
+msgid "checkout.note"
+msgstr "Комментарий к заказу"
+
+msgid "checkout.note_hint"
+msgstr "Например: позвонить перед доставкой"
+
+msgid "checkout.submit"
+msgstr "Подтвердить заказ"
+
+msgid "checkout.summary"
+msgstr "Ваш заказ"
+
+msgid "checkout.title"
+msgstr "Оформление заказа"
+
+msgid "cookies.accept"
+msgstr "Принять"
+
+msgid "cookies.more"
+msgstr "Подробнее"
+
+msgid "cookies.text"
+msgstr "Мы используем cookie для работы корзины, сессии и аналитики."
+
+msgid "errors.403.text"
+msgstr "У вас нет прав для просмотра этой страницы."
+
+msgid "errors.403.title"
+msgstr "403 — Доступ запрещён"
+
+msgid "errors.404.text"
+msgstr "Похоже, эта карта выпала из колоды. Проверьте адрес или вернитесь в каталог."
+
+msgid "errors.404.title"
+msgstr "404 — Страница не найдена"
+
+msgid "errors.500.text"
+msgstr "Что-то сломалось на нашей стороне. Мы уже разбираемся."
+
+msgid "errors.500.title"
+msgstr "500 — Внутренняя ошибка"
+
+msgid "errors.back_home"
+msgstr "На главную"
+
+msgid "errors.csrf"
+msgstr "Сессия устарела. Обновите страницу и попробуйте снова."
+
+msgid "errors.to_catalog"
+msgstr "В каталог"
+
+msgid "faq.a1"
+msgstr "Заказы, оформленные до 15:00, уходят в тот же день. Трек-номер появляется в чате заказа."
+
+msgid "faq.a2"
+msgstr "Да. Мы работаем напрямую с издателями и проверяем каждую колоду перед упаковкой."
+
+msgid "faq.a3"
+msgstr "Да, 30 дней с момента получения, если колода не распечатана. Напишите в чат заказа."
+
+msgid "faq.a4"
+msgstr "Карты, СБП и оплата по счёту для оптовых заказов."
+
+msgid "faq.a5"
+msgstr "Да, отправляем по всему миру. Стоимость рассчитывается при оформлении."
+
+msgid "faq.a6"
+msgstr "Через форму поддержки или в чате по вашему заказу — отвечаем в течение часа."
+
+msgid "faq.q1"
+msgstr "Как быстро вы отправляете заказ?"
+
+msgid "faq.q2"
+msgstr "Карты оригинальные?"
+
+msgid "faq.q3"
+msgstr "Можно вернуть товар?"
+
+msgid "faq.q4"
+msgstr "Какие способы оплаты?"
+
+msgid "faq.q5"
+msgstr "Есть ли доставка за границу?"
+
+msgid "faq.q6"
+msgstr "Как связаться с поддержкой?"
+
+msgid "faq.subtitle"
+msgstr "Коротко о доставке, оплате и подлинности"
+
+msgid "faq.title"
+msgstr "Частые вопросы"
+
+msgid "footer.catalog"
+msgstr "Каталог"
+
+msgid "footer.company"
+msgstr "Компания"
+
+msgid "footer.contacts"
+msgstr "Контакты"
+
+msgid "footer.help"
+msgstr "Помощь"
+
+msgid "footer.payments"
+msgstr "Оплата и доставка"
+
+msgid "footer.rights"
+msgstr "Все права защищены."
+
+msgid "footer.tagline"
+msgstr "Карты, которые переживут партию. И сотню партий."
+
+msgid "home.advantages.1.text"
+msgstr "Каждую колоду проверяет наш карт-мастер: печать, нарезка, покрытие, ровность крапа."
+
+msgid "home.advantages.1.title"
+msgstr "Отбор вручную"
+
+msgid "home.advantages.2.text"
+msgstr "Отправляем в день заказа, трек-номер приходит в чат заказа автоматически."
+
+msgid "home.advantages.2.title"
+msgstr "Быстрая доставка"
+
+msgid "home.advantages.3.text"
+msgstr "Только официальные тиражи и проверенные издатели. Никаких реплик."
+
+msgid "home.advantages.3.title"
+msgstr "Гарантия подлинности"
+
+msgid "home.advantages.4.text"
+msgstr "Чат по каждому заказу с живым человеком, а не с ботом."
+
+msgid "home.advantages.4.title"
+msgstr "Живая поддержка"
+
+msgid "home.advantages.subtitle"
+msgstr "Мы одержимы деталями, чтобы вы получали удовольствие от каждой раздачи"
+
+msgid "home.advantages.title"
+msgstr "Почему RiderCards"
+
+msgid "home.bestsellers.title"
+msgstr "Хиты продаж"
+
+msgid "home.categories.subtitle"
+msgstr "Найдите свою колоду по назначению"
+
+msgid "home.categories.title"
+msgstr "Категории"
+
+msgid "home.cta.button"
+msgstr "Перейти в каталог"
+
+msgid "home.cta.text"
+msgstr "Более 400 позиций в наличии. Поможем подобрать карты под вашу игру."
+
+msgid "home.cta.title"
+msgstr "Готовы собрать свою колоду?"
+
+msgid "home.featured.subtitle"
+msgstr "Колоды, которые выбирают чаще всего"
+
+msgid "home.featured.title"
+msgstr "Фичеринг"
+
+msgid "home.hero.badge"
+msgstr "Новая линейка Rider Series уже в продаже"
+
+msgid "home.hero.cta"
+msgstr "Смотреть каталог"
+
+msgid "home.hero.eyebrow"
+msgstr "С 2014 года"
+
+msgid "home.hero.secondary"
+msgstr "О магазине"
+
+msgid "home.hero.subtitle"
+msgstr "Коллекционные, дизайнерские и классические карты. Отобранные вручную колоды, печать премиум-класса и доставка по всему миру."
+
+msgid "home.hero.title"
+msgstr "Колода, которой играют легенды"
+
+msgid "home.news.all"
+msgstr "Все новости"
+
+msgid "home.news.subtitle"
+msgstr "Что происходит в RiderCards"
+
+msgid "home.news.title"
+msgstr "Новости магазина"
+
+msgid "home.stat.clients"
+msgstr "довольных игроков"
+
+msgid "home.stat.decks"
+msgstr "колод в каталоге"
+
+msgid "home.stat.rating"
+msgstr "средняя оценка"
+
+msgid "home.stat.years"
+msgstr "лет на рынке"
+
+msgid "meta.description"
+msgstr "RiderCards — премиальные игральные карты: коллекционные, дизайнерские, классические, для фокусов и настольных игр."
+
+msgid "nav.about"
+msgstr "О магазине"
+
+msgid "nav.admin"
+msgstr "Админка"
+
+msgid "nav.cart"
+msgstr "Корзина"
+
+msgid "nav.catalog"
+msgstr "Каталог"
+
+msgid "nav.chats"
+msgstr "Чаты"
+
+msgid "nav.faq"
+msgstr "FAQ"
+
+msgid "nav.home"
+msgstr "Главная"
+
+msgid "nav.login"
+msgstr "Войти"
+
+msgid "nav.logout"
+msgstr "Выйти"
+
+msgid "nav.menu"
+msgstr "Меню"
+
+msgid "nav.news"
+msgstr "Новости"
+
+msgid "nav.orders"
+msgstr "Заказы"
+
+msgid "nav.profile"
+msgstr "Профиль"
+
+msgid "nav.register"
+msgstr "Регистрация"
+
+msgid "nav.support"
+msgstr "Поддержка"
+
+msgid "nav.tickets"
+msgstr "Обращения"
+
+msgid "nav.wishlist"
+msgstr "Избранное"
+
+msgid "news.back"
+msgstr "Ко всем новостям"
+
+msgid "news.empty"
+msgstr "Пока нет опубликованных новостей"
+
+msgid "news.published_on"
+msgstr "Опубликовано"
+
+msgid "news.read_more"
+msgstr "Читать"
+
+msgid "news.subtitle"
+msgstr "Анонсы, новинки и события RiderCards"
+
+msgid "news.title"
+msgstr "Новости"
+
+msgid "news.views"
+msgstr "просмотров"
+
+msgid "orders.cancel"
+msgstr "Отменить заказ"
+
+msgid "orders.cancelled"
+msgstr "Заказ отменён"
+
+msgid "orders.cannot_cancel"
+msgstr "Этот заказ уже нельзя отменить"
+
+msgid "orders.date"
+msgstr "Дата"
+
+msgid "orders.detail.contact"
+msgstr "Контакт"
+
+msgid "orders.detail.delivery"
+msgstr "Доставка"
+
+msgid "orders.detail.history"
+msgstr "История статусов"
+
+msgid "orders.detail.items"
+msgstr "Состав заказа"
+
+msgid "orders.detail.note"
+msgstr "Комментарий"
+
+msgid "orders.detail.title"
+msgstr "Заказ #{id}"
+
+msgid "orders.details"
+msgstr "Подробнее"
+
+msgid "orders.empty"
+msgstr "Заказов пока нет"
+
+msgid "orders.items"
+msgstr "Состав"
+
+msgid "orders.number"
+msgstr "Заказ"
+
+msgid "orders.open_chat"
+msgstr "Связаться с поддержкой"
+
+msgid "orders.status"
+msgstr "Статус"
+
+msgid "orders.status.cancelled"
+msgstr "Отменён"
+
+msgid "orders.status.delivered"
+msgstr "Доставлен"
+
+msgid "orders.status.paid"
+msgstr "Оплачен"
+
+msgid "orders.status.pending"
+msgstr "Ожидает оплаты"
+
+msgid "orders.status.processing"
+msgstr "В сборке"
+
+msgid "orders.status.shipped"
+msgstr "Отправлен"
+
+msgid "orders.title"
+msgstr "Мои заказы"
+
+msgid "orders.total"
+msgstr "Сумма"
+
+msgid "product.add_to_cart"
+msgstr "В корзину"
+
+msgid "product.brand"
+msgstr "Бренд"
+
+msgid "product.buy_now"
+msgstr "Купить сразу"
+
+msgid "product.category"
+msgstr "Категория"
+
+msgid "product.description"
+msgstr "Описание"
+
+msgid "product.discount"
+msgstr "Скидка"
+
+msgid "product.gallery"
+msgstr "Галерея"
+
+msgid "product.in_stock"
+msgstr "В наличии"
+
+msgid "product.low_stock"
+msgstr "Мало на складе"
+
+msgid "product.not_found"
+msgstr "Товар не найден"
+
+msgid "product.out_of_stock"
+msgstr "Нет в наличии"
+
+msgid "product.quantity"
+msgstr "Количество"
+
+msgid "product.rarity"
+msgstr "Редкость"
+
+msgid "product.similar"
+msgstr "Похожие колоды"
+
+msgid "product.sku"
+msgstr "Артикул"
+
+msgid "product.specs"
+msgstr "Характеристики"
+
+msgid "product.stock_left"
+msgstr "Осталось:"
+
+msgid "product.views"
+msgstr "Просмотров"
+
+msgid "product.wishlist_add"
+msgstr "В избранное"
+
+msgid "product.wishlist_remove"
+msgstr "В избранном"
+
+msgid "profile.chats.empty"
+msgstr "Чатов пока нет"
+
+msgid "profile.email"
+msgstr "Email"
+
+msgid "profile.locale"
+msgstr "Язык интерфейса"
+
+msgid "profile.name"
+msgstr "Имя"
+
+msgid "profile.orders.empty"
+msgstr "Заказов пока нет"
+
+msgid "profile.password.changed"
+msgstr "Пароль изменён"
+
+msgid "profile.password.confirm"
+msgstr "Повторите новый пароль"
+
+msgid "profile.password.current"
+msgstr "Текущий пароль"
+
+msgid "profile.password.new"
+msgstr "Новый пароль"
+
+msgid "profile.password.submit"
+msgstr "Сменить пароль"
+
+msgid "profile.password.title"
+msgstr "Смена пароля"
+
+msgid "profile.save"
+msgstr "Сохранить"
+
+msgid "profile.saved"
+msgstr "Данные обновлены"
+
+msgid "profile.since"
+msgstr "С нами с"
+
+msgid "profile.stats.orders"
+msgstr "Заказов"
+
+msgid "profile.stats.spent"
+msgstr "Потрачено"
+
+msgid "profile.stats.wishlist"
+msgstr "В избранном"
+
+msgid "profile.tab.chats"
+msgstr "Чаты"
+
+msgid "profile.tab.data"
+msgstr "Данные"
+
+msgid "profile.tab.orders"
+msgstr "Заказы"
+
+msgid "profile.tab.tickets"
+msgstr "Обращения"
+
+msgid "profile.tab.wishlist"
+msgstr "Избранное"
+
+msgid "profile.ticket.answer"
+msgstr "Ответ поддержки"
+
+msgid "profile.ticket.status"
+msgstr "Статус"
+
+msgid "profile.tickets.empty"
+msgstr "Обращений пока нет"
+
+msgid "profile.title"
+msgstr "Профиль"
+
+msgid "profile.wishlist.empty"
+msgstr "Избранное пусто"
+
+msgid "support.contacts"
+msgstr "Контакты"
+
+msgid "support.email"
+msgstr "Email"
+
+msgid "support.faq_hint"
+msgstr "Возможно, ответ уже есть в FAQ"
+
+msgid "support.form.title"
+msgstr "Написать нам"
+
+msgid "support.hours"
+msgstr "Пн–Пт, 10:00–19:00 (МСК)"
+
+msgid "support.message"
+msgstr "Сообщение"
+
+msgid "support.mine"
+msgstr "Мои обращения"
+
+msgid "support.name"
+msgstr "Ваше имя"
+
+msgid "support.phone"
+msgstr "Телефон"
+
+msgid "support.sent"
+msgstr "Обращение отправлено. Мы ответим на указанный email."
+
+msgid "support.subject"
+msgstr "Тема"
+
+msgid "support.submit"
+msgstr "Отправить"
+
+msgid "support.subtitle"
+msgstr "Ответим в течение часа в рабочее время"
+
+msgid "support.title"
+msgstr "Поддержка"

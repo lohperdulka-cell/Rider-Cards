@@ -1,0 +1,90 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('orders.detail.title', id=order.id) }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+  <div>
+    <a href="/admin/orders" class="rc-btn-ghost mb-3 px-3 py-1.5 text-xs">← {{ t('admin.orders') }}</a>
+    <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('orders.detail.title', id=order.id) }}</h1>
+    <time class="mt-1 block text-sm text-white/45">{{ order.created_at | dt }}</time>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    {% if chat %}
+      <a href="/admin/chats/{{ chat.id }}" class="rc-btn-primary px-5 py-2.5 text-sm">{{ t('admin.open_chat') }}</a>
+    {% endif %}
+    <a href="/admin/orders/export.csv?q={{ order.id }}" class="rc-btn-ghost px-5 py-2.5 text-sm">{{ t('admin.export_csv') }}</a>
+  </div>
+</header>
+
+<div class="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
+  <div class="space-y-5">
+    <section class="rc-card p-5">
+      <h2 class="rc-label">{{ t('orders.detail.items') }}</h2>
+      <ul class="divide-y divide-white/6">
+        {% for item in order.items %}
+          <li class="flex items-center gap-4 py-3.5 first:pt-0 last:pb-0">
+            <span class="h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-800">
+              {% if item.cover_image %}
+                <img src="{{ item.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+              {% endif %}
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-sm text-white/85">{{ item.product_name }}</span>
+              <span class="text-xs text-white/40">
+                {{ item.price_at_purchase | money(order.currency) }} × {{ item.qty }}
+                {% if item.product_id %}· #{{ item.product_id }}{% endif %}
+              </span>
+            </span>
+            <span class="font-display text-lg text-lime-brand">{{ item.subtotal | money(order.currency) }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="mt-4 flex items-center justify-between border-t border-white/8 pt-4">
+        <span class="font-semibold text-white">{{ t('orders.total') }}</span>
+        <span class="font-display text-2xl text-lime-brand">{{ order.total | money(order.currency) }}</span>
+      </div>
+    </section>
+
+    <section class="rc-card p-5">
+      <h2 class="rc-label">{{ t('admin.change_status') }}</h2>
+      <form method="post" action="/admin/orders/{{ order.id }}/status" class="flex flex-wrap gap-2">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label class="sr-only" for="admin-order-status">{{ t('admin.status') }}</label>
+        <select id="admin-order-status" name="status" class="rc-input sm:max-w-xs">
+          {% for value in statuses %}
+            <option value="{{ value }}" {{ 'selected' if order.status.value == value }}>{{ t('orders.status.' ~ value) }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="rc-btn-primary px-6">{{ t('admin.save') }}</button>
+      </form>
+      <p class="mt-2 text-xs text-white/40">{{ t('admin.status_changed') }}</p>
+    </section>
+  </div>
+
+  <aside class="space-y-5">
+    {% include "partials/order_info.html" %}
+
+    <section class="rc-card p-5">
+      <h2 class="rc-label">{{ t('admin.users') }}</h2>
+      {% if order.user %}
+        <p class="text-sm text-white/80">{{ order.user.display_name }}</p>
+        <a href="/admin/users/{{ order.user.id }}" class="rc-link text-sm">{{ order.user.email }}</a>
+      {% else %}
+        <p class="text-sm text-white/45">—</p>
+      {% endif %}
+
+      <h2 class="rc-label mt-5">{{ t('orders.detail.contact') }}</h2>
+      <p class="break-words text-sm text-white/70">{{ order.contact }}</p>
+
+      <h2 class="rc-label mt-5">{{ t('orders.detail.delivery') }}</h2>
+      <p class="whitespace-pre-line text-sm text-white/70">{{ order.address }}</p>
+
+      {% if order.note %}
+        <h2 class="rc-label mt-5">{{ t('orders.detail.note') }}</h2>
+        <p class="whitespace-pre-line text-sm text-white/70">{{ order.note }}</p>
+      {% endif %}
+    </section>
+  </aside>
+</div>
+{% endblock %}

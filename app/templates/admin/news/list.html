@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.news') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('admin.news') }}</h1>
+    <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ total }}</p>
+  </div>
+  <a href="/admin/news/new" class="rc-btn-primary px-5 py-2.5 text-sm">+ {{ t('admin.news.title_new') }}</a>
+</header>
+
+<form method="get" action="/admin/news" class="rc-card mb-5 flex flex-wrap items-end gap-3 p-4">
+  <div class="min-w-[220px] flex-1">
+    <label class="rc-label" for="news-q">{{ t('admin.search') }}</label>
+    <input id="news-q" name="q" type="search" value="{{ filters.q }}" class="rc-input">
+  </div>
+  <button type="submit" class="rc-btn-primary px-4">{{ t('admin.filter') }}</button>
+  <a href="/admin/news" class="rc-btn-ghost px-3">{{ t('admin.reset') }}</a>
+</form>
+
+{% if items %}
+  <div class="space-y-3">
+    {% for item in items %}
+      <article class="rc-card flex flex-wrap items-center gap-4 p-4">
+        <span class="h-16 w-24 shrink-0 overflow-hidden rounded-xl bg-ink-800">
+          {% if item.cover_image %}
+            <img src="{{ item.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+          {% else %}
+            <span class="grid h-full place-items-center text-2xl text-lime-brand/25" aria-hidden="true">♥</span>
+          {% endif %}
+        </span>
+
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <a href="/admin/news/{{ item.id }}" class="font-display text-lg text-white hover:text-lime-brand">{{ item.localized_title(locale) }}</a>
+            {% if item.is_published %}
+              <span class="rc-badge bg-lime-brand/15 text-lime-brand">{{ t('admin.news.published') }}</span>
+            {% else %}
+              <span class="rc-badge bg-white/8 text-white/50">{{ t('admin.news.draft') }}</span>
+            {% endif %}
+          </div>
+          <p class="mt-1 line-clamp-1 text-sm text-white/45">{{ item.localized_excerpt(locale) }}</p>
+          <p class="mt-1 text-xs text-white/30">
+            /news/{{ item.slug }}
+            {% if item.published_at %}· {{ item.published_at | date }}{% endif %}
+            · {{ t('news.views') }}: {{ item.views }}
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <form method="post" action="/admin/news/{{ item.id }}/publish">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="rc-btn-ghost px-3 py-2 text-xs">
+              {{ t('admin.news.unpublish') if item.is_published else t('admin.news.publish') }}
+            </button>
+          </form>
+          <a href="/admin/news/{{ item.id }}" class="text-xs text-lime-brand hover:underline">{{ t('admin.edit') }}</a>
+          <form method="post" action="/admin/news/{{ item.id }}/delete" data-confirm="{{ t('admin.confirm_delete') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="text-xs text-rose-300 hover:underline">{{ t('admin.delete') }}</button>
+          </form>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  {% if pages > 1 %}
+    <nav class="mt-6 flex items-center justify-center gap-1.5" aria-label="{{ t('admin.page') }}">
+      {% for number in range(1, pages + 1) %}
+        <a href="?page={{ number }}&q={{ filters.q }}"
+           class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == page else 'border border-white/10 text-white/70 hover:border-lime-brand/50' }}"
+           {% if number == page %}aria-current="page"{% endif %}>{{ number }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.empty') }}</div>
+{% endif %}
+{% endblock %}

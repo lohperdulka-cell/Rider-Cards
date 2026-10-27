@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ t('checkout.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="rc-container py-8">
+  <h1 class="rc-section-title mb-8" data-reveal>{{ t('checkout.title') }}</h1>
+
+  <form method="post" action="/checkout" class="grid gap-6 lg:grid-cols-[1.4fr_1fr]" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="rc-card space-y-5 p-6 lg:p-8" data-reveal>
+      {% if errors.get('form') %}
+        <p class="rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">{{ errors['form'] }}</p>
+      {% endif %}
+
+      <div>
+        <label class="rc-label" for="checkout-contact">{{ t('checkout.contact') }}</label>
+        <input id="checkout-contact" name="contact" type="text" required minlength="5" maxlength="255"
+               value="{{ form_data.get('contact', '') }}" class="rc-input" autocomplete="email">
+        <p class="mt-1.5 text-xs text-white/40">{{ t('checkout.contact_hint') }}</p>
+        {% if errors.get('contact') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['contact'] }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="rc-label" for="checkout-address">{{ t('checkout.address') }}</label>
+        <textarea id="checkout-address" name="address" rows="4" required minlength="10" maxlength="1000"
+                  class="rc-input resize-y" autocomplete="street-address">{{ form_data.get('address', '') }}</textarea>
+        <p class="mt-1.5 text-xs text-white/40">{{ t('checkout.address_hint') }}</p>
+        {% if errors.get('address') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['address'] }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="rc-label" for="checkout-note">{{ t('checkout.note') }}</label>
+        <textarea id="checkout-note" name="note" rows="3" maxlength="1000" class="rc-input resize-y">{{ form_data.get('note', '') }}</textarea>
+        <p class="mt-1.5 text-xs text-white/40">{{ t('checkout.note_hint') }}</p>
+      </div>
+
+      <div class="flex flex-wrap gap-3 pt-2">
+        <button type="submit" class="rc-btn-primary px-7 py-3">{{ t('checkout.submit') }}</button>
+        <a href="/cart" class="rc-btn-ghost px-6 py-3">{{ t('checkout.back_to_cart') }}</a>
+      </div>
+    </div>
+
+    <aside class="lg:sticky lg:top-24 lg:self-start" data-reveal data-reveal-delay="1">
+      <div class="rc-card space-y-4 p-6">
+        <h2 class="rc-label">{{ t('checkout.summary') }}</h2>
+        <ul class="space-y-3">
+          {% for item in items %}
+            <li class="flex items-center gap-3">
+              <span class="h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-800">
+                {% if item.product.cover_image %}
+                  <img src="{{ item.product.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                {% endif %}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-sm text-white/85">{{ item.product.localized_name(locale) }}</span>
+                <span class="text-xs text-white/40">{{ item.qty }} × {{ item.product.price | money }}</span>
+              </span>
+              <span class="text-sm font-semibold text-lime-brand">{{ item.subtotal | money }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        <div class="flex items-center justify-between border-t border-white/8 pt-4">
+          <span class="font-semibold text-white">{{ t('cart.total') }}</span>
+          <span class="font-display text-2xl text-lime-brand">{{ total | money }}</span>
+        </div>
+        <p class="text-xs text-white/40">{{ t('cart.delivery_note') }}</p>
+      </div>
+    </aside>
+  </form>
+</section>
+{% endblock %}

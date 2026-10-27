@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ t('about.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+{% include "partials/breadcrumbs.html" %}
+
+<section class="relative overflow-hidden py-14">
+  <div class="rc-mesh" aria-hidden="true"></div>
+  <div class="rc-container relative">
+    <p class="rc-eyebrow">{{ settings.shop_name }}</p>
+    <h1 class="rc-section-title max-w-3xl" data-reveal>{{ t('about.title') }}</h1>
+    <p class="mt-5 max-w-2xl text-lg text-white/60" data-reveal data-reveal-delay="1">{{ t('about.lead') }}</p>
+
+    <dl class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rc-card p-6" data-reveal>
+        <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.decks') }}</dt>
+        <dd class="font-display text-4xl text-lime-brand" data-count-to="{{ product_count }}">0</dd>
+      </div>
+      <div class="rc-card p-6" data-reveal data-reveal-delay="1">
+        <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.clients') }}</dt>
+        <dd class="font-display text-4xl text-lime-brand" data-count-to="12480">0</dd>
+      </div>
+      <div class="rc-card p-6" data-reveal data-reveal-delay="2">
+        <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.years') }}</dt>
+        <dd class="font-display text-4xl text-lime-brand" data-count-to="11">0</dd>
+      </div>
+      <div class="rc-card p-6" data-reveal data-reveal-delay="3">
+        <dt class="text-xs uppercase tracking-wider text-white/40">{{ t('home.stat.rating') }}</dt>
+        <dd class="font-display text-4xl text-lime-brand">4.9</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="rc-container py-14">
+  <div class="grid gap-6 lg:grid-cols-2">
+    <article class="rc-card p-8" data-reveal>
+      <h2 class="font-display text-2xl">{{ t('about.story.title') }}</h2>
+      <p class="mt-4 leading-relaxed text-white/60">{{ t('about.story.text') }}</p>
+    </article>
+    <article class="rc-card p-8" data-reveal data-reveal-delay="1">
+      <h2 class="font-display text-2xl">{{ t('about.mission.title') }}</h2>
+      <p class="mt-4 leading-relaxed text-white/60">{{ t('about.mission.text') }}</p>
+      <ul class="mt-6 space-y-2.5 text-sm text-white/65">
+        {% for key in ['about.values.1','about.values.2','about.values.3','about.values.4'] %}
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-lime-brand" aria-hidden="true">✦</span>{{ t(key) }}
+          </li>
+        {% endfor %}
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="rc-container py-14">
+  <p class="rc-eyebrow">{{ t('about.team.title') }}</p>
+  <h2 class="rc-section-title mb-8" data-reveal>{{ t('about.team.subtitle') }}</h2>
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {% for index in ['1','2','3'] %}
+      <article class="rc-card rc-card-hover p-6 text-center" data-reveal data-reveal-delay="{{ loop.index }}">
+        <span class="rc-avatar mx-auto h-16 w-16 text-lg">{{ t('about.team.' ~ index ~ '.name')[0] }}</span>
+        <h3 class="mt-4 font-display text-lg">{{ t('about.team.' ~ index ~ '.name') }}</h3>
+        <p class="mt-1 text-sm text-white/50">{{ t('about.team.' ~ index ~ '.role') }}</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="rc-container py-16">
+  <div class="rc-card relative overflow-hidden p-10 text-center lg:p-14" data-reveal>
+    <div class="rc-mesh" aria-hidden="true"></div>
+    <div class="relative">
+      <h2 class="rc-section-title">{{ t('home.cta.title') }}</h2>
+      <p class="mx-auto mt-4 max-w-xl text-white/60">{{ t('home.cta.text') }}</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/catalog" class="rc-btn-primary px-7 py-3">{{ t('home.cta.button') }}</a>
+        <a href="/support" class="rc-btn-ghost px-7 py-3">{{ t('nav.support') }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

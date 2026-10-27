@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}{{ t('auth.register.title') }} — {{ settings.shop_name }}{% endblock %}
+
+{% block content %}
+<section class="relative flex min-h-[calc(100vh-9rem)] items-center overflow-hidden py-14">
+  <div class="rc-mesh" aria-hidden="true"></div>
+  <div class="rc-suits" aria-hidden="true"></div>
+
+  <div class="rc-container relative grid items-center gap-10 lg:grid-cols-2">
+    <div class="hidden lg:block" data-reveal>
+      <p class="rc-eyebrow">{{ settings.shop_name }}</p>
+      <h1 class="font-display text-5xl leading-tight">{{ t('auth.register.subtitle') }}</h1>
+      <p class="mt-5 max-w-md text-white/55">{{ t('home.cta.text') }}</p>
+      <ul class="mt-8 space-y-3 text-sm text-white/60">
+        {% for key in ['home.advantages.2.title','home.advantages.3.title','home.advantages.4.title'] %}
+          <li class="flex items-center gap-3">
+            <span class="grid h-8 w-8 place-items-center rounded-full bg-lime-brand/12 text-lime-brand" aria-hidden="true">✦</span>
+            {{ t(key) }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="rc-card mx-auto w-full max-w-md p-7 lg:p-8" data-reveal data-reveal-delay="1">
+      <h2 class="font-display text-2xl">{{ t('auth.register.title') }}</h2>
+
+      {% if errors.get('form') %}
+        <p class="mt-5 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">{{ errors['form'] }}</p>
+      {% endif %}
+
+      <form method="post" action="/register" class="mt-6 space-y-5" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="next" value="{{ next_url }}">
+
+        <div>
+          <label class="rc-label" for="reg-name">{{ t('auth.name') }}</label>
+          <input id="reg-name" name="name" type="text" required minlength="2" maxlength="120" autocomplete="name"
+                 value="{{ form_data.get('name', '') }}" class="rc-input">
+          {% if errors.get('name') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['name'] }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label class="rc-label" for="reg-email">{{ t('auth.email') }}</label>
+          <input id="reg-email" name="email" type="email" required autocomplete="email"
+                 value="{{ form_data.get('email', '') }}" class="rc-input">
+          {% if errors.get('email') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['email'] }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label class="rc-label" for="reg-password">{{ t('auth.password') }}</label>
+          <input id="reg-password" name="password" type="password" required minlength="8" maxlength="128"
+                 autocomplete="new-password" class="rc-input">
+          {% if errors.get('password') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['password'] }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label class="rc-label" for="reg-password-confirm">{{ t('auth.password_confirm') }}</label>
+          <input id="reg-password-confirm" name="password_confirm" type="password" required minlength="8" maxlength="128"
+                 autocomplete="new-password" class="rc-input">
+          {% if errors.get('password_confirm') %}<p class="mt-1.5 text-xs text-rose-300">{{ errors['password_confirm'] }}</p>{% endif %}
+        </div>
+
+        <button type="submit" class="rc-btn-primary w-full py-3">{{ t('auth.register.submit') }}</button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-white/50">
+        {{ t('auth.register.have_account') }}
+        <a href="/login?next={{ next_url }}" class="rc-link">{{ t('nav.login') }}</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

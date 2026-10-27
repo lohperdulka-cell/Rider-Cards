@@ -1,0 +1,1180 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RiderCards 0.1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+
+msgid "a11y.close"
+msgstr "Close"
+
+msgid "a11y.filters"
+msgstr "Catalogue filters"
+
+msgid "a11y.language"
+msgstr "Language selection"
+
+msgid "a11y.main_nav"
+msgstr "Main navigation"
+
+msgid "a11y.menu"
+msgstr "Open menu"
+
+msgid "a11y.search"
+msgstr "Search the catalogue"
+
+msgid "a11y.skip"
+msgstr "Skip to content"
+
+msgid "a11y.theme"
+msgstr "Colour theme"
+
+msgid "about.lead"
+msgstr "RiderCards is a small team that believes a good deck changes the game."
+
+msgid "about.mission.text"
+msgstr "Make premium cards accessible: no mark-ups, no fakes and no delivery surprises."
+
+msgid "about.mission.title"
+msgstr "Mission"
+
+msgid "about.numbers.title"
+msgstr "Numbers"
+
+msgid "about.story.text"
+msgstr "We started in 2014 with one display case and a hundred decks. Today RiderCards is a warehouse, a verification workshop and a community of players who value print quality and fair play."
+
+msgid "about.story.title"
+msgstr "Our story"
+
+msgid "about.team.1.name"
+msgstr "Artem Rider"
+
+msgid "about.team.1.role"
+msgstr "Founder, card master"
+
+msgid "about.team.2.name"
+msgstr "Maria Lemesheva"
+
+msgid "about.team.2.role"
+msgstr "Catalogue curator"
+
+msgid "about.team.3.name"
+msgstr "Ivan Severov"
+
+msgid "about.team.3.role"
+msgstr "Logistics and support"
+
+msgid "about.team.subtitle"
+msgstr "The people answering your messages in chat"
+
+msgid "about.team.title"
+msgstr "Team"
+
+msgid "about.title"
+msgstr "About"
+
+msgid "about.values.1"
+msgstr "Official print runs only"
+
+msgid "about.values.2"
+msgstr "Every deck verified before shipping"
+
+msgid "about.values.3"
+msgstr "Transparent timelines and tracking"
+
+msgid "about.values.4"
+msgstr "30-day no-questions returns"
+
+msgid "about.values.title"
+msgstr "Principles"
+
+msgid "admin.actions"
+msgstr "Actions"
+
+msgid "admin.audit"
+msgstr "Audit log"
+
+msgid "admin.audit.action"
+msgstr "Action"
+
+msgid "admin.audit.actor"
+msgstr "Actor"
+
+msgid "admin.audit.details"
+msgstr "Details"
+
+msgid "admin.audit.empty"
+msgstr "The log is empty"
+
+msgid "admin.audit.entity"
+msgstr "Entity"
+
+msgid "admin.audit.ip"
+msgstr "IP"
+
+msgid "admin.audit.when"
+msgstr "When"
+
+msgid "admin.back_to_site"
+msgstr "To the site"
+
+msgid "admin.bulk_disable"
+msgstr "Hide"
+
+msgid "admin.bulk_done"
+msgstr "Bulk action completed"
+
+msgid "admin.bulk_enable"
+msgstr "Enable"
+
+msgid "admin.cancel"
+msgstr "Cancel"
+
+msgid "admin.categories"
+msgstr "Categories"
+
+msgid "admin.change_status"
+msgstr "Change status"
+
+msgid "admin.chart.title"
+msgstr "Orders and revenue by day"
+
+msgid "admin.chats"
+msgstr "Chats"
+
+msgid "admin.chats.empty"
+msgstr "No chats found"
+
+msgid "admin.chats.only_unread"
+msgstr "Unread only"
+
+msgid "admin.confirm_delete"
+msgstr "Delete permanently?"
+
+msgid "admin.confirm_soft_delete"
+msgstr "Move to archive?"
+
+msgid "admin.create"
+msgstr "Create"
+
+msgid "admin.created"
+msgstr "Record created"
+
+msgid "admin.dashboard"
+msgstr "Dashboard"
+
+msgid "admin.delete"
+msgstr "Delete"
+
+msgid "admin.deleted"
+msgstr "Record deleted"
+
+msgid "admin.edit"
+msgstr "Edit"
+
+msgid "admin.empty"
+msgstr "No data yet"
+
+msgid "admin.export_csv"
+msgstr "Export CSV"
+
+msgid "admin.filter"
+msgstr "Filter"
+
+msgid "admin.kpi.avg_order"
+msgstr "Average order"
+
+msgid "admin.kpi.low_stock"
+msgstr "Low stock"
+
+msgid "admin.kpi.new_users"
+msgstr "New users"
+
+msgid "admin.kpi.open_chats"
+msgstr "Open chats"
+
+msgid "admin.kpi.orders_today"
+msgstr "Orders today"
+
+msgid "admin.kpi.orders_week"
+msgstr "Orders this week"
+
+msgid "admin.kpi.revenue"
+msgstr "Revenue"
+
+msgid "admin.kpi.revenue_week"
+msgstr "Revenue this week"
+
+msgid "admin.kpi.total_orders"
+msgstr "Orders total"
+
+msgid "admin.kpi.unread"
+msgstr "Unread messages"
+
+msgid "admin.low_stock_list"
+msgstr "Time to restock"
+
+msgid "admin.news"
+msgstr "News"
+
+msgid "admin.news.draft"
+msgstr "Draft"
+
+msgid "admin.news.publish"
+msgstr "Publish"
+
+msgid "admin.news.published"
+msgstr "Published"
+
+msgid "admin.news.title_edit"
+msgstr "Edit article"
+
+msgid "admin.news.title_new"
+msgstr "New article"
+
+msgid "admin.news.unpublish"
+msgstr "Unpublish"
+
+msgid "admin.open_chat"
+msgstr "Open chat"
+
+msgid "admin.orders"
+msgstr "Orders"
+
+msgid "admin.page"
+msgstr "Page"
+
+msgid "admin.product.cover"
+msgstr "Cover"
+
+msgid "admin.product.gallery"
+msgstr "Gallery (one URL per line)"
+
+msgid "admin.product.images"
+msgstr "Images"
+
+msgid "admin.product.title_edit"
+msgstr "Edit product"
+
+msgid "admin.product.title_new"
+msgstr "New product"
+
+msgid "admin.product.upload"
+msgstr "Upload image"
+
+msgid "admin.products"
+msgstr "Products"
+
+msgid "admin.recent_orders"
+msgstr "Recent orders"
+
+msgid "admin.recent_users"
+msgstr "Recent sign-ups"
+
+msgid "admin.reset"
+msgstr "Reset"
+
+msgid "admin.restore"
+msgstr "Restore"
+
+msgid "admin.save"
+msgstr "Save"
+
+msgid "admin.saved"
+msgstr "Changes saved"
+
+msgid "admin.search"
+msgstr "Search"
+
+msgid "admin.settings"
+msgstr "Settings"
+
+msgid "admin.settings.note"
+msgstr "Settings are read from environment variables (.env)."
+
+msgid "admin.status"
+msgstr "Status"
+
+msgid "admin.status_changed"
+msgstr "Status changed and a message was sent to the chat"
+
+msgid "admin.ticket.answer"
+msgstr "Answer"
+
+msgid "admin.ticket.answer_sent"
+msgstr "Answer saved"
+
+msgid "admin.tickets"
+msgstr "Requests"
+
+msgid "admin.title"
+msgstr "Admin panel"
+
+msgid "admin.toggle_all"
+msgstr "Select all"
+
+msgid "admin.total"
+msgstr "Total"
+
+msgid "admin.unread_chats"
+msgstr "Chats with unread messages"
+
+msgid "admin.users"
+msgstr "Users"
+
+msgid "admin.users.admin_granted"
+msgstr "Admin rights granted"
+
+msgid "admin.users.admin_revoked"
+msgstr "Admin rights revoked"
+
+msgid "admin.users.block"
+msgstr "Block"
+
+msgid "admin.users.blocked"
+msgstr "User blocked"
+
+msgid "admin.users.make_admin"
+msgstr "Grant admin"
+
+msgid "admin.users.orders_of"
+msgstr "Orders of the user"
+
+msgid "admin.users.revoke_admin"
+msgstr "Revoke admin"
+
+msgid "admin.users.unblock"
+msgstr "Unblock"
+
+msgid "admin.users.unblocked"
+msgstr "User unblocked"
+
+msgid "auth.email"
+msgstr "Email"
+
+msgid "auth.errors.account_blocked"
+msgstr "Account blocked. Please contact support."
+
+msgid "auth.errors.bad_credentials"
+msgstr "Wrong email or password"
+
+msgid "auth.errors.bad_current_password"
+msgstr "The current password is incorrect"
+
+msgid "auth.errors.email_taken"
+msgstr "This email is already registered"
+
+msgid "auth.errors.password_mismatch"
+msgstr "Passwords do not match"
+
+msgid "auth.errors.rate_limited"
+msgstr "Too many attempts. Please try later."
+
+msgid "auth.errors.validation"
+msgstr "Please check the form fields"
+
+msgid "auth.logged_out"
+msgstr "You have signed out"
+
+msgid "auth.login.forgot"
+msgstr "Forgot your password?"
+
+msgid "auth.login.no_account"
+msgstr "No account yet?"
+
+msgid "auth.login.submit"
+msgstr "Sign in"
+
+msgid "auth.login.subtitle"
+msgstr "Good to see you again"
+
+msgid "auth.login.title"
+msgstr "Sign in"
+
+msgid "auth.name"
+msgstr "Name"
+
+msgid "auth.password"
+msgstr "Password"
+
+msgid "auth.password_confirm"
+msgstr "Repeat password"
+
+msgid "auth.register.have_account"
+msgstr "Already have an account?"
+
+msgid "auth.register.submit"
+msgstr "Create account"
+
+msgid "auth.register.subtitle"
+msgstr "Create an account to track your orders"
+
+msgid "auth.register.title"
+msgstr "Sign up"
+
+msgid "auth.welcome"
+msgstr "Welcome, {name}!"
+
+msgid "brand.tagline"
+msgstr "premium playing cards"
+
+msgid "cart.added"
+msgstr "Added to cart"
+
+msgid "cart.checkout"
+msgstr "Checkout"
+
+msgid "cart.clear"
+msgstr "Clear cart"
+
+msgid "cart.cleared"
+msgstr "Cart cleared"
+
+msgid "cart.continue"
+msgstr "Continue shopping"
+
+msgid "cart.delivery_note"
+msgstr "Delivery is calculated when the order is confirmed"
+
+msgid "cart.empty"
+msgstr "Your cart is empty"
+
+msgid "cart.empty_hint"
+msgstr "Take a look at the catalog — 400+ decks inside"
+
+msgid "cart.items"
+msgstr "items"
+
+msgid "cart.over_stock"
+msgstr "Less stock than in the cart"
+
+msgid "cart.price"
+msgstr "Price"
+
+msgid "cart.product"
+msgstr "Product"
+
+msgid "cart.qty"
+msgstr "Qty"
+
+msgid "cart.remove"
+msgstr "Remove"
+
+msgid "cart.removed"
+msgstr "Item removed"
+
+msgid "cart.subtotal"
+msgstr "Subtotal"
+
+msgid "cart.title"
+msgstr "Cart"
+
+msgid "cart.total"
+msgstr "Total"
+
+msgid "cart.updated"
+msgstr "Cart updated"
+
+msgid "catalog.all"
+msgstr "All"
+
+msgid "catalog.brand"
+msgstr "Brand"
+
+msgid "catalog.category"
+msgstr "Category"
+
+msgid "catalog.empty"
+msgstr "Nothing matches your filters"
+
+msgid "catalog.empty_hint"
+msgstr "Try changing the search terms or reset the filters"
+
+msgid "catalog.filters"
+msgstr "Filters"
+
+msgid "catalog.filters_apply"
+msgstr "Show results"
+
+msgid "catalog.filters_reset"
+msgstr "Reset"
+
+msgid "catalog.found"
+msgstr "Products found:"
+
+msgid "catalog.in_stock_only"
+msgstr "In stock only"
+
+msgid "catalog.next"
+msgstr "Next"
+
+msgid "catalog.page"
+msgstr "Page"
+
+msgid "catalog.prev"
+msgstr "Previous"
+
+msgid "catalog.price"
+msgstr "Price"
+
+msgid "catalog.price_from"
+msgstr "from"
+
+msgid "catalog.price_to"
+msgstr "to"
+
+msgid "catalog.rarity"
+msgstr "Rarity"
+
+msgid "catalog.reset"
+msgstr "Reset filters"
+
+msgid "catalog.search_placeholder"
+msgstr "Search: name, brand, description"
+
+msgid "catalog.sort"
+msgstr "Sort"
+
+msgid "catalog.sort.name"
+msgstr "By name"
+
+msgid "catalog.sort.new"
+msgstr "Newest first"
+
+msgid "catalog.sort.popular"
+msgstr "Popular"
+
+msgid "catalog.sort.price_asc"
+msgstr "Price: low to high"
+
+msgid "catalog.sort.price_desc"
+msgstr "Price: high to low"
+
+msgid "catalog.subtitle"
+msgstr "Decks for every taste: from classics to limited print runs"
+
+msgid "catalog.title"
+msgstr "Catalog"
+
+msgid "chat.closed"
+msgstr "Chat closed"
+
+msgid "chat.connecting"
+msgstr "Connecting…"
+
+msgid "chat.empty"
+msgstr "No messages yet. Say hello!"
+
+msgid "chat.list_title"
+msgstr "My chats"
+
+msgid "chat.no_access"
+msgstr "No access to this chat"
+
+msgid "chat.offline"
+msgstr "Disconnected"
+
+msgid "chat.online"
+msgstr "Online"
+
+msgid "chat.open_order"
+msgstr "Open order"
+
+msgid "chat.order_info"
+msgstr "Order information"
+
+msgid "chat.placeholder"
+msgstr "Write a message…"
+
+msgid "chat.polling"
+msgstr "Refreshing every 3s"
+
+msgid "chat.rate_limited"
+msgstr "Too fast. Wait a couple of seconds."
+
+msgid "chat.read"
+msgstr "Read"
+
+msgid "chat.send"
+msgstr "Send"
+
+msgid "chat.support"
+msgstr "RiderCards support"
+
+msgid "chat.system"
+msgstr "System"
+
+msgid "chat.title"
+msgstr "Order chat"
+
+msgid "chat.unread"
+msgstr "Unread"
+
+msgid "chat.you"
+msgstr "You"
+
+msgid "checkout.address"
+msgstr "Delivery address"
+
+msgid "checkout.address_hint"
+msgstr "City, street, building, apartment, postcode"
+
+msgid "checkout.back_to_cart"
+msgstr "Back to cart"
+
+msgid "checkout.contact"
+msgstr "Contact"
+
+msgid "checkout.contact_hint"
+msgstr "Email or phone — we send tracking and status there"
+
+msgid "checkout.created"
+msgstr "Order #{id} created. We opened a chat for it."
+
+msgid "checkout.errors.empty"
+msgstr "Your cart is empty"
+
+msgid "checkout.errors.validation"
+msgstr "Please check the contact and address"
+
+msgid "checkout.need_login"
+msgstr "Please sign in to place an order"
+
+msgid "checkout.note"
+msgstr "Order comment"
+
+msgid "checkout.note_hint"
+msgstr "For example: call before delivery"
+
+msgid "checkout.submit"
+msgstr "Place the order"
+
+msgid "checkout.summary"
+msgstr "Your order"
+
+msgid "checkout.title"
+msgstr "Checkout"
+
+msgid "cookies.accept"
+msgstr "Accept"
+
+msgid "cookies.more"
+msgstr "Learn more"
+
+msgid "cookies.text"
+msgstr "We use cookies for the cart, your session and analytics."
+
+msgid "errors.403.text"
+msgstr "You do not have permission to view this page."
+
+msgid "errors.403.title"
+msgstr "403 — Forbidden"
+
+msgid "errors.404.text"
+msgstr "Looks like this card fell out of the deck. Check the address or head back to the catalog."
+
+msgid "errors.404.title"
+msgstr "404 — Page not found"
+
+msgid "errors.500.text"
+msgstr "Something broke on our side. We are already on it."
+
+msgid "errors.500.title"
+msgstr "500 — Internal error"
+
+msgid "errors.back_home"
+msgstr "Back home"
+
+msgid "errors.csrf"
+msgstr "Your session expired. Reload the page and try again."
+
+msgid "errors.to_catalog"
+msgstr "To the catalog"
+
+msgid "faq.a1"
+msgstr "Orders placed before 15:00 ship the same day. The tracking number appears in the order chat."
+
+msgid "faq.a2"
+msgstr "Yes. We work directly with publishers and verify every deck before packing."
+
+msgid "faq.a3"
+msgstr "Yes, within 30 days if the deck is unopened. Just write in the order chat."
+
+msgid "faq.a4"
+msgstr "Cards, instant bank transfer and invoicing for wholesale orders."
+
+msgid "faq.a5"
+msgstr "Yes, we ship worldwide. The cost is calculated at checkout."
+
+msgid "faq.a6"
+msgstr "Use the support form or the chat on your order — we reply within an hour."
+
+msgid "faq.q1"
+msgstr "How fast do you ship?"
+
+msgid "faq.q2"
+msgstr "Are the cards authentic?"
+
+msgid "faq.q3"
+msgstr "Can I return an item?"
+
+msgid "faq.q4"
+msgstr "Which payment methods do you accept?"
+
+msgid "faq.q5"
+msgstr "Do you ship internationally?"
+
+msgid "faq.q6"
+msgstr "How do I reach support?"
+
+msgid "faq.subtitle"
+msgstr "Short answers about shipping, payment and authenticity"
+
+msgid "faq.title"
+msgstr "Frequently asked questions"
+
+msgid "footer.catalog"
+msgstr "Catalog"
+
+msgid "footer.company"
+msgstr "Company"
+
+msgid "footer.contacts"
+msgstr "Contacts"
+
+msgid "footer.help"
+msgstr "Help"
+
+msgid "footer.payments"
+msgstr "Payment and delivery"
+
+msgid "footer.rights"
+msgstr "All rights reserved."
+
+msgid "footer.tagline"
+msgstr "Cards that outlive the game. And a hundred more."
+
+msgid "home.advantages.1.text"
+msgstr "Every deck is checked by our card master: print, cut, coating and even edge alignment."
+
+msgid "home.advantages.1.title"
+msgstr "Hand-picked"
+
+msgid "home.advantages.2.text"
+msgstr "Orders ship the same day and the tracking number lands in your order chat."
+
+msgid "home.advantages.2.title"
+msgstr "Fast shipping"
+
+msgid "home.advantages.3.text"
+msgstr "Official print runs from verified publishers only. No replicas."
+
+msgid "home.advantages.3.title"
+msgstr "Authenticity guaranteed"
+
+msgid "home.advantages.4.text"
+msgstr "A chat per order with a human, never a bot."
+
+msgid "home.advantages.4.title"
+msgstr "Real support"
+
+msgid "home.advantages.subtitle"
+msgstr "We are obsessed with detail so you enjoy every deal"
+
+msgid "home.advantages.title"
+msgstr "Why RiderCards"
+
+msgid "home.bestsellers.title"
+msgstr "Bestsellers"
+
+msgid "home.categories.subtitle"
+msgstr "Find a deck that matches your game"
+
+msgid "home.categories.title"
+msgstr "Categories"
+
+msgid "home.cta.button"
+msgstr "Go to the catalog"
+
+msgid "home.cta.text"
+msgstr "Over 400 items in stock. We will help you pick cards for your game."
+
+msgid "home.cta.title"
+msgstr "Ready to build your deck?"
+
+msgid "home.featured.subtitle"
+msgstr "The decks players pick most often"
+
+msgid "home.featured.title"
+msgstr "Featured"
+
+msgid "home.hero.badge"
+msgstr "The new Rider Series is available now"
+
+msgid "home.hero.cta"
+msgstr "Browse the catalog"
+
+msgid "home.hero.eyebrow"
+msgstr "Since 2014"
+
+msgid "home.hero.secondary"
+msgstr "About us"
+
+msgid "home.hero.subtitle"
+msgstr "Collectible, designer and classic decks. Hand-picked stock, premium print quality and worldwide delivery."
+
+msgid "home.hero.title"
+msgstr "The deck legends play with"
+
+msgid "home.news.all"
+msgstr "All news"
+
+msgid "home.news.subtitle"
+msgstr "What is happening at RiderCards"
+
+msgid "home.news.title"
+msgstr "Store news"
+
+msgid "home.stat.clients"
+msgstr "happy players"
+
+msgid "home.stat.decks"
+msgstr "decks in the catalog"
+
+msgid "home.stat.rating"
+msgstr "average rating"
+
+msgid "home.stat.years"
+msgstr "years on the market"
+
+msgid "meta.description"
+msgstr "RiderCards — premium playing cards: collectible, designer, classic, magic and tabletop decks."
+
+msgid "nav.about"
+msgstr "About"
+
+msgid "nav.admin"
+msgstr "Admin"
+
+msgid "nav.cart"
+msgstr "Cart"
+
+msgid "nav.catalog"
+msgstr "Catalog"
+
+msgid "nav.chats"
+msgstr "Chats"
+
+msgid "nav.faq"
+msgstr "FAQ"
+
+msgid "nav.home"
+msgstr "Home"
+
+msgid "nav.login"
+msgstr "Sign in"
+
+msgid "nav.logout"
+msgstr "Sign out"
+
+msgid "nav.menu"
+msgstr "Menu"
+
+msgid "nav.news"
+msgstr "News"
+
+msgid "nav.orders"
+msgstr "Orders"
+
+msgid "nav.profile"
+msgstr "Profile"
+
+msgid "nav.register"
+msgstr "Sign up"
+
+msgid "nav.support"
+msgstr "Support"
+
+msgid "nav.tickets"
+msgstr "Requests"
+
+msgid "nav.wishlist"
+msgstr "Wishlist"
+
+msgid "news.back"
+msgstr "All news"
+
+msgid "news.empty"
+msgstr "No published news yet"
+
+msgid "news.published_on"
+msgstr "Published"
+
+msgid "news.read_more"
+msgstr "Read"
+
+msgid "news.subtitle"
+msgstr "Announcements, new releases and events"
+
+msgid "news.title"
+msgstr "News"
+
+msgid "news.views"
+msgstr "views"
+
+msgid "orders.cancel"
+msgstr "Cancel order"
+
+msgid "orders.cancelled"
+msgstr "Order cancelled"
+
+msgid "orders.cannot_cancel"
+msgstr "This order can no longer be cancelled"
+
+msgid "orders.date"
+msgstr "Date"
+
+msgid "orders.detail.contact"
+msgstr "Contact"
+
+msgid "orders.detail.delivery"
+msgstr "Delivery"
+
+msgid "orders.detail.history"
+msgstr "Status history"
+
+msgid "orders.detail.items"
+msgstr "Order items"
+
+msgid "orders.detail.note"
+msgstr "Comment"
+
+msgid "orders.detail.title"
+msgstr "Order #{id}"
+
+msgid "orders.details"
+msgstr "Details"
+
+msgid "orders.empty"
+msgstr "No orders yet"
+
+msgid "orders.items"
+msgstr "Items"
+
+msgid "orders.number"
+msgstr "Order"
+
+msgid "orders.open_chat"
+msgstr "Contact support"
+
+msgid "orders.status"
+msgstr "Status"
+
+msgid "orders.status.cancelled"
+msgstr "Cancelled"
+
+msgid "orders.status.delivered"
+msgstr "Delivered"
+
+msgid "orders.status.paid"
+msgstr "Paid"
+
+msgid "orders.status.pending"
+msgstr "Awaiting payment"
+
+msgid "orders.status.processing"
+msgstr "Processing"
+
+msgid "orders.status.shipped"
+msgstr "Shipped"
+
+msgid "orders.title"
+msgstr "My orders"
+
+msgid "orders.total"
+msgstr "Total"
+
+msgid "product.add_to_cart"
+msgstr "Add to cart"
+
+msgid "product.brand"
+msgstr "Brand"
+
+msgid "product.buy_now"
+msgstr "Buy now"
+
+msgid "product.category"
+msgstr "Category"
+
+msgid "product.description"
+msgstr "Description"
+
+msgid "product.discount"
+msgstr "Discount"
+
+msgid "product.gallery"
+msgstr "Gallery"
+
+msgid "product.in_stock"
+msgstr "In stock"
+
+msgid "product.low_stock"
+msgstr "Low stock"
+
+msgid "product.not_found"
+msgstr "Product not found"
+
+msgid "product.out_of_stock"
+msgstr "Out of stock"
+
+msgid "product.quantity"
+msgstr "Quantity"
+
+msgid "product.rarity"
+msgstr "Rarity"
+
+msgid "product.similar"
+msgstr "Similar decks"
+
+msgid "product.sku"
+msgstr "SKU"
+
+msgid "product.specs"
+msgstr "Specifications"
+
+msgid "product.stock_left"
+msgstr "Left:"
+
+msgid "product.views"
+msgstr "Views"
+
+msgid "product.wishlist_add"
+msgstr "Add to wishlist"
+
+msgid "product.wishlist_remove"
+msgstr "In wishlist"
+
+msgid "profile.chats.empty"
+msgstr "No chats yet"
+
+msgid "profile.email"
+msgstr "Email"
+
+msgid "profile.locale"
+msgstr "Interface language"
+
+msgid "profile.name"
+msgstr "Name"
+
+msgid "profile.orders.empty"
+msgstr "No orders yet"
+
+msgid "profile.password.changed"
+msgstr "Password changed"
+
+msgid "profile.password.confirm"
+msgstr "Repeat new password"
+
+msgid "profile.password.current"
+msgstr "Current password"
+
+msgid "profile.password.new"
+msgstr "New password"
+
+msgid "profile.password.submit"
+msgstr "Change password"
+
+msgid "profile.password.title"
+msgstr "Change password"
+
+msgid "profile.save"
+msgstr "Save"
+
+msgid "profile.saved"
+msgstr "Profile updated"
+
+msgid "profile.since"
+msgstr "Member since"
+
+msgid "profile.stats.orders"
+msgstr "Orders"
+
+msgid "profile.stats.spent"
+msgstr "Spent"
+
+msgid "profile.stats.wishlist"
+msgstr "Wishlisted"
+
+msgid "profile.tab.chats"
+msgstr "Chats"
+
+msgid "profile.tab.data"
+msgstr "Details"
+
+msgid "profile.tab.orders"
+msgstr "Orders"
+
+msgid "profile.tab.tickets"
+msgstr "Requests"
+
+msgid "profile.tab.wishlist"
+msgstr "Wishlist"
+
+msgid "profile.ticket.answer"
+msgstr "Support reply"
+
+msgid "profile.ticket.status"
+msgstr "Status"
+
+msgid "profile.tickets.empty"
+msgstr "No requests yet"
+
+msgid "profile.title"
+msgstr "Profile"
+
+msgid "profile.wishlist.empty"
+msgstr "Your wishlist is empty"
+
+msgid "support.contacts"
+msgstr "Contacts"
+
+msgid "support.email"
+msgstr "Email"
+
+msgid "support.faq_hint"
+msgstr "The answer may already be in the FAQ"
+
+msgid "support.form.title"
+msgstr "Write to us"
+
+msgid "support.hours"
+msgstr "Mon–Fri, 10:00–19:00 (MSK)"
+
+msgid "support.message"
+msgstr "Message"
+
+msgid "support.mine"
+msgstr "My requests"
+
+msgid "support.name"
+msgstr "Your name"
+
+msgid "support.phone"
+msgstr "Phone"
+
+msgid "support.sent"
+msgstr "Your request has been sent. We will reply to the given email."
+
+msgid "support.subject"
+msgstr "Subject"
+
+msgid "support.submit"
+msgstr "Send"
+
+msgid "support.subtitle"
+msgstr "We reply within an hour during business hours"
+
+msgid "support.title"
+msgstr "Support"

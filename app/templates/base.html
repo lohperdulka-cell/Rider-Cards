@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" class="dark scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="theme-color" content="#050506">
+  <meta name="color-scheme" content="dark">
+  <title>{% block title %}{{ settings.shop_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ t('meta.description') }}{% endblock %}">
+  <link rel="canonical" href="{{ request.url.scheme }}://{{ request.url.netloc }}{{ request.url.path }}">
+
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:site_name" content="{{ settings.shop_name }}">
+  <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+  <meta property="og:description" content="{{ self.meta_description() }}">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:image" content="{{ request.url.scheme }}://{{ request.url.netloc }}{% block og_image %}/static/img/og-default.svg{% endblock %}">
+  <meta property="og:locale" content="{{ 'ru_RU' if locale == 'ru' else 'en_US' }}">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="ru" href="?lang=ru">
+  <link rel="alternate" hreflang="en" href="?lang=en">
+
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_version }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {% block head_extra %}{% endblock %}
+  {% block jsonld %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "{{ settings.shop_name }}",
+      "description": "{{ t('meta.description') }}",
+      "url": "{{ request.url.scheme }}://{{ request.url.netloc }}",
+      "currenciesAccepted": "{{ settings.currency }}",
+      "email": "{{ settings.support_email }}"
+    }
+  </script>
+  {% endblock %}
+</head>
+<body class="rc-noise min-h-screen bg-ink-950 font-sans text-white/90 selection:bg-lime-brand selection:text-ink-950">
+  <a href="#rc-main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-lime-brand focus:px-4 focus:py-2 focus:text-ink-950">
+    {{ t('a11y.skip') }}
+  </a>
+
+  {% include "partials/header.html" %}
+  {% include "partials/burger.html" %}
+
+  <main id="rc-main" class="relative z-10">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+  {% include "partials/toasts.html" %}
+  {% include "partials/cookie_bar.html" %}
+
+  <script src="/static/vendor/htmx.min.js" defer></script>
+  <script src="/static/vendor/alpine-csp.min.js" defer></script>
+  <script src="/static/js/alpine-components.js" defer></script>
+  <script src="/static/js/main.js" defer></script>
+  <script src="/static/js/chat.js" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,132 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.products') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('admin.products') }}</h1>
+    <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ total }}</p>
+  </div>
+  <a href="/admin/products/new" class="rc-btn-primary px-5 py-2.5 text-sm">+ {{ t('admin.product.title_new') }}</a>
+</header>
+
+<form method="get" action="/admin/products" class="rc-card mb-5 grid gap-3 p-4 sm:grid-cols-2 xl:grid-cols-4">
+  <div>
+    <label class="rc-label" for="product-q">{{ t('admin.search') }}</label>
+    <input id="product-q" name="q" type="search" value="{{ filters.q }}" class="rc-input">
+  </div>
+  <div>
+    <label class="rc-label" for="product-category">{{ t('catalog.category') }}</label>
+    <select id="product-category" name="category" class="rc-input">
+      <option value="">{{ t('catalog.all') }}</option>
+      {% for item in categories %}
+        <option value="{{ item.slug }}" {{ 'selected' if filters.category == item.slug }}>{{ item.localized_name(locale) }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <label class="flex items-end gap-2.5 pb-2.5 text-sm text-white/70">
+    <input type="checkbox" name="show_deleted" value="1" {{ 'checked' if filters.show_deleted in ['1','true'] }} class="h-4 w-4 accent-lime-brand">
+    {{ t('admin.deleted') }}
+  </label>
+  <div class="flex items-end gap-2">
+    <button type="submit" class="rc-btn-primary px-4">{{ t('admin.filter') }}</button>
+    <a href="/admin/products" class="rc-btn-ghost px-3">{{ t('admin.reset') }}</a>
+  </div>
+</form>
+
+{% if products %}
+  <form method="post" action="/admin/products/bulk">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="rc-card mb-3 flex flex-wrap items-center gap-3 p-4">
+      <label class="flex items-center gap-2.5 text-xs text-white/60">
+        <input type="checkbox" data-check-master data-check-group="products" class="h-4 w-4 accent-lime-brand">
+        {{ t('admin.toggle_all') }}
+      </label>
+      <div class="ml-auto flex gap-2">
+        <button type="submit" name="bulk_action" value="enable" class="rc-btn-ghost px-4 py-2 text-xs">{{ t('admin.bulk_enable') }}</button>
+        <button type="submit" name="bulk_action" value="disable" class="rc-btn-ghost px-4 py-2 text-xs">{{ t('admin.bulk_disable') }}</button>
+      </div>
+    </div>
+
+    <div class="rc-card overflow-x-auto">
+      <table class="w-full min-w-[820px] text-sm">
+        <thead>
+          <tr class="border-b border-white/8 text-left text-xs uppercase tracking-wider text-white/40">
+            <th class="px-4 py-3"></th>
+            <th class="px-4 py-3">{{ t('cart.product') }}</th>
+            <th class="px-4 py-3">{{ t('product.brand') }}</th>
+            <th class="px-4 py-3">{{ t('catalog.category') }}</th>
+            <th class="px-4 py-3">{{ t('product.rarity') }}</th>
+            <th class="px-4 py-3 text-right">{{ t('cart.price') }}</th>
+            <th class="px-4 py-3 text-right">{{ t('product.stock_left') }}</th>
+            <th class="px-4 py-3 text-center">{{ t('admin.status') }}</th>
+            <th class="px-4 py-3 text-right">{{ t('admin.actions') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+            <tr class="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03] {{ 'opacity-50' if product.is_deleted }}">
+              <td class="px-4 py-3">
+                <input type="checkbox" name="ids" value="{{ product.id }}" data-check-group="products" class="h-4 w-4 accent-lime-brand" aria-label="{{ product.localized_name(locale) }}">
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <span class="h-11 w-9 shrink-0 overflow-hidden rounded-lg bg-ink-800">
+                    {% if product.cover_image %}
+                      <img src="{{ product.cover_image }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                    {% endif %}
+                  </span>
+                  <span class="min-w-0">
+                    <a href="/admin/products/{{ product.id }}" class="block truncate text-white/85 hover:text-lime-brand">{{ product.localized_name(locale) }}</a>
+                    <span class="block truncate text-xs text-white/35">{{ product.slug }}</span>
+                  </span>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-white/60">{{ product.brand or '—' }}</td>
+              <td class="px-4 py-3 text-white/60">{{ product.category.localized_name(locale) if product.category else '—' }}</td>
+              <td class="px-4 py-3">
+                <span class="rc-badge bg-white/8 text-white/60">{{ product.rarity_label.get(locale, product.rarity.value) }}</span>
+              </td>
+              <td class="px-4 py-3 text-right text-white/85">{{ product.price | money(product.currency) }}</td>
+              <td class="px-4 py-3 text-right {{ 'text-rose-300' if product.stock <= 3 else 'text-white/70' }}">{{ product.stock }}</td>
+              <td class="px-4 py-3 text-center">
+                {% if product.is_deleted %}
+                  <span class="rc-badge bg-rose-500/15 text-rose-300">{{ t('admin.deleted') }}</span>
+                {% elif product.is_active %}
+                  <span class="rc-badge bg-lime-brand/15 text-lime-brand">on</span>
+                {% else %}
+                  <span class="rc-badge bg-white/8 text-white/45">off</span>
+                {% endif %}
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center justify-end gap-3">
+                  <a href="/admin/products/{{ product.id }}" class="text-xs text-lime-brand hover:underline">{{ t('admin.edit') }}</a>
+                  {% if product.is_deleted %}
+                    <button type="submit" formaction="/admin/products/{{ product.id }}/restore" class="text-xs text-emerald-300 hover:underline">{{ t('admin.restore') }}</button>
+                  {% else %}
+                    <button type="submit" formaction="/admin/products/{{ product.id }}/delete" class="text-xs text-rose-300 hover:underline">{{ t('admin.delete') }}</button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  {% if pages > 1 %}
+    <nav class="mt-6 flex items-center justify-center gap-1.5" aria-label="{{ t('admin.page') }}">
+      {% for number in range(1, pages + 1) %}
+        <a href="?page={{ number }}&q={{ filters.q }}&category={{ filters.category }}&show_deleted={{ filters.show_deleted }}"
+           class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == page else 'border border-white/10 text-white/70 hover:border-lime-brand/50' }}"
+           {% if number == page %}aria-current="page"{% endif %}>{{ number }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.empty') }}</div>
+{% endif %}
+{% endblock %}

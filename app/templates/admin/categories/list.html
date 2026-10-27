@@ -1,0 +1,79 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.categories') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.categories') }}</h1>
+  <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ categories | length }}</p>
+</header>
+
+<div class="grid gap-5 xl:grid-cols-[1fr_380px]">
+  <div class="space-y-3">
+    {% for category in categories %}
+      <form method="post" action="/admin/categories/{{ category.id }}" class="rc-card grid gap-3 p-4 sm:grid-cols-[auto_1fr_1fr_auto] sm:items-end">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="flex items-center gap-3 sm:flex-col">
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-lime-brand/12 text-xl text-lime-brand" aria-hidden="true">
+            {{ category.icon or '♠' }}
+          </span>
+          <label class="sr-only" for="cat-icon-{{ category.id }}">icon</label>
+          <input id="cat-icon-{{ category.id }}" name="icon" type="text" maxlength="40" value="{{ category.icon }}"
+                 class="rc-input w-20 text-center" placeholder="♠">
+        </div>
+
+        <div>
+          <label class="rc-label" for="cat-ru-{{ category.id }}">Название (RU)</label>
+          <input id="cat-ru-{{ category.id }}" name="name_ru" type="text" required maxlength="160" value="{{ category.name_ru }}" class="rc-input">
+          <label class="rc-label mt-3" for="cat-desc-ru-{{ category.id }}">Описание (RU)</label>
+          <input id="cat-desc-ru-{{ category.id }}" name="description_ru" type="text" maxlength="2000" value="{{ category.description_ru }}" class="rc-input">
+        </div>
+
+        <div>
+          <label class="rc-label" for="cat-en-{{ category.id }}">Name (EN)</label>
+          <input id="cat-en-{{ category.id }}" name="name_en" type="text" maxlength="160" value="{{ category.name_en }}" class="rc-input">
+          <label class="rc-label mt-3" for="cat-desc-en-{{ category.id }}">Description (EN)</label>
+          <input id="cat-desc-en-{{ category.id }}" name="description_en" type="text" maxlength="2000" value="{{ category.description_en }}" class="rc-input">
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <label class="flex items-center gap-2 text-xs text-white/60">
+            <input type="checkbox" name="is_active" value="1" {{ 'checked' if category.is_active }} class="h-4 w-4 accent-lime-brand">
+            {{ t('admin.bulk_enable') }}
+          </label>
+          <label class="sr-only" for="cat-sort-{{ category.id }}">sort</label>
+          <input id="cat-sort-{{ category.id }}" name="sort_order" type="number" value="{{ category.sort_order }}" class="rc-input w-20">
+          <button type="submit" class="rc-btn-primary px-4 py-2 text-xs">{{ t('admin.save') }}</button>
+          <span class="text-[11px] text-white/30">/{{ category.slug }}</span>
+        </div>
+      </form>
+    {% endfor %}
+  </div>
+
+  <aside>
+    <form method="post" action="/admin/categories" class="rc-card space-y-4 p-5 xl:sticky xl:top-24">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <h2 class="rc-label">{{ t('admin.create') }}</h2>
+
+      <div>
+        <label class="rc-label" for="new-cat-ru">Название (RU) *</label>
+        <input id="new-cat-ru" name="name_ru" type="text" required minlength="2" maxlength="160" value="{{ form_data.get('name_ru', '') }}" class="rc-input">
+      </div>
+      <div>
+        <label class="rc-label" for="new-cat-en">Name (EN)</label>
+        <input id="new-cat-en" name="name_en" type="text" maxlength="160" value="{{ form_data.get('name_en', '') }}" class="rc-input">
+      </div>
+      <div>
+        <label class="rc-label" for="new-cat-icon">icon</label>
+        <input id="new-cat-icon" name="icon" type="text" maxlength="40" class="rc-input" placeholder="♥">
+      </div>
+      <label class="flex items-center gap-2.5 text-sm text-white/75">
+        <input type="checkbox" name="is_active" value="1" checked class="h-4 w-4 accent-lime-brand">
+        {{ t('admin.bulk_enable') }}
+      </label>
+      <button type="submit" class="rc-btn-primary w-full py-3">{{ t('admin.create') }}</button>
+    </form>
+  </aside>
+</div>
+{% endblock %}

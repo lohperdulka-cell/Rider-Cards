@@ -1,0 +1,101 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.orders') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+    <h1 class="rc-section-title" data-reveal>{{ t('admin.orders') }}</h1>
+    <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ total }}</p>
+  </div>
+  <a href="/admin/orders/export.csv?status={{ filters.status }}&q={{ filters.q }}" class="rc-btn-ghost px-4 py-2 text-xs">
+    {{ t('admin.export_csv') }}
+  </a>
+</header>
+
+<form method="get" action="/admin/orders" class="rc-card mb-5 grid gap-3 p-4 sm:grid-cols-2 xl:grid-cols-5">
+  <div class="xl:col-span-2">
+    <label class="rc-label" for="order-q">{{ t('admin.search') }}</label>
+    <input id="order-q" name="q" type="search" value="{{ filters.q }}" placeholder="#123 {{ t('auth.email') }}" class="rc-input">
+  </div>
+  <div>
+    <label class="rc-label" for="order-status">{{ t('admin.status') }}</label>
+    <select id="order-status" name="status" class="rc-input">
+      <option value="">{{ t('catalog.all') }}</option>
+      {% for value in statuses %}
+        <option value="{{ value }}" {{ 'selected' if filters.status == value }}>{{ t('orders.status.' ~ value) }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label class="rc-label" for="order-from">{{ t('admin.audit.when') }}</label>
+    <input id="order-from" name="date_from" type="date" value="{{ filters.date_from }}" class="rc-input">
+  </div>
+  <div class="flex items-end gap-2">
+    <input name="date_to" type="date" value="{{ filters.date_to }}" class="rc-input" aria-label="{{ t('admin.audit.when') }}">
+    <button type="submit" class="rc-btn-primary shrink-0 px-4">{{ t('admin.filter') }}</button>
+    <a href="/admin/orders" class="rc-btn-ghost shrink-0 px-3">{{ t('admin.reset') }}</a>
+  </div>
+</form>
+
+{% if orders %}
+  <div class="rc-card overflow-x-auto">
+    <table class="w-full min-w-[720px] text-sm">
+      <thead>
+        <tr class="border-b border-white/8 text-left text-xs uppercase tracking-wider text-white/40">
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">{{ t('admin.audit.when') }}</th>
+          <th class="px-4 py-3">{{ t('admin.users') }}</th>
+          <th class="px-4 py-3">{{ t('admin.status') }}</th>
+          <th class="px-4 py-3">{{ t('orders.items') }}</th>
+          <th class="px-4 py-3 text-right">{{ t('orders.total') }}</th>
+          <th class="px-4 py-3 text-right">{{ t('admin.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr class="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]">
+            <td class="px-4 py-3 font-semibold">
+              <a href="/admin/orders/{{ order.id }}" class="text-lime-brand hover:underline">#{{ order.id }}</a>
+            </td>
+            <td class="px-4 py-3 text-white/50">{{ order.created_at | dt }}</td>
+            <td class="px-4 py-3 text-white/75">
+              {% if order.user %}
+                <a href="/admin/users/{{ order.user.id }}" class="hover:text-lime-brand">{{ order.user.email }}</a>
+              {% else %}—{% endif %}
+            </td>
+            <td class="px-4 py-3">
+              <span class="rc-badge
+                {% if order.status.value == 'delivered' %}bg-emerald-500/15 text-emerald-300
+                {% elif order.status.value == 'cancelled' %}bg-rose-500/15 text-rose-300
+                {% elif order.status.value == 'pending' %}bg-amber-400/15 text-amber-300
+                {% elif order.status.value == 'shipped' %}bg-violet-500/15 text-violet-300
+                {% elif order.status.value == 'processing' %}bg-sky-500/15 text-sky-300
+                {% else %}bg-lime-brand/15 text-lime-brand{% endif %}">
+                {{ t('orders.status.' ~ order.status.value) }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-white/55">{{ order.items_count }}</td>
+            <td class="px-4 py-3 text-right font-semibold text-white/85">{{ order.total | money(order.currency) }}</td>
+            <td class="px-4 py-3 text-right">
+              <a href="/admin/orders/{{ order.id }}" class="text-xs text-lime-brand hover:underline">{{ t('admin.edit') }}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if pages > 1 %}
+    <nav class="mt-6 flex items-center justify-center gap-1.5" aria-label="{{ t('admin.page') }}">
+      {% for number in range(1, pages + 1) %}
+        <a href="?page={{ number }}&status={{ filters.status }}&q={{ filters.q }}"
+           class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == page else 'border border-white/10 text-white/70 hover:border-lime-brand/50' }}"
+           {% if number == page %}aria-current="page"{% endif %}>{{ number }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.empty') }}</div>
+{% endif %}
+{% endblock %}

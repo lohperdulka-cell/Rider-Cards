@@ -1,0 +1,93 @@
+{% extends "admin/base.html" %}
+{% block admin_title %}{{ t('admin.users') }}{% endblock %}
+
+{% block admin_content %}
+<header class="mb-6">
+  <p class="rc-eyebrow">{{ t('admin.title') }}</p>
+  <h1 class="rc-section-title" data-reveal>{{ t('admin.users') }}</h1>
+  <p class="mt-1 text-sm text-white/45">{{ t('admin.total') }}: {{ total }}</p>
+</header>
+
+<form method="get" action="/admin/users" class="rc-card mb-5 flex flex-wrap items-end gap-3 p-4">
+  <div class="min-w-[220px] flex-1">
+    <label class="rc-label" for="user-q">{{ t('admin.search') }}</label>
+    <input id="user-q" name="q" type="search" value="{{ filters.q }}" placeholder="{{ t('auth.email') }}" class="rc-input">
+  </div>
+  <button type="submit" class="rc-btn-primary px-4">{{ t('admin.filter') }}</button>
+  <a href="/admin/users" class="rc-btn-ghost px-3">{{ t('admin.reset') }}</a>
+</form>
+
+{% if users %}
+  <div class="rc-card overflow-x-auto">
+    <table class="w-full min-w-[760px] text-sm">
+      <thead>
+        <tr class="border-b border-white/8 text-left text-xs uppercase tracking-wider text-white/40">
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">{{ t('auth.name') }}</th>
+          <th class="px-4 py-3">{{ t('auth.email') }}</th>
+          <th class="px-4 py-3">{{ t('profile.since') }}</th>
+          <th class="px-4 py-3 text-center">{{ t('admin.status') }}</th>
+          <th class="px-4 py-3 text-right">{{ t('admin.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in users %}
+          <tr class="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]">
+            <td class="px-4 py-3 text-white/40">{{ item.id }}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class="rc-avatar">{{ item.initials }}</span>
+                <a href="/admin/users/{{ item.id }}" class="text-white/85 hover:text-lime-brand">{{ item.display_name }}</a>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-white/60">{{ item.email }}</td>
+            <td class="px-4 py-3 text-white/50">{{ item.created_at | date }}</td>
+            <td class="px-4 py-3 text-center">
+              {% if not item.is_active %}
+                <span class="rc-badge bg-rose-500/15 text-rose-300">{{ t('admin.users.block') }}</span>
+              {% elif item.is_admin %}
+                <span class="rc-badge bg-lime-brand/15 text-lime-brand">admin</span>
+              {% else %}
+                <span class="rc-badge bg-white/8 text-white/50">active</span>
+              {% endif %}
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center justify-end gap-3">
+                <a href="/admin/users/{{ item.id }}" class="text-xs text-lime-brand hover:underline">{{ t('admin.users.orders_of') }}</a>
+
+                {% if item.id != admin.id %}
+                  <form method="post" action="/admin/users/{{ item.id }}/block">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="block" value="{{ '0' if not item.is_active else '1' }}">
+                    <button type="submit" class="text-xs {{ 'text-emerald-300' if not item.is_active else 'text-rose-300' }} hover:underline">
+                      {{ t('admin.users.unblock') if not item.is_active else t('admin.users.block') }}
+                    </button>
+                  </form>
+                  <form method="post" action="/admin/users/{{ item.id }}/admin">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button type="submit" class="text-xs text-white/60 hover:underline">
+                      {{ t('admin.users.revoke_admin') if item.is_admin else t('admin.users.make_admin') }}
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if pages > 1 %}
+    <nav class="mt-6 flex items-center justify-center gap-1.5" aria-label="{{ t('admin.page') }}">
+      {% for number in range(1, pages + 1) %}
+        <a href="?page={{ number }}&q={{ filters.q }}"
+           class="grid h-9 min-w-9 place-items-center rounded-full px-3 text-xs font-semibold transition {{ 'bg-lime-brand text-ink-950' if number == page else 'border border-white/10 text-white/70 hover:border-lime-brand/50' }}"
+           {% if number == page %}aria-current="page"{% endif %}>{{ number }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="rc-card p-14 text-center text-sm text-white/45">{{ t('admin.empty') }}</div>
+{% endif %}
+{% endblock %}
