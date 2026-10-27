@@ -103,7 +103,16 @@ async def post_message(
     )
     session.add(message)
     await session.flush()
-    return message
+    # Re-select so `sender` is populated inside the async context. Touching the
+    # lazy relationship later (e.g. in the WebSocket handler, where the sender
+    # was loaded by a different, already-closed session) would emit a lazy SELECT
+    # outside greenlet_spawn and raise MissingGreenlet.
+    return await _load_with_sender(session, message.id)
+
+
+async def _load_with_sender(session: AsyncSession, message_id: int) -> Message:
+    stmt = select(Message).options(selectinload(Message.sender)).where(Message.id == message_id)
+    return (await session.execute(stmt)).scalars().one()
 
 
 async def mark_read(session: AsyncSession, chat: Chat, *, reader_role: SenderRole) -> int:

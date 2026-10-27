@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 
+from app.models.user import User
 from tests.conftest import ADMIN_EMAIL, ADMIN_PASSWORD, csrf_token, login, register
 
 
@@ -150,6 +151,45 @@ async def test_admin_can_reply_and_user_sees_it(client):
 
 async def test_chat_messages_endpoint_requires_auth(client):
     assert (await client.get("/chats/1/messages")).status_code == 401
+
+
+async def test_post_message_with_sender_from_foreign_session(client):
+    """Regression: the WebSocket handler authenticates in a separate session.
+
+    Touching ``message.sender`` on the newly flushed row used to trigger a lazy
+    load outside ``greenlet_spawn`` (``MissingGreenlet``) and killed every send
+    over the socket. The payload must be complete right after ``post_message``.
+    """
+    from app.db.session import SessionLocal
+    from app.models.chat import SenderRole
+    from app.services import chat as chat_service
+
+    await login(client)
+    _, chat_id = await _create_order(client)
+
+    # Session A mimics the socket handshake: it loads the user and then closes.
+    async with SessionLocal() as auth_session:
+        sender = await auth_session.get(User, 2)
+        assert sender is not None
+
+    # Session B mimics the message loop: a *fresh* session that has never seen
+    # that user, so `message.sender` cannot be resolved from the identity map.
+    async with SessionLocal() as message_session:
+        chat = await chat_service.get_chat(message_session, int(chat_id))
+        assert chat is not None
+        message = await chat_service.post_message(
+            message_session,
+            chat=chat,
+            sender=sender,
+            role=SenderRole.user,
+            text="Привет из сокета",
+        )
+        await message_session.commit()
+        payload = chat_service.message_payload(message, viewer_is_admin=False)
+
+    assert payload["text"] == "Привет из сокета"
+    assert payload["sender"] == "Buyer"
+    assert payload["role"] == "user"
 
 
 async def test_closed_chat_rejects_new_messages(client):
