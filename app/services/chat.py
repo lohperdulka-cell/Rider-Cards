@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import func, select
@@ -44,9 +44,7 @@ def reset_rate_limit() -> None:
 
 async def get_chat(session: AsyncSession, chat_id: int) -> Chat | None:
     stmt = (
-        select(Chat)
-        .options(selectinload(Chat.messages), selectinload(Chat.order))
-        .where(Chat.id == chat_id)
+        select(Chat).options(selectinload(Chat.messages), selectinload(Chat.order)).where(Chat.id == chat_id)
     )
     return (await session.execute(stmt)).scalars().first()
 
@@ -89,9 +87,13 @@ async def post_message(
         raise ChatError("MESSAGE_TOO_LONG")
     if chat.is_closed:
         raise ChatError("CHAT_CLOSED")
-    if enforce_rate_limit and sender is not None and role == SenderRole.user:
-        if not check_rate_limit(sender.id):
-            raise ChatError("RATE_LIMITED")
+    if (
+        enforce_rate_limit
+        and sender is not None
+        and role == SenderRole.user
+        and not check_rate_limit(sender.id)
+    ):
+        raise ChatError("RATE_LIMITED")
 
     message = Message(
         chat_id=chat.id,
@@ -107,7 +109,7 @@ async def post_message(
 async def mark_read(session: AsyncSession, chat: Chat, *, reader_role: SenderRole) -> int:
     """Mark messages of the counterpart role as read."""
     target_role = SenderRole.admin if reader_role == SenderRole.user else SenderRole.user
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     updated = 0
     for message in chat.messages:
         if message.sender_role == target_role and message.read_at is None:
@@ -166,9 +168,7 @@ async def list_for_admin(
         if query.strip().isdigit():
             stmt = stmt.where(Order.id == int(query.strip()))
         else:
-            stmt = stmt.where(
-                func.lower(User.email).like(needle) | func.lower(User.name).like(needle)
-            )
+            stmt = stmt.where(func.lower(User.email).like(needle) | func.lower(User.name).like(needle))
     stmt = stmt.order_by(Chat.id.desc()).limit(limit)
     chats = list((await session.execute(stmt)).scalars().unique().all())
     if only_unread:

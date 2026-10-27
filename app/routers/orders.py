@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
 
 from app import flash
-from app.deps import CsrfDep, PageContext, SessionDep, CurrentUser
+from app.deps import CsrfDep, CurrentUser, PageContext, SessionDep
 from app.i18n import translate
 from app.services import chat as chat_service
 from app.services import orders as orders_service

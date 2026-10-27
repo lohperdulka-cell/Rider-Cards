@@ -198,9 +198,5 @@ async def price_bounds(session: AsyncSession) -> tuple[Decimal, Decimal]:
 
 
 async def active_categories(session: AsyncSession) -> list[Category]:
-    stmt = (
-        select(Category)
-        .where(Category.is_active.is_(True))
-        .order_by(Category.sort_order, Category.id)
-    )
+    stmt = select(Category).where(Category.is_active.is_(True)).order_by(Category.sort_order, Category.id)
     return list((await session.execute(stmt)).scalars().all())

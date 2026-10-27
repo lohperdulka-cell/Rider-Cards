@@ -32,11 +32,7 @@ async def create(
 
 
 async def list_for_user(session: AsyncSession, user_id: int) -> list[SupportTicket]:
-    stmt = (
-        select(SupportTicket)
-        .where(SupportTicket.user_id == user_id)
-        .order_by(SupportTicket.id.desc())
-    )
+    stmt = select(SupportTicket).where(SupportTicket.user_id == user_id).order_by(SupportTicket.id.desc())
     return list((await session.execute(stmt)).scalars().all())
 
 

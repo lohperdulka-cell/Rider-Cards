@@ -7,10 +7,8 @@ from sqlalchemy import or_, select
 
 from app.deps import AdminUser, PageContext, SessionDep
 from app.models.audit import AuditLog
-from app.services import audit as audit_service
-from app.templating import render
-
 from app.routers.admin._common import paginate
+from app.templating import render
 
 router = APIRouter(prefix="/admin/audit")
 

@@ -20,8 +20,22 @@ document.addEventListener("alpine:init", () => {
 
   Alpine.data("filters", () => ({
     open: false,
+    isDesktop: false,
+    init() {
+      // The CSP build cannot evaluate `window.innerWidth >= 1024` inline, so the
+      // desktop breakpoint is tracked here and exposed as `expanded`.
+      const query = window.matchMedia("(min-width: 1024px)");
+      const sync = () => {
+        this.isDesktop = query.matches;
+      };
+      sync();
+      query.addEventListener("change", sync);
+    },
     toggle() {
       this.open = !this.open;
+    },
+    get expanded() {
+      return this.open || this.isDesktop;
     },
   }));
 

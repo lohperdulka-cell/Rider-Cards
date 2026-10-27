@@ -56,11 +56,7 @@ async def chat_thread(
 
 
 @router.post("/{chat_id}/close", name="admin_chat_close")
-async def chat_close(
-    request: Request, chat_id: int, session: SessionDep, ctx: PageContext, admin: AdminUser
-):
-    from app.deps import CsrfDep
-    from fastapi import Depends
+async def chat_close(request: Request, chat_id: int, session: SessionDep, ctx: PageContext, admin: AdminUser):
 
     chat = await chat_service.get_chat(session, chat_id)
     if chat is None:

@@ -11,11 +11,17 @@ from app import flash
 from app.deps import AdminUser, CsrfDep, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.models.news import News
+from app.routers.admin._common import (
+    UploadError,
+    as_upload,
+    log_action,
+    paginate,
+    save_upload,
+    unique_slug,
+)
 from app.schemas.admin import NewsIn
 from app.services import news as news_service
 from app.templating import render
-
-from app.routers.admin._common import UploadError, log_action, paginate, save_upload, unique_slug
 
 router = APIRouter(prefix="/admin/news")
 
@@ -45,8 +51,8 @@ async def _form_context(session, admin, item, payload, errors, status_code=200, 
 
 async def _cover_from_request(request: Request) -> str:
     form = await request.form()
-    file = form.get("cover_file")
-    if file is None or not getattr(file, "filename", ""):
+    file = as_upload(form.get("cover_file"))
+    if file is None:
         return ""
     try:
         return await save_upload(file, prefix="news")
@@ -66,9 +72,7 @@ async def news_list(
     stmt = select(News)
     if q:
         needle = f"%{q.strip().lower()}%"
-        stmt = stmt.where(
-            or_(func.lower(News.title_ru).like(needle), func.lower(News.slug).like(needle))
-        )
+        stmt = stmt.where(or_(func.lower(News.title_ru).like(needle), func.lower(News.slug).like(needle)))
     stmt = stmt.order_by(News.id.desc())
     rows, total, pages = await paginate(session, stmt, page=page, per_page=PER_PAGE)
     return await render(
@@ -128,9 +132,7 @@ async def news_create(
     if cover:
         item.cover_image = cover
 
-    await log_action(
-        session, request, actor=admin, action="news.create", entity="news", entity_id=item.id
-    )
+    await log_action(session, request, actor=admin, action="news.create", entity="news", entity_id=item.id)
     await session.commit()
     response = RedirectResponse("/admin/news", status_code=303)
     flash.add(response, translate(request.state.locale, "admin.created"), "success")
@@ -138,9 +140,7 @@ async def news_create(
 
 
 @router.get("/{news_id}", name="admin_news_edit")
-async def news_edit(
-    request: Request, news_id: int, session: SessionDep, ctx: PageContext, admin: AdminUser
-):
+async def news_edit(request: Request, news_id: int, session: SessionDep, ctx: PageContext, admin: AdminUser):
     item = await session.get(News, news_id)
     if item is None:
         raise HTTPException(status_code=404, detail="NEWS_NOT_FOUND")
@@ -191,9 +191,7 @@ async def news_update(
     if cover:
         item.cover_image = cover
 
-    await log_action(
-        session, request, actor=admin, action="news.update", entity="news", entity_id=item.id
-    )
+    await log_action(session, request, actor=admin, action="news.update", entity="news", entity_id=item.id)
     await session.commit()
     response = RedirectResponse("/admin/news", status_code=303)
     flash.add(response, translate(request.state.locale, "admin.saved"), "success")
@@ -240,9 +238,7 @@ async def news_delete(
     if item is None:
         raise HTTPException(status_code=404, detail="NEWS_NOT_FOUND")
     await session.delete(item)
-    await log_action(
-        session, request, actor=admin, action="news.delete", entity="news", entity_id=news_id
-    )
+    await log_action(session, request, actor=admin, action="news.delete", entity="news", entity_id=news_id)
     await session.commit()
     response = RedirectResponse("/admin/news", status_code=303)
     flash.add(response, translate(request.state.locale, "admin.deleted"), "info")

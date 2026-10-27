@@ -49,9 +49,7 @@ class Order(Base, TimestampMixin):
         cascade="all, delete-orphan",
         lazy="selectin",
     )
-    chat = relationship(
-        "Chat", back_populates="order", uselist=False, cascade="all, delete-orphan"
-    )
+    chat = relationship("Chat", back_populates="order", uselist=False, cascade="all, delete-orphan")
 
     @property
     def status_meta(self) -> dict[str, str]:

@@ -1,4 +1,4 @@
-from app.schemas.auth import LoginIn, RegisterIn, ProfileUpdateIn
+from app.schemas.auth import LoginIn, ProfileUpdateIn, RegisterIn
 from app.schemas.catalog import CatalogFilters
 from app.schemas.chat import MessageIn
 from app.schemas.order import CheckoutIn

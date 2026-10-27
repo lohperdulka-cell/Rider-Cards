@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -67,6 +67,6 @@ async def increment_views(session: AsyncSession, item: News) -> None:
 def mark_published(item: News, published: bool) -> None:
     item.is_published = published
     if published and item.published_at is None:
-        item.published_at = datetime.now(timezone.utc)
+        item.published_at = datetime.now(UTC)
     if not published:
         item.published_at = None

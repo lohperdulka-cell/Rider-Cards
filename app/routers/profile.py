@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from pydantic import ValidationError
 
 from app import flash
-from app.deps import CsrfDep, FormDep, PageContext, SessionDep, CurrentUser
+from app.deps import CsrfDep, CurrentUser, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.schemas.auth import PasswordChangeIn, ProfileUpdateIn
 from app.services import auth as auth_service
@@ -69,9 +69,7 @@ async def profile_update(
         return await _profile_error(request, session, user, payload, errors, locale)
 
     try:
-        await auth_service.update_profile(
-            session, user, name=data.name, email=data.email, locale=data.locale
-        )
+        await auth_service.update_profile(session, user, name=data.name, email=data.email, locale=data.locale)
     except auth_service.AuthError as exc:
         await session.rollback()
         return await _profile_error(

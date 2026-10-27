@@ -90,7 +90,9 @@ class Product(Base, TimestampMixin):
 
     @property
     def rarity_label(self) -> dict[str, str]:
-        return RARITY_LABELS.get(self.rarity.value if isinstance(self.rarity, Rarity) else str(self.rarity), {})
+        return RARITY_LABELS.get(
+            self.rarity.value if isinstance(self.rarity, Rarity) else str(self.rarity), {}
+        )
 
     @property
     def currency(self) -> str:

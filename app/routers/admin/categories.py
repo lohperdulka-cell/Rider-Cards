@@ -11,18 +11,15 @@ from app import flash
 from app.deps import AdminUser, CsrfDep, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.models.category import Category
+from app.routers.admin._common import log_action, unique_slug
 from app.schemas.admin import CategoryIn
 from app.templating import render
-
-from app.routers.admin._common import log_action, unique_slug
 
 router = APIRouter(prefix="/admin/categories")
 
 
 @router.get("", name="admin_categories")
-async def categories_list(
-    request: Request, session: SessionDep, ctx: PageContext, admin: AdminUser
-):
+async def categories_list(request: Request, session: SessionDep, ctx: PageContext, admin: AdminUser):
     stmt = select(Category).order_by(Category.sort_order, Category.id)
     categories = list((await session.execute(stmt)).scalars().all())
     return await render(

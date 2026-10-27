@@ -76,7 +76,7 @@
         {% endif %}
         {% if order.status.value in ['pending', 'paid'] %}
           <form method="post" action="/profile/orders/{{ order.id }}/cancel"
-                onsubmit="return confirm('{{ t('orders.cancel') }}?')">
+                data-confirm="{{ t('orders.cancel') }}?">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button type="submit" class="rc-btn-danger w-full py-3">{{ t('orders.cancel') }}</button>
           </form>

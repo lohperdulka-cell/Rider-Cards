@@ -57,7 +57,7 @@
             </button>
           </form>
           <a href="/admin/news/{{ item.id }}" class="text-xs text-lime-brand hover:underline">{{ t('admin.edit') }}</a>
-          <form method="post" action="/admin/news/{{ item.id }}/delete" onsubmit="return confirm('{{ t('admin.confirm_delete') }}')">
+          <form method="post" action="/admin/news/{{ item.id }}/delete" data-confirm="{{ t('admin.confirm_delete') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button type="submit" class="text-xs text-rose-300 hover:underline">{{ t('admin.delete') }}</button>
           </form>

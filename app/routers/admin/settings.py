@@ -12,9 +12,7 @@ router = APIRouter(prefix="/admin/settings")
 
 
 @router.get("", name="admin_settings")
-async def settings_page(
-    request: Request, session: SessionDep, ctx: PageContext, admin: AdminUser
-):
+async def settings_page(request: Request, session: SessionDep, ctx: PageContext, admin: AdminUser):
     return await render(
         request,
         "admin/settings.html",

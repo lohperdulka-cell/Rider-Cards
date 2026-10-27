@@ -60,8 +60,7 @@ async def chat_socket(websocket: WebSocket, chat_id: int):
                 {
                     "type": "history",
                     "messages": [
-                        chat_service.message_payload(m, viewer_is_admin=user.is_admin)
-                        for m in chat.messages
+                        chat_service.message_payload(m, viewer_is_admin=user.is_admin) for m in chat.messages
                     ],
                 }
             )
@@ -111,9 +110,7 @@ async def chat_socket(websocket: WebSocket, chat_id: int):
                 await session.commit()
                 message_payload = chat_service.message_payload(message, viewer_is_admin=user.is_admin)
 
-            await chat_manager.broadcast(
-                chat_id, {"type": "message", "message": message_payload}
-            )
+            await chat_manager.broadcast(chat_id, {"type": "message", "message": message_payload})
             if not user.is_admin:
                 await chat_manager.broadcast_global({"type": "unread", "chat_id": chat_id})
 

@@ -78,9 +78,7 @@ async def login_submit(
         )
 
     try:
-        user = await auth_service.authenticate(
-            session, email=data.email, password=data.password
-        )
+        user = await auth_service.authenticate(session, email=data.email, password=data.password)
     except auth_service.AuthError as exc:
         await session.rollback()
         return await render(
@@ -150,9 +148,7 @@ async def register_submit(
         )
 
     try:
-        user = await auth_service.register(
-            session, name=data.name, email=data.email, password=data.password
-        )
+        user = await auth_service.register(session, name=data.name, email=data.email, password=data.password)
     except auth_service.AuthError as exc:
         await session.rollback()
         return await render(

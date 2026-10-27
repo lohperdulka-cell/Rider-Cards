@@ -37,7 +37,7 @@
         {{ t('catalog.filters') }}
       </button>
 
-      <form method="get" action="/catalog" class="rc-card space-y-6 p-5" x-show="open || window.innerWidth >= 1024" x-transition.opacity>
+      <form method="get" action="/catalog" class="rc-card space-y-6 p-5" x-show="expanded" x-transition.opacity>
         <input type="hidden" name="q" value="{{ filters.q }}">
         <input type="hidden" name="sort" value="{{ filters.sort }}">
 

@@ -17,10 +17,38 @@ from app.models.product import Product
 from app.services import audit as audit_service
 
 TRANSLIT = {
-    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "e", "ж": "zh",
-    "з": "z", "и": "i", "й": "y", "к": "k", "л": "l", "м": "m", "н": "n", "о": "o",
-    "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "h", "ц": "c",
-    "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu",
+    "а": "a",
+    "б": "b",
+    "в": "v",
+    "г": "g",
+    "д": "d",
+    "е": "e",
+    "ё": "e",
+    "ж": "zh",
+    "з": "z",
+    "и": "i",
+    "й": "y",
+    "к": "k",
+    "л": "l",
+    "м": "m",
+    "н": "n",
+    "о": "o",
+    "п": "p",
+    "р": "r",
+    "с": "s",
+    "т": "t",
+    "у": "u",
+    "ф": "f",
+    "х": "h",
+    "ц": "c",
+    "ч": "ch",
+    "ш": "sh",
+    "щ": "sch",
+    "ъ": "",
+    "ы": "y",
+    "ь": "",
+    "э": "e",
+    "ю": "yu",
     "я": "ya",
 }
 
@@ -39,9 +67,7 @@ def slugify(value: str) -> str:
     return slug[:150] or "item"
 
 
-async def unique_slug(
-    session: AsyncSession, model, base: str, *, exclude_id: int | None = None
-) -> str:
+async def unique_slug(session: AsyncSession, model, base: str, *, exclude_id: int | None = None) -> str:
     slug = slugify(base)
     candidate = slug
     counter = 2
@@ -53,6 +79,13 @@ async def unique_slug(
             return candidate
         candidate = f"{slug}-{counter}"
         counter += 1
+
+
+def as_upload(value: object) -> UploadFile | None:
+    """FormData values are untyped; only real uploads carry a filename."""
+    if isinstance(value, UploadFile) and value.filename:
+        return value
+    return None
 
 
 async def save_upload(file: UploadFile | None, *, prefix: str = "img") -> str:
@@ -129,7 +162,5 @@ async def paginate(
 
 
 async def product_choices(session: AsyncSession) -> list[Product]:
-    stmt = (
-        select(Product).where(Product.is_deleted.is_(False)).order_by(Product.name_ru).limit(500)
-    )
+    stmt = select(Product).where(Product.is_deleted.is_(False)).order_by(Product.name_ru).limit(500)
     return list((await session.execute(stmt)).scalars().unique().all())

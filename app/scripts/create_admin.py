@@ -23,9 +23,7 @@ async def main() -> None:
 
     email = settings.admin_email.lower().strip()
     async with session_scope() as session:
-        existing = (
-            await session.execute(select(User).where(User.email == email))
-        ).scalars().first()
+        existing = (await session.execute(select(User).where(User.email == email))).scalars().first()
         if existing is None:
             session.add(
                 User(

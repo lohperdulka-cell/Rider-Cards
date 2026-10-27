@@ -12,18 +12,18 @@ from app.deps import AdminUser, CsrfDep, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.models.category import Category
 from app.models.product import Product, Rarity
-from app.schemas.admin import ProductIn
-from app.services import products as products_service
-from app.services.audit import diff_details
-from app.templating import render
-
 from app.routers.admin._common import (
     UploadError,
+    as_upload,
     log_action,
     paginate,
     save_upload,
     unique_slug,
 )
+from app.schemas.admin import ProductIn
+from app.services import products as products_service
+from app.services.audit import diff_details
+from app.templating import render
 
 router = APIRouter(prefix="/admin/products")
 
@@ -81,9 +81,7 @@ async def products_list(
             or_(func.lower(Product.name_ru).like(needle), func.lower(Product.slug).like(needle))
         )
     if category:
-        stmt = stmt.join(Category, Product.category_id == Category.id).where(
-            Category.slug == category
-        )
+        stmt = stmt.join(Category, Product.category_id == Category.id).where(Category.slug == category)
     stmt = stmt.order_by(Product.id.desc())
 
     rows, total, pages = await paginate(session, stmt, page=page, per_page=PER_PAGE)
@@ -318,9 +316,7 @@ async def products_bulk(
     if not ids or action not in {"enable", "disable"}:
         return response
 
-    products = list(
-        (await session.execute(select(Product).where(Product.id.in_(ids)))).scalars().all()
-    )
+    products = list((await session.execute(select(Product).where(Product.id.in_(ids)))).scalars().all())
     for product in products:
         product.is_active = action == "enable"
     await log_action(
@@ -339,14 +335,14 @@ async def products_bulk(
 async def _apply_images(request: Request, product: Product) -> None:
     """Attach uploaded files to the product cover and gallery."""
     form = await request.form()
-    cover = form.get("cover_file")
-    if cover is not None and getattr(cover, "filename", ""):
+    cover = as_upload(form.get("cover_file"))
+    if cover is not None:
         product.cover_image = await save_upload(cover, prefix="cover")
 
-    files = form.getlist("gallery_files")
     gallery_lines = [line.strip() for line in (product.gallery or "").splitlines() if line.strip()]
-    for file in files:
-        if getattr(file, "filename", ""):
+    for raw in form.getlist("gallery_files"):
+        file = as_upload(raw)
+        if file is not None:
             path = await save_upload(file, prefix="gallery")
             if path not in gallery_lines:
                 gallery_lines.append(path)

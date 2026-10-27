@@ -10,10 +10,9 @@ from app import flash
 from app.deps import AdminUser, CsrfDep, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.models.user import User
+from app.routers.admin._common import log_action, paginate
 from app.services import orders as orders_service
 from app.templating import render
-
-from app.routers.admin._common import log_action, paginate
 
 router = APIRouter(prefix="/admin/users")
 
@@ -32,9 +31,7 @@ async def users_list(
     stmt = select(User)
     if q:
         needle = f"%{q.strip().lower()}%"
-        stmt = stmt.where(
-            or_(func.lower(User.email).like(needle), func.lower(User.name).like(needle))
-        )
+        stmt = stmt.where(or_(func.lower(User.email).like(needle), func.lower(User.name).like(needle)))
     stmt = stmt.order_by(User.id.desc())
     rows, total, pages = await paginate(session, stmt, page=page, per_page=PER_PAGE)
     return await render(
@@ -136,9 +133,7 @@ async def user_toggle_admin(
     await session.commit()
     flash.add(
         response,
-        translate(
-            locale, "admin.users.admin_granted" if target.is_admin else "admin.users.admin_revoked"
-        ),
+        translate(locale, "admin.users.admin_granted" if target.is_admin else "admin.users.admin_revoked"),
         "success",
     )
     return response

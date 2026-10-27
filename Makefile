@@ -2,7 +2,7 @@
 PY := .venv/bin/python
 PIP := uv pip install --python $(PY)
 
-.PHONY: help venv install dev run migrate migration seed create-admin test e2e lint fmt type audit css css-watch check shell clean
+.PHONY: help venv install dev run migrate migration seed create-admin test e2e e2e-install lint fmt type audit css css-watch check shell clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -36,6 +36,9 @@ test: ## Run the pytest suite
 
 e2e: ## Run the Playwright end-to-end tests
 	$(PY) -m pytest tests/e2e -q
+
+e2e-install: ## Download the Chromium build Playwright drives
+	$(PY) -m playwright install --with-deps chromium
 
 lint: ## Ruff lint
 	$(PY) -m ruff check app tests

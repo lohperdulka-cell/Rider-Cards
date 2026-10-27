@@ -68,9 +68,7 @@ EN: dict[str, str] = {
         "Every deck is checked by our card master: print, cut, coating and even edge alignment."
     ),
     "home.advantages.2.title": "Fast shipping",
-    "home.advantages.2.text": (
-        "Orders ship the same day and the tracking number lands in your order chat."
-    ),
+    "home.advantages.2.text": ("Orders ship the same day and the tracking number lands in your order chat."),
     "home.advantages.3.title": "Authenticity guaranteed",
     "home.advantages.3.text": "Official print runs from verified publishers only. No replicas.",
     "home.advantages.4.title": "Real support",
@@ -149,9 +147,7 @@ EN: dict[str, str] = {
         "and fair play."
     ),
     "about.mission.title": "Mission",
-    "about.mission.text": (
-        "Make premium cards accessible: no mark-ups, no fakes and no delivery surprises."
-    ),
+    "about.mission.text": ("Make premium cards accessible: no mark-ups, no fakes and no delivery surprises."),
     "about.team.title": "Team",
     "about.team.subtitle": "The people answering your messages in chat",
     "about.team.1.name": "Artem Rider",

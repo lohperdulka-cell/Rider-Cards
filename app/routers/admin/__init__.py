@@ -10,9 +10,11 @@ from app.routers.admin import (
     news,
     orders,
     products,
-    settings as settings_router,
     tickets,
     users,
+)
+from app.routers.admin import (
+    settings as settings_router,
 )
 
 # Each sub-router carries its own "/admin/..." prefix, so the aggregator stays

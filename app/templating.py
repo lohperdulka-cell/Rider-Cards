@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
 
@@ -10,8 +10,7 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from app import flash
-from app import __version__
+from app import __version__, flash
 from app.config import STATIC_DIR, TEMPLATES_DIR, settings
 from app.i18n import LOCALE_LABELS, SUPPORTED_LOCALES, gettext_for, normalize_locale
 from app.models.order import ORDER_STATUS_META
@@ -47,6 +46,8 @@ def date_fmt(value: Any, fmt: str = "%d.%m.%Y") -> str:
 templates.env.filters["money"] = money
 templates.env.filters["dt"] = datetime_fmt
 templates.env.filters["date"] = date_fmt
+
+
 def _asset_version() -> str:
     """Cache-busting token derived from the built CSS bundle."""
     css = STATIC_DIR / "css" / "app.css"
@@ -76,7 +77,7 @@ templates.env.filters["urlencode_query"] = urlencode_query
 templates.env.globals.update(
     settings=settings,
     asset_version=_asset_version(),
-    now_year=datetime.now(timezone.utc).year,
+    now_year=datetime.now(UTC).year,
     SUPPORTED_LOCALES=SUPPORTED_LOCALES,
     LOCALE_LABELS=LOCALE_LABELS,
     ORDER_STATUS_META=ORDER_STATUS_META,
@@ -108,9 +109,7 @@ async def render_partial(
         "query_params": request.query_params,
     }
     base_context.update(context)
-    return templates.TemplateResponse(
-        request, template_name, base_context, status_code=status_code
-    )
+    return templates.TemplateResponse(request, template_name, base_context, status_code=status_code)
 
 
 async def render(
@@ -148,7 +147,11 @@ async def render(
     messages = flash.take(request, response)
     if messages:
         response.headers["X-RC-Flashes"] = str(len(messages))
-    response.body = _inject_flashes(response, messages)
+        new_body = _inject_flashes(response, messages)
+        if new_body is not response.body:
+            response.body = new_body
+            # The body grew, so the header computed at render time is stale.
+            response.headers["Content-Length"] = str(len(new_body))
     return response
 
 
@@ -156,7 +159,7 @@ def _inject_flashes(response: HTMLResponse, messages: list[dict[str, str]]) -> b
     """Append toast payload for Alpine to pick up on load."""
     import json
 
-    body = response.body
+    body = bytes(response.body)
     if not messages or b"</body>" not in body:
         return body
     script = (

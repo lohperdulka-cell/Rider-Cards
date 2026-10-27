@@ -83,9 +83,7 @@ async def chat_messages(request: Request, chat_id: int, session: SessionDep, ctx
 
 
 @router.post("/{chat_id}/messages", name="chat_send")
-async def chat_send(
-    request: Request, chat_id: int, session: SessionDep, ctx: PageContext, _csrf: CsrfDep
-):
+async def chat_send(request: Request, chat_id: int, session: SessionDep, ctx: PageContext, _csrf: CsrfDep):
     locale = request.state.locale
     user = request.state.user
     if user is None:
@@ -110,7 +108,9 @@ async def chat_send(
             "RATE_LIMITED": "chat.rate_limited",
             "CHAT_CLOSED": "chat.closed",
         }.get(exc.code, "chat.rate_limited")
-        return JSONResponse({"detail": translate(locale, key)}, status_code=429 if exc.code == "RATE_LIMITED" else 400)
+        return JSONResponse(
+            {"detail": translate(locale, key)}, status_code=429 if exc.code == "RATE_LIMITED" else 400
+        )
 
     await session.commit()
     payload = chat_service.message_payload(message, viewer_is_admin=user.is_admin)

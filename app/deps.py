@@ -9,6 +9,7 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import settings
 from app.db.session import get_session
@@ -94,7 +95,7 @@ async def form_data(request: Request) -> dict[str, Any]:
     content_type = request.headers.get("content-type", "")
     if "form" in content_type or "multipart" in content_type:
         form = await request.form()
-        data = {key: form[key] for key in form.keys()}
+        data = {key: form[key] for key in form}
     request.state.form_data = data
     return data
 
@@ -107,7 +108,7 @@ def _wants_html(request: Request) -> bool:
     return "text/html" in accept or "HX-Request" in request.headers
 
 
-async def handle_auth_required(request: Request, exc: HTTPException) -> Any:
+async def handle_auth_required(request: Request, exc: StarletteHTTPException) -> Any:
     """Redirect browsers to /login, answer APIs with JSON."""
     if _wants_html(request):
         target = request.url.path
@@ -121,7 +122,7 @@ async def handle_auth_required(request: Request, exc: HTTPException) -> Any:
     return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
 
 
-async def handle_forbidden(request: Request, exc: HTTPException) -> Any:
+async def handle_forbidden(request: Request, exc: StarletteHTTPException) -> Any:
     from app.templating import render
 
     if _wants_html(request):

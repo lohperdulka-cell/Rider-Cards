@@ -138,6 +138,9 @@
     panel.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", function () { setOpen(false); });
     });
+    panel.querySelectorAll("[data-burger-close]").forEach(function (el) {
+      el.addEventListener("click", function () { setOpen(false); });
+    });
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") setOpen(false);
     });
@@ -259,6 +262,11 @@
   function initForms() {
     document.addEventListener("submit", function (event) {
       const form = event.target;
+      const confirmMessage = form.dataset.confirm;
+      if (confirmMessage && !window.confirm(confirmMessage)) {
+        event.preventDefault();
+        return;
+      }
       if (!form.matches("[data-add-to-cart]")) return;
       event.preventDefault();
       const qtyInput = form.querySelector("[name='qty']");

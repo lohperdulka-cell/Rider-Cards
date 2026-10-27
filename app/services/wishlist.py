@@ -15,11 +15,7 @@ async def product_ids(session: AsyncSession, user_id: int) -> set[int]:
 
 
 async def items(session: AsyncSession, user_id: int) -> list[WishlistItem]:
-    stmt = (
-        select(WishlistItem)
-        .where(WishlistItem.user_id == user_id)
-        .order_by(WishlistItem.id.desc())
-    )
+    stmt = select(WishlistItem).where(WishlistItem.user_id == user_id).order_by(WishlistItem.id.desc())
     return list((await session.execute(stmt)).scalars().unique().all())
 
 
@@ -29,12 +25,16 @@ async def toggle(session: AsyncSession, user_id: int, product_id: int) -> bool:
     if product is None or product.is_deleted or not product.is_active:
         return False
     existing = (
-        await session.execute(
-            select(WishlistItem).where(
-                WishlistItem.user_id == user_id, WishlistItem.product_id == product_id
+        (
+            await session.execute(
+                select(WishlistItem).where(
+                    WishlistItem.user_id == user_id, WishlistItem.product_id == product_id
+                )
             )
         )
-    ).scalars().first()
+        .scalars()
+        .first()
+    )
     if existing is not None:
         await session.delete(existing)
         await session.flush()
@@ -46,9 +46,7 @@ async def toggle(session: AsyncSession, user_id: int, product_id: int) -> bool:
 
 async def remove(session: AsyncSession, user_id: int, product_id: int) -> None:
     await session.execute(
-        delete(WishlistItem).where(
-            WishlistItem.user_id == user_id, WishlistItem.product_id == product_id
-        )
+        delete(WishlistItem).where(WishlistItem.user_id == user_id, WishlistItem.product_id == product_id)
     )
     await session.flush()
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from typing import Any
 
@@ -131,9 +131,7 @@ async def get_for_user(session: AsyncSession, order_id: int, user_id: int) -> Or
 
 async def get_any(session: AsyncSession, order_id: int) -> Order | None:
     stmt = (
-        select(Order)
-        .options(selectinload(Order.items), selectinload(Order.user))
-        .where(Order.id == order_id)
+        select(Order).options(selectinload(Order.items), selectinload(Order.user)).where(Order.id == order_id)
     )
     return (await session.execute(stmt)).scalars().first()
 
@@ -169,17 +167,13 @@ async def list_orders(
             stmt = stmt.where(Order.id == int(query.strip()))
             count_stmt = count_stmt.where(Order.id == int(query.strip()))
         else:
-            stmt = stmt.join(User, Order.user_id == User.id).where(
-                func.lower(User.email).like(needle)
-            )
+            stmt = stmt.join(User, Order.user_id == User.id).where(func.lower(User.email).like(needle))
             count_stmt = count_stmt.join(User, Order.user_id == User.id).where(
                 func.lower(User.email).like(needle)
             )
     if date_from:
         stmt = stmt.where(Order.created_at >= datetime.combine(date_from, datetime.min.time()))
-        count_stmt = count_stmt.where(
-            Order.created_at >= datetime.combine(date_from, datetime.min.time())
-        )
+        count_stmt = count_stmt.where(Order.created_at >= datetime.combine(date_from, datetime.min.time()))
     if date_to:
         end = datetime.combine(date_to, datetime.min.time()) + timedelta(days=1)
         stmt = stmt.where(Order.created_at < end)
@@ -199,9 +193,7 @@ async def set_status(
     await session.flush()
     if not notify:
         return None
-    chat = (
-        await session.execute(select(Chat).where(Chat.order_id == order.id))
-    ).scalars().first()
+    chat = (await session.execute(select(Chat).where(Chat.order_id == order.id))).scalars().first()
     if chat is None:
         return None
     message = Message(
@@ -223,16 +215,14 @@ async def cancel_by_user(session: AsyncSession, order: Order, *, locale: str = "
 
 async def stats_summary(session: AsyncSession) -> dict[str, Any]:
     """KPI numbers for the admin dashboard."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     start_today = datetime.combine(now.date(), datetime.min.time())
     start_week = start_today - timedelta(days=6)
 
     async def _count(stmt) -> int:
         return int((await session.execute(stmt)).scalar_one() or 0)
 
-    orders_today = await _count(
-        select(func.count(Order.id)).where(Order.created_at >= start_today)
-    )
+    orders_today = await _count(select(func.count(Order.id)).where(Order.created_at >= start_today))
     orders_week = await _count(select(func.count(Order.id)).where(Order.created_at >= start_week))
     revenue_total = (
         await session.execute(
@@ -251,9 +241,7 @@ async def stats_summary(session: AsyncSession) -> dict[str, Any]:
     new_users = await _count(
         select(func.count(User.id)).where(User.created_at >= start_week, User.is_admin.is_(False))
     )
-    open_chats = await _count(
-        select(func.count(Chat.id)).where(Chat.is_closed.is_(False))
-    )
+    open_chats = await _count(select(func.count(Chat.id)).where(Chat.is_closed.is_(False)))
     unread_messages = await _count(
         select(func.count(Message.id)).where(
             Message.sender_role == SenderRole.user, Message.read_at.is_(None)
@@ -289,7 +277,7 @@ async def stats_summary(session: AsyncSession) -> dict[str, Any]:
 
 async def daily_series(session: AsyncSession, days: int = 14) -> list[dict[str, Any]]:
     """Orders and revenue per day for the dashboard chart."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     start = datetime.combine((now - timedelta(days=days - 1)).date(), datetime.min.time())
     stmt = (
         select(

@@ -33,7 +33,6 @@ async def about(request: Request, session: SessionDep, ctx: PageContext):
 
 @router.get("/faq", name="faq")
 async def faq(request: Request, ctx: PageContext):
-    locale = request.state.locale
     return await render(
         request,
         "pages/faq.html",
@@ -107,15 +106,18 @@ async def sitemap(request: Request, session: SessionDep, ctx: PageContext):
     base = f"{request.url.scheme}://{request.url.netloc}"
     from app.services import news as news_service
 
-    products = await products_service.list_products(
-        session, CatalogFilters(), per_page=500
-    )
+    products = await products_service.list_products(session, CatalogFilters(), per_page=500)
     news_items = await news_service.published(session, limit=200)
     static_paths = ["/", "/catalog", "/news", "/about", "/faq", "/support"]
 
-    parts = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
     for path in static_paths:
-        parts.append(f"<url><loc>{base}{path}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>")
+        parts.append(
+            f"<url><loc>{base}{path}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
+        )
     for product in products.items:
         parts.append(
             f"<url><loc>{base}/product/{product.slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>"

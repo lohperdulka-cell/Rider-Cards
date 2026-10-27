@@ -39,8 +39,8 @@ def write_po(locale: str, catalogue: dict[str, str]) -> Path:
 
     lines = [PO_HEADER.format(locale=locale)]
     for key in sorted(catalogue):
-        lines.append('msgid "{}"'.format(_escape(key)))
-        lines.append('msgstr "{}"'.format(_escape(catalogue[key])))
+        lines.append(f'msgid "{_escape(key)}"')
+        lines.append(f'msgstr "{_escape(catalogue[key])}"')
         lines.append("")
     path.write_text("\n".join(lines), encoding="utf-8")
     return path

@@ -17,7 +17,7 @@ logger = logging.getLogger("ridercards.http")
 
 CSP = (
     "default-src 'self'; "
-    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+    "script-src 'self'; "
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
     "font-src 'self' https://fonts.gstatic.com data:; "
     "img-src 'self' data: blob:; "
@@ -42,9 +42,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
         response.headers.setdefault("X-Permitted-Cross-Domain-Policies", "none")
         if settings.session_cookie_secure:
-            response.headers.setdefault(
-                "Strict-Transport-Security", "max-age=31536000; includeSubDomains"
-            )
+            response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         return response
 
 

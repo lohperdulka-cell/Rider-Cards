@@ -3,7 +3,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin
@@ -56,9 +56,7 @@ class Message(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     chat_id: Mapped[int] = mapped_column(ForeignKey("chats.id", ondelete="CASCADE"), index=True)
-    sender_id: Mapped[int | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
-    )
+    sender_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     sender_role: Mapped[SenderRole] = mapped_column(
         Enum(SenderRole, native_enum=False, length=10), default=SenderRole.user, nullable=False
     )

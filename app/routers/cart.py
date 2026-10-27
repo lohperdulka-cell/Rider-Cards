@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, RedirectResponse
+from starlette.responses import Response
 
 from app.config import settings
 from app.deps import CsrfDep, PageContext, SessionDep
@@ -36,9 +37,9 @@ def _save(response, cart: dict[int, int]) -> None:
 
 
 def _is_json(request: Request) -> bool:
-    return request.headers.get("X-Requested-With") == "fetch" or request.headers.get(
-        "accept", ""
-    ).startswith("application/json")
+    return request.headers.get("X-Requested-With") == "fetch" or request.headers.get("accept", "").startswith(
+        "application/json"
+    )
 
 
 def _is_htmx(request: Request) -> bool:
@@ -87,6 +88,7 @@ async def cart_add(request: Request, session: SessionDep, ctx: PageContext, _csr
     cart = cart_service.add_item(_cart(request), product_id, qty)
     context = await _cart_context(session, cart)
 
+    response: Response
     if _is_json(request):
         response = JSONResponse(
             {
@@ -116,6 +118,7 @@ async def cart_update(request: Request, session: SessionDep, ctx: PageContext, _
     cart_service.set_item(cart, product_id, qty)
     context = await _cart_context(session, cart)
 
+    response: Response
     if _is_htmx(request):
         response = await render_partial(request, "partials/cart_items.html", **context)
     else:
@@ -134,6 +137,7 @@ async def cart_remove(request: Request, session: SessionDep, ctx: PageContext, _
     cart = cart_service.remove_item(_cart(request), product_id)
     context = await _cart_context(session, cart)
 
+    response: Response
     if _is_htmx(request):
         response = await render_partial(request, "partials/cart_items.html", **context)
     else:

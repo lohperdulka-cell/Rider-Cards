@@ -9,18 +9,15 @@ from app import flash
 from app.deps import AdminUser, CsrfDep, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.models.support import TicketStatus
+from app.routers.admin._common import log_action
 from app.services import support as support_service
 from app.templating import render
-
-from app.routers.admin._common import log_action
 
 router = APIRouter(prefix="/admin/tickets")
 
 
 @router.get("", name="admin_tickets")
-async def tickets_list(
-    request: Request, session: SessionDep, ctx: PageContext, admin: AdminUser
-):
+async def tickets_list(request: Request, session: SessionDep, ctx: PageContext, admin: AdminUser):
     tickets = await support_service.list_all(session, limit=200)
     return await render(
         request,

@@ -11,11 +11,10 @@ from app import flash
 from app.deps import AdminUser, CsrfDep, FormDep, PageContext, SessionDep
 from app.i18n import translate
 from app.models.order import OrderStatus
+from app.routers.admin._common import log_action
 from app.services import chat as chat_service
 from app.services import orders as orders_service
 from app.templating import render
-
-from app.routers.admin._common import log_action
 
 router = APIRouter(prefix="/admin/orders")
 
@@ -128,9 +127,7 @@ async def order_status(
 
     previous = order.status.value
     order_locale = order.user.locale if order.user else locale
-    message = await orders_service.set_status(
-        session, order, OrderStatus(new_status), locale=order_locale
-    )
+    message = await orders_service.set_status(session, order, OrderStatus(new_status), locale=order_locale)
     await log_action(
         session,
         request,

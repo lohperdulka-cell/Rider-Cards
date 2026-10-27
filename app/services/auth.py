@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -47,14 +47,12 @@ async def authenticate(session: AsyncSession, *, email: str, password: str) -> U
         raise AuthError("ACCOUNT_BLOCKED")
     if needs_rehash(user.password_hash):
         user.password_hash = hash_password(password)
-    user.last_login_at = datetime.now(timezone.utc)
+    user.last_login_at = datetime.now(UTC)
     await session.flush()
     return user
 
 
-async def update_profile(
-    session: AsyncSession, user: User, *, name: str, email: str, locale: str
-) -> User:
+async def update_profile(session: AsyncSession, user: User, *, name: str, email: str, locale: str) -> User:
     email = email.lower().strip()
     if email != user.email:
         existing = await get_by_email(session, email)
@@ -67,9 +65,7 @@ async def update_profile(
     return user
 
 
-async def change_password(
-    session: AsyncSession, user: User, *, current: str, new: str, confirm: str
-) -> None:
+async def change_password(session: AsyncSession, user: User, *, current: str, new: str, confirm: str) -> None:
     if not verify_password(current, user.password_hash):
         raise AuthError("BAD_CURRENT_PASSWORD")
     if new != confirm:

@@ -1,7 +1,7 @@
 <div id="rc-mobile-menu" class="fixed inset-0 z-[60] hidden flex-col bg-ink-950/97 backdrop-blur-xl lg:hidden" role="dialog" aria-modal="true" aria-label="{{ t('a11y.menu') }}">
   <div class="rc-container flex h-16 items-center justify-between">
     <span class="font-display text-lg tracking-[0.14em] text-white">RIDER<span class="text-lime-brand">CARDS</span></span>
-    <button type="button" id="rc-burger-close" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-white/80" aria-label="{{ t('a11y.close') }}" onclick="document.getElementById('rc-burger').click()">
+    <button type="button" data-burger-close type="button" id="rc-burger-close" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-white/80" aria-label="{{ t('a11y.close') }}">
       <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
         <path d="M6 6l12 12M18 6 6 18"/>
       </svg>

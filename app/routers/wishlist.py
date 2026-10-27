@@ -29,9 +29,7 @@ async def wishlist_page(request: Request, session: SessionDep, ctx: PageContext)
 
 
 @router.post("/toggle", name="wishlist_toggle")
-async def wishlist_toggle(
-    request: Request, session: SessionDep, ctx: PageContext, _csrf: CsrfDep
-):
+async def wishlist_toggle(request: Request, session: SessionDep, ctx: PageContext, _csrf: CsrfDep):
     locale = request.state.locale
     user = request.state.user
     form = await request.form()
@@ -44,7 +42,7 @@ async def wishlist_toggle(
         message = translate(locale, "checkout.need_login")
         if request.headers.get("X-Requested-With") == "fetch":
             return JSONResponse({"ok": False, "message": message}, status_code=401)
-        return RedirectResponse(f"/login?next=/product", status_code=303)
+        return RedirectResponse("/login?next=/product", status_code=303)
 
     added = await wishlist_service.toggle(session, user.id, product_id)
     await session.commit()
