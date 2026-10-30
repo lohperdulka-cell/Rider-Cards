@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -27,6 +28,10 @@ class Settings(BaseSettings):
     secret_key: str = "dev-secret-key-change-me-0123456789abcdef"
 
     database_url: str = f"sqlite+aiosqlite:///{PROJECT_ROOT / 'data' / 'ridercards.db'}"
+    # Neon hands out two strings for the same database. They are optional so
+    # local and Render setups keep working with a single DATABASE_URL.
+    database_url_pooled: str = ""
+    database_url_unpooled: str = ""
 
     session_cookie_name: str = "rc_session"
     session_max_age: int = 60 * 60 * 24 * 14
@@ -54,20 +59,55 @@ class Settings(BaseSettings):
             raise ValueError("SECRET_KEY must be at least 16 characters long")
         return v
 
-    @field_validator("database_url")
+    @field_validator("database_url", "database_url_pooled", "database_url_unpooled")
     @classmethod
     def _async_driver(cls, v: str) -> str:
-        """Accept the URLs managed hosts hand out and pick an async driver.
+        """Normalise the connection strings managed hosts hand out.
 
-        Render/Heroku-style variables are ``postgres://`` or ``postgresql://``,
-        neither of which SQLAlchemy can drive asynchronously. Rewriting the
-        scheme here turns an opaque startup crash into a working connection.
+        Two things break asyncpg: the ``postgres://`` scheme, which SQLAlchemy
+        cannot drive asynchronously, and libpq query parameters. ``sslmode`` is
+        renamed to asyncpg's ``ssl`` and ``channel_binding`` is dropped, since
+        asyncpg rejects both as unexpected keyword arguments. TLS stays
+        enforced either way, so the rename loses no protection.
         """
+        if not v:
+            return v
         if v.startswith("postgres://"):
-            return "postgresql+asyncpg://" + v[len("postgres://") :]
-        if v.startswith("postgresql://"):
-            return "postgresql+asyncpg://" + v[len("postgresql://") :]
-        return v
+            v = "postgresql+asyncpg://" + v[len("postgres://") :]
+        elif v.startswith("postgresql://"):
+            v = "postgresql+asyncpg://" + v[len("postgresql://") :]
+        if not v.startswith("postgresql+asyncpg://"):
+            return v
+        parts = urlsplit(v)
+        if not parts.query:
+            return v
+        query = [
+            ("ssl" if key == "sslmode" else key, value)
+            for key, value in parse_qsl(parts.query, keep_blank_values=True)
+            if key != "channel_binding"
+        ]
+        return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+    @property
+    def engine_url(self) -> str:
+        """URL the request path should use.
+
+        Neon routes ``-pooler`` hostnames through PgBouncer in transaction
+        mode, which is what a web app wants: it survives the many short-lived
+        connections an async server opens. Schema work goes to
+        ``migration_url`` instead, because DDL and session-level state do not
+        behave under transaction pooling.
+        """
+        return self.database_url_pooled or self.database_url
+
+    @property
+    def migration_url(self) -> str:
+        """Direct, non-pooled URL for DDL and migrations."""
+        return self.database_url_unpooled or self.database_url
+
+    @property
+    def is_sqlite(self) -> bool:
+        return self.engine_url.startswith("sqlite")
 
     @property
     def locales(self) -> list[str]:
@@ -76,10 +116,6 @@ class Settings(BaseSettings):
     @property
     def allowed_image_types_list(self) -> list[str]:
         return [item.strip() for item in self.allowed_image_types.split(",") if item.strip()]
-
-    @property
-    def is_sqlite(self) -> bool:
-        return self.database_url.startswith("sqlite")
 
     @property
     def session_cookie_secure(self) -> bool:

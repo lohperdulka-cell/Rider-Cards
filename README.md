@@ -196,6 +196,47 @@ slowapi rate-limit на `/login`, `/register` и чат, CSP и hardening-заг
 
 ---
 
+## Деплой на Neon (Postgres)
+
+Neon выдаёт для одной базы **две** строки подключения. Приложение использует обе:
+
+| Переменная | Куда идёт | Зачем |
+| --- | --- | --- |
+| `DATABASE_URL_POOLED` (хост с `-pooler`) | запросы, WebSocket-чат | PgBouncer в transaction mode переживает много коротких соединений async-сервера |
+| `DATABASE_URL_UNPOOLED` (хост без `-pooler`) | миграции, DDL, `create_all` | DDL и session-level состояние в transaction pooling не работают |
+| `DATABASE_URL` | фолбэк для обоих | нужен, если пулера нет (локальный Postgres, Render) |
+
+Строки Neon можно вставлять **как есть**, вместе с `?sslmode=require&channel_binding=require`.
+`config.py` приводит их к виду, который понимает asyncpg: `sslmode` → `ssl`, `channel_binding`
+отбрасывается (asyncpg не знает этих параметров и падает с `TypeError`). TLS при этом остаётся
+включённым, так что защита не теряется.
+
+```bash
+# в .env
+DATABASE_URL_POOLED='postgresql://user:pw@ep-xxx-pooler.region.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+DATABASE_URL_UNPOOLED='postgresql://user:pw@ep-xxx.region.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+```
+
+**Кавычки обязательны.** В `&` без кавычек шелл обрывает присваивание, `DATABASE_URL` остаётся
+пустым, и приложение молча уезжает на SQLite — внешне всё работает, но данные пишутся в файл.
+
+Для пулера кэш prepared statements отключается автоматически (`prepared_statement_cache_size=0`),
+иначе PgBouncer отдаёт соединение другому клиенту и получается
+`prepared statement "s0" already exists`.
+
+Схема и демо-данные:
+
+```bash
+make migrate   # alembic upgrade head, идёт через UNPOOLED
+make seed      # 5 категорий, 12 товаров, 3 новости
+```
+
+`neon deploy` в этом окружении не проходит: он требует браузерной авторизации с callback на
+`127.0.0.1` внутри контейнера. Строки подключения берутся из консоли Neon и кладутся в `.env`
+вручную — на результат это не влияет.
+
+---
+
 ## Деплой на Render (Free, вручную)
 
 Инструкция под **новый Web Service на бесплатном тарифе** (без Blueprint).

@@ -12,6 +12,7 @@ from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from app import __version__
 from app.config import STATIC_DIR, settings
@@ -50,9 +51,18 @@ limiter = Limiter(
 
 
 async def _bootstrap() -> None:
-    """Create tables and the default admin on first boot (dev convenience)."""
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    """Create tables and the default admin on first boot (dev convenience).
+
+    DDL goes through the direct URL: Neon's pooler runs PgBouncer in
+    transaction mode, where ``CREATE TABLE`` can land on a different backend
+    than the one that later reads the schema.
+    """
+    migration_engine = create_async_engine(settings.migration_url, echo=False, future=True)
+    try:
+        async with migration_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    finally:
+        await migration_engine.dispose()
     async with session_scope() as session:
         from app.services.auth import ensure_default_admin
 

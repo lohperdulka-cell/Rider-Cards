@@ -8,11 +8,22 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from app.config import settings
 
+_engine_url = settings.engine_url
+_connect_args: dict[str, object] = {}
+
+if not settings.is_sqlite and "pooler" in _engine_url:
+    # Neon's pooler is PgBouncer in transaction mode, which hands a backend to
+    # whoever needs it next. A prepared statement made on one transaction may
+    # not exist in the next, so the cache is switched off. Direct connections
+    # keep it, and with it the performance benefit.
+    _connect_args["prepared_statement_cache_size"] = 0
+
 engine = create_async_engine(
-    settings.database_url,
+    _engine_url,
     echo=False,
     future=True,
     pool_pre_ping=not settings.is_sqlite,
+    connect_args=_connect_args,
 )
 
 if settings.is_sqlite:  # pragma: no cover - import side effect

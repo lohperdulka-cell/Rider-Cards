@@ -20,3 +20,4 @@ build/
 playwright-report/
 test-results/
 .agent_tmp/
+.neon
